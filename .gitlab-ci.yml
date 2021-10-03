@@ -12,7 +12,6 @@ variables:
 
 stages:
   - build
-  - apply
   - c-fuzz
   - test
   - staging
@@ -39,15 +38,6 @@ build:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker build -t $IMAGE .
     - docker push $IMAGE
-
-apply:
-  stage: apply
-  image: "registry.gitlab.com/gitlab-org/cluster-integration/cluster-applications:v1.1.0"
-  environment:
-    name: staging
-  script:
-    - gl-ensure-namespace gitlab-managed-apps
-    - gl-helmfile --file $CI_PROJECT_DIR/helmfile.yaml apply --suppress-secrets
 
 my_fuzz_target:
   image: python:3.9.1-buster
