@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notes
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notes
+  template:
+    metadata:
+      labels:
+        app: notes
+    spec:
+      containers:
+      - name: notes
+        image: {{ .Values.image }}
+        ports:
+        - containerPort: {{ .Values.targetPort }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: notes-svc
+spec:
+  ports:
+  - port: {{ .Values.port }}
+    targetPort: {{ .Values.targetPort }}
+    protocol: TCP
+    name: http
+  selector:
+    app: notes
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: notes-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /{{ .Values.path }}(/|$)(.*)
+        backend:
+          serviceName: notes-svc
+          servicePort: {{ .Values.port }}

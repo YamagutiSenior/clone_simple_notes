@@ -1,0 +1,71 @@
+image: docker:19.03.8
+
+services:
+  - docker:19.03.8-dind
+
+variables:
+  SCAN_KUBERNETES_MANIFESTS: "true"
+  DAST_WEBSITE: http://35.238.92.252/notes
+  FUZZAPI_PROFILE: Long-100
+  FUZZAPI_OPENAPI: test_openapi.v2.0.json
+  FUZZAPI_TARGET_URL: http://35.238.92.252
+
+stages:
+  - build
+  - apply
+  - c-fuzz
+  - test
+  - staging
+  - dast
+  - fuzz
+
+include:
+  - template: Security/SAST.gitlab-ci.yml
+  - template: Security/Dependency-Scanning.gitlab-ci.yml
+  - template: Security/License-Scanning.gitlab-ci.yml
+  - template: Security/Container-Scanning.gitlab-ci.yml
+  - template: Security/DAST.gitlab-ci.yml
+  - template: Security/Secret-Detection.gitlab-ci.yml
+  - template: API-Fuzzing.gitlab-ci.yml
+  - template: Coverage-Fuzzing.gitlab-ci.yml
+
+build:
+  image: docker:19.03.8
+  stage: build
+  variables:
+    IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
+  script:
+    - docker info
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build -t $IMAGE .
+    - docker push $IMAGE
+
+apply:
+  stage: apply
+  image: "registry.gitlab.com/gitlab-org/cluster-integration/cluster-applications:v1.1.0"
+  environment:
+    name: staging
+  script:
+    - gl-ensure-namespace gitlab-managed-apps
+    - gl-helmfile --file $CI_PROJECT_DIR/helmfile.yaml apply --suppress-secrets
+
+my_fuzz_target:
+  image: python:3.9.1-buster
+  stage: c-fuzz
+  extends: .fuzz_base
+  script:
+    - pip install --extra-index-url https://gitlab.com/api/v4/projects/19904939/packages/pypi/simple pythonfuzz
+    - ./gitlab-cov-fuzz run --engine pythonfuzz -- fuzz.py
+
+deploy_staging:
+  image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image/releases/3.2.4-kube-1.13.12
+  stage: staging
+  variables:
+    IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
+    HELM_HOST: "localhost:44134"
+  script:
+    - export KUBE_INGRESS_BASE_DOMAIN=$(kubectl get svc --all-namespaces -o jsonpath='{range.items[?(@.status.loadBalancer.ingress)]}{.status.loadBalancer.ingress[*].ip}')
+    - helm upgrade -f helm/values.yaml --set image=$IMAGE --install notes ./helm
+  environment:
+    name: staging
+  allow_failure: true

@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kubesec-demo
+spec:
+  containers:
+  - name: kubesec-demo
+    image: gcr.io/google-samples/node-hello:1.0
+    securityContext:
+      allowPrivilegeEscalation: true
+    volumeMounts:
+      - mountPath: /dev/ahh.txt
+        name: ahh
+  volumes:
+  - name: ahh
+    hostPath:
+      path: /dev/ahh.txt
+      type: FileOrCreate

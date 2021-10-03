@@ -1,0 +1,7 @@
+name: notes
+version: 1.0.0
+appVersion: 1.0.0
+home: https://gitlab.com/gitlab-examples/security/simply-simple-notes
+description: A simple Flask application that stores notes in a SQLite file.
+sources:
+  - https://gitlab.com/gitlab-examples/security/simply-simple-notes
