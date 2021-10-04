@@ -5,7 +5,7 @@
     "title": "Adding Notes",
     "description": "Testing adding notes via simply simple notes"
   },
-  "host": "35.238.92.252",
+  "host": "34.132.49.184",
   "basePath": "/notes",
   "schemes": [
     "http"

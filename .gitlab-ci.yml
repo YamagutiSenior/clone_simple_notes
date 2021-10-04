@@ -5,10 +5,10 @@ services:
 
 variables:
   SCAN_KUBERNETES_MANIFESTS: "true"
-  DAST_WEBSITE: http://35.238.92.252/notes
+  DAST_WEBSITE: http://34.132.49.184/notes
   FUZZAPI_PROFILE: Long-100
   FUZZAPI_OPENAPI: test_openapi.v2.0.json
-  FUZZAPI_TARGET_URL: http://35.238.92.252
+  FUZZAPI_TARGET_URL: http://34.132.49.184
 
 stages:
   - build
