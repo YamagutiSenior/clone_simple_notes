@@ -31,7 +31,7 @@ spec:
   selector:
     app: notes
 ---
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: notes-ingress
@@ -41,7 +41,10 @@ spec:
   rules:
   - http:
       paths:
-      - path: /notes(/|$)(.*)
+      - path: /{{ .Values.path }}(/|$)(.*)
+        pathType: Prefix
         backend:
-          serviceName: notes-svc
-          servicePort: {{ .Values.port }}
+          service:
+            name: notes-svc
+            port:
+              number: {{ .Values.port }}
