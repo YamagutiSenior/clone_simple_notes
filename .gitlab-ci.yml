@@ -54,7 +54,6 @@ deploy_staging:
     IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
     HELM_HOST: "localhost:44134"
   script:
-    - export KUBE_INGRESS_BASE_DOMAIN=$(kubectl get svc --all-namespaces -o jsonpath='{range.items[?(@.status.loadBalancer.ingress)]}{.status.loadBalancer.ingress[*].ip}')
     - helm upgrade -f helm/values.yaml --set image=$IMAGE --install notes ./helm
   environment:
     name: staging
