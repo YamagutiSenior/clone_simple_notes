@@ -27,7 +27,6 @@ spec:
   - port: 80
     targetPort: 8080
     protocol: TCP
-    name: http
   selector:
     app: echo
 ---
@@ -37,7 +36,8 @@ metadata:
   name: echo-ingress
 spec:
   rules:
-  - http:
+  - host: "35.238.92.252"
+    http:
       paths:
       - path: /
         backend:
