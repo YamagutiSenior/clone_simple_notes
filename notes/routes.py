@@ -4,6 +4,16 @@ from notes.forms import AddForm, DeleteForm
 from flask import render_template, request, send_file, flash, redirect, jsonify
 
 
+def get_note_ui():
+    id = request.args.get('id')
+    conn = db.create_connection()
+
+    with conn:
+        try:
+            return db.select_note_by_id(conn, id)
+        except Exception as e:
+            return "Failed to delete Note: %s" % e
+
 @note.route('/', methods=['GET', 'POST'])
 @note.route('/index', methods=['GET', 'POST'])
 def index():
@@ -80,16 +90,6 @@ def delete_note(id=None):
         try:
             db.delete_note(conn, id)
             return "Note deleted successfully!"
-        except Exception as e:
-            return "Failed to delete Note: %s" % e
-
-def get_note_ui():
-    id = request.args.get('id')
-    conn = db.create_connection()
-
-    with conn:
-        try:
-            return db.select_note_by_id(conn, id)
         except Exception as e:
             return "Failed to delete Note: %s" % e
 
