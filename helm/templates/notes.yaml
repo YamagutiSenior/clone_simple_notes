@@ -39,8 +39,7 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   rules:
-  - host: "35.238.92.252"
-    http:
+  - http:
       paths:
       - path: /{{ .Values.path }}(/|$)(.*)
         backend:

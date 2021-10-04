@@ -36,8 +36,7 @@ metadata:
   name: echo-ingress
 spec:
   rules:
-  - host: "35.238.92.252"
-    http:
+  - http:
       paths:
       - path: /
         backend:
