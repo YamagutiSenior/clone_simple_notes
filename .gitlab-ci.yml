@@ -14,6 +14,7 @@ stages:
   - build
   - c-fuzz
   - test
+  - db
   - staging
   - dast
   - fuzz
@@ -48,6 +49,15 @@ my_fuzz_target:
   script:
     - pip install --extra-index-url https://gitlab.com/api/v4/projects/19904939/packages/pypi/simple pythonfuzz
     - ./gitlab-cov-fuzz run --engine pythonfuzz -- fuzz.py
+
+deploy_database:
+  image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image/releases/3.2.4-kube-1.13.12
+  stage: db
+  script:
+    - helm repo add bitnami https://charts.bitnami.com/bitnami
+    - helm upgrade --install mariadb bitnami/mariadb
+  environment:
+    name: staging
 
 deploy_staging:
   image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image/releases/3.2.4-kube-1.13.12
