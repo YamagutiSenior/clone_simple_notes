@@ -42,8 +42,10 @@ build:
     - docker build -t $IMAGE .
     - docker push $IMAGE
 
-my_fuzz_target:
+fuzz-target:
   image: python:3.9.1-buster
+  variables:
+    COVFUZZ_ADDITIONAL_ARGS: '-max_total_time=300'
   stage: c-fuzz
   extends: .fuzz_base
   script:
@@ -53,8 +55,6 @@ my_fuzz_target:
 deploy_database:
   image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image/releases/3.2.4-kube-1.13.12
   stage: db
-  variables:
-    DB_ROOT_PWD: $OK
   script:
     - helm repo add bitnami https://charts.bitnami.com/bitnami
     - helm upgrade --set auth.rootPassword=$DB_ROOT_PWD --set primary.service.clusterIP=None --install mariadb bitnami/mariadb
