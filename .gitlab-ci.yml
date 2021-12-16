@@ -53,9 +53,11 @@ my_fuzz_target:
 deploy_database:
   image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image/releases/3.2.4-kube-1.13.12
   stage: db
+  variables:
+    DB_ROOT_PWD: $OK
   script:
     - helm repo add bitnami https://charts.bitnami.com/bitnami
-    - helm upgrade --install mariadb bitnami/mariadb
+    - helm upgrade --set auth.rootPassword=$DB_ROOT_PWD --install mariadb bitnami/mariadb
   environment:
     name: staging
 
@@ -66,7 +68,6 @@ deploy_staging:
     IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
     HELM_HOST: "localhost:44134"
   script:
-    - export KUBE_INGRESS_BASE_DOMAIN=$(kubectl get svc --all-namespaces -o jsonpath='{range.items[?(@.status.loadBalancer.ingress)]}{.status.loadBalancer.ingress[*].ip}')
     - helm upgrade -f helm/values.yaml --set image=$IMAGE --install notes ./helm
   environment:
     name: staging
