@@ -2,4 +2,4 @@ Flask
 flask_wtf
 wtforms
 flask-bootstrap
-mariadb
+mysql-connector-python

@@ -1,6 +1,6 @@
 import os
 import logging
-import mariadb
+import mysql.connector as database
 from sqlite3 import Error
 
 
@@ -8,7 +8,7 @@ def create_connection(name='my_database.db'):
     conn = None
 
     try:
-        conn = mariadb.connect(
+        conn = database.connect(
             user="root",
             password=os.environ("DB_ROOT_PWD"),
             host="mariadb",
