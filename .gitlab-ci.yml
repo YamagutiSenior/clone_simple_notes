@@ -57,7 +57,7 @@ deploy_database:
     DB_ROOT_PWD: $OK
   script:
     - helm repo add bitnami https://charts.bitnami.com/bitnami
-    - helm upgrade --set auth.rootPassword=$DB_ROOT_PWD --install mariadb bitnami/mariadb
+    - helm upgrade --set auth.rootPassword=$DB_ROOT_PWD --set primary.service.clusterIP=None --install mariadb bitnami/mariadb
   environment:
     name: staging
 
