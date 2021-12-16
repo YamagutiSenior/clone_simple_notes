@@ -15,6 +15,9 @@ spec:
       containers:
       - name: notes
         image: {{ .Values.image }}
+        env:
+          - name: DB_ROOT_PWD
+            value: "{{ .Values.dbrootpwd }}"
         ports:
         - containerPort: {{ .Values.targetPort }}
 ---

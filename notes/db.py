@@ -1,14 +1,20 @@
 import os
 import logging
-import sqlite3
+import mariadb
 from sqlite3 import Error
 
 
-def create_connection(name='notes.db'):
+def create_connection(name='my_database.db'):
     conn = None
 
     try:
-        conn = sqlite3.connect(name)
+        conn = mariadb.connect(
+            user="root",
+            password=os.environ("DB_ROOT_PWD"),
+            host="mariadb",
+            port=3306,
+            database=name
+        )
     except Error as e:
         logging.error(e)
 
