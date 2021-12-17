@@ -19,6 +19,3 @@ if conn is not None:
     db.create_table(conn, sql_create_notes_table)
 else:
     note.logger.error("Error! cannot create the database connection.")
-
-conn.commit()
-conn.close()
