@@ -1,9 +1,7 @@
-FROM python:3-alpine
+FROM python:3
 
-RUN apk update
-RUN apk add mariadb-connector-c-dev
-RUN apk add mariadb-connector-c
-RUN apk add mariadb-client
+RUN apt update
+RUN apt install libmariadb3 libmariadb-dev
 
 COPY ./requirements.txt /app/requirements.txt
 
