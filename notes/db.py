@@ -26,34 +26,42 @@ def create_table(conn, create_table_sql):
         c = conn.cursor()
         c.execute(create_table_sql)
     except Error as e:
-        print(e)
+        logging.error("Error! cannot create the table.")
 
 
 def create_note(conn, notes):
     query = "INSERT INTO notes(data) VALUES(?)"
-
     cur = conn.cursor()
-    cur.execute(query, notes)
+
+    try:
+        cur.execute(query, notes)
+    except Error as e:
+        logging.error(e)
 
     return cur.lastrowid
 
 
 def delete_note(conn, id):
     query = 'DELETE FROM notes WHERE id=?'
-    
     cur = conn.cursor()
-    cur.execute(query, (id,))
+    
+    try:
+        cur.execute(query, (id,))
+        conn.commit()
+    except Error as e:
+        logging.error(e)
 
-    conn.commit()
 
 def select_note_by_id(conn, id=None):
     query = "SELECT * FROM notes"
+    cur = conn.cursor()
 
     if id:
         query = query + " WHERE id = '%s'" % id
 
-    cur = conn.cursor()
-    cur.execute(query)
+    try:
+        cur.execute(query)
+    except Error as e:
+        logging.error(e)
 
-    rows = cur.fetchall()
-    return rows
+    return cur.fetchall()

@@ -12,7 +12,7 @@ def get_note_ui():
         try:
             return db.select_note_by_id(conn, id)
         except Exception as e:
-            return "Failed to delete Note: %s" % e
+            return "Failed to get Note: %s" % e
 
 @note.route('/', methods=['GET', 'POST'])
 @note.route('/index', methods=['GET', 'POST'])
