@@ -10,7 +10,7 @@ def get_note_ui():
     try:
         return db.select_note_by_id(conn, id)
     except Exception as e:
-        return e
+        note.logger.error(e)
 
 @note.route('/', methods=['GET', 'POST'])
 @note.route('/index', methods=['GET', 'POST'])
