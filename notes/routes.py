@@ -1,4 +1,3 @@
-import logging
 from notes import db, note
 from notes.forms import AddForm, DeleteForm
 from flask import render_template, request, send_file, flash, redirect, jsonify
@@ -12,7 +11,7 @@ def get_note_ui():
         try:
             return db.select_note_by_id(conn, id)
         except Exception as e:
-            return "Failed to get Note: %s" % e
+            return e
 
 @note.route('/', methods=['GET', 'POST'])
 @note.route('/index', methods=['GET', 'POST'])
@@ -26,7 +25,7 @@ def index():
             note_str = '%s. "%s"' % (_id, _note)
             arr.append(note_str)
         except Exception as e:
-            return str(e)
+            note.logger.error(e)
 
     add_form = AddForm()
     delete_form = DeleteForm()

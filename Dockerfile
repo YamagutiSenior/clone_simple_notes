@@ -1,6 +1,7 @@
 FROM python:3-alpine
 
 RUN apk update
+RUN apk add mariadb-connector-c-dev
 
 COPY ./requirements.txt /app/requirements.txt
 
