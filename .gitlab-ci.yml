@@ -3,33 +3,33 @@ image: docker:19.03.8
 services:
   - docker:19.03.8-dind
 
-# variables:
-#   SCAN_KUBERNETES_MANIFESTS: "true"
-#   DAST_WEBSITE: http://34.122.197.106/notes
-#   FUZZAPI_PROFILE: Long-100
-#   FUZZAPI_OPENAPI: test_openapi.v2.0.json
-#   FUZZAPI_TARGET_URL: http://34.122.197.106
+variables:
+  SCAN_KUBERNETES_MANIFESTS: "true"
+  DAST_WEBSITE: http://34.122.197.106/notes
+  FUZZAPI_PROFILE: Long-100
+  FUZZAPI_OPENAPI: test_openapi.v2.0.json
+  FUZZAPI_TARGET_URL: http://34.122.197.106
 
 stages:
   - build
-  #- c-fuzz
-  #- test
+  - c-fuzz
+  - test
   - db
   - staging
-  #- dast
-  #- fuzz
+  - dast
+  - fuzz
 
-# include:
-#   - template: Security/SAST.gitlab-ci.yml
-#   - template: Security/Dependency-Scanning.gitlab-ci.yml
-#   - template: Security/License-Scanning.gitlab-ci.yml
-#   - template: Security/Container-Scanning.gitlab-ci.yml
-#   - template: Security/DAST.gitlab-ci.yml
-#   - template: Security/Secret-Detection.gitlab-ci.yml
-#   - template: API-Fuzzing.gitlab-ci.yml
-#   - template: Coverage-Fuzzing.gitlab-ci.yml
-#   - template: Security/SAST-IaC.latest.gitlab-ci.yml
-#   - template: Code-Quality.gitlab-ci.yml
+include:
+  - template: Security/SAST.gitlab-ci.yml
+  - template: Security/Dependency-Scanning.gitlab-ci.yml
+  - template: Security/License-Scanning.gitlab-ci.yml
+  - template: Security/Container-Scanning.gitlab-ci.yml
+  - template: Security/DAST.gitlab-ci.yml
+  - template: Security/Secret-Detection.gitlab-ci.yml
+  - template: API-Fuzzing.gitlab-ci.yml
+  - template: Coverage-Fuzzing.gitlab-ci.yml
+  - template: Security/SAST-IaC.latest.gitlab-ci.yml
+  - template: Code-Quality.gitlab-ci.yml
 
 build:
   image: docker:19.03.8
@@ -42,16 +42,16 @@ build:
     - docker build -t $IMAGE .
     - docker push $IMAGE
 
-# fuzz-target:
-#   image: python:3.9.1-buster
-#   timeout: 90 seconds
-#   variables:
-#     COVFUZZ_ADDITIONAL_ARGS: '-max_total_time=90'
-#   stage: c-fuzz
-#   extends: .fuzz_base
-#   script:
-#     - pip install --extra-index-url https://gitlab.com/api/v4/projects/19904939/packages/pypi/simple pythonfuzz
-#     - ./gitlab-cov-fuzz run --engine pythonfuzz -- fuzz.py
+fuzz-target:
+  image: python:3.9.1-buster
+  timeout: 90 seconds
+  variables:
+    COVFUZZ_ADDITIONAL_ARGS: '-max_total_time=90'
+  stage: c-fuzz
+  extends: .fuzz_base
+  script:
+    - pip install --extra-index-url https://gitlab.com/api/v4/projects/19904939/packages/pypi/simple pythonfuzz
+    - ./gitlab-cov-fuzz run --engine pythonfuzz -- fuzz.py
 
 deploy_database:
   image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image/releases/3.2.4-kube-1.13.12
