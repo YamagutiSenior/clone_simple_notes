@@ -1,6 +1,6 @@
 from notes import db, note
 from notes.forms import AddForm, DeleteForm
-from flask import render_template, request, send_from_directory, flash, redirect, jsonify
+from flask import render_template, request, flash, redirect, jsonify
 
 
 def get_note_ui():
@@ -12,10 +12,6 @@ def get_note_ui():
     except Exception as e:
         note.logger.error("Error Creating UI: %s" % e)
         return []
-
-@note.route('/notes/static/gitlab-icon-rgb.png') 
-def send_file(filename): 
-    return send_from_directory(note.static_url_path, filename)
 
 @note.route('/', methods=['GET', 'POST'])
 @note.route('/index', methods=['GET', 'POST'])
