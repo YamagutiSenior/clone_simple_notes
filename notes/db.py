@@ -1,5 +1,4 @@
 import os
-import logging
 import mariadb
 from sqlite3 import Error
 from notes import note
@@ -35,6 +34,7 @@ def create_note(conn, notes):
     cur = conn.cursor()
 
     try:
+        note.logger.info("Adding Note %s", notes)
         cur.execute(query, notes)
         conn.commit()
     except Error as e:
@@ -48,6 +48,7 @@ def delete_note(conn, id):
     cur = conn.cursor()
     
     try:
+        note.logger.info("Deleteing Note #%s", id)
         cur.execute(query, (id,))
         conn.commit()
     except Error as e:
@@ -62,7 +63,9 @@ def select_note_by_id(conn, id=None):
         query = query + " WHERE id = '%s'" % id
 
     try:
+        note.logger.info("Getting all notes!")
         cur.execute(query)
+        conn.commit()
     except Error as e:
         note.logger.error("Error: cannot select note by id - %s" % e)
 

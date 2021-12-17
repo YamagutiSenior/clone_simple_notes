@@ -7,11 +7,10 @@ def get_note_ui():
     id = request.args.get('id')
     conn = db.create_connection()
 
-    with conn:
-        try:
-            return db.select_note_by_id(conn, id)
-        except Exception as e:
-            return e
+    try:
+        return db.select_note_by_id(conn, id)
+    except Exception as e:
+        return e
 
 @note.route('/', methods=['GET', 'POST'])
 @note.route('/index', methods=['GET', 'POST'])
@@ -62,18 +61,17 @@ def add_note(msg=""):
         return jsonify({"Error": "Message tooooo long!"}), 400
 
     if (msg == "\""):
-        response = jsonify({"Sucess": "Maybe a Security Issue!"})
+        response = jsonify({"Success": "Maybe a Security Issue!"})
         response.headers.set('Content-Type', 'text/html')
         return response, 200
 
     conn = db.create_connection()
-    with conn:
-        try:
-            db.create_note(conn, (str(msg),))
-            return jsonify({"Sucess": "Note added!"})
-        except Exception as e:
-            err = "%s" % e
-            return jsonify({"Error": err}), 500
+    try:
+        db.create_note(conn, (str(msg),))
+        return jsonify({"Sucess": "Note added!"})
+    except Exception as e:
+        err = "%s" % e
+        return jsonify({"Error": err}), 500
 
 
 @note.route('/delete', methods=['DELETE'])
@@ -85,12 +83,11 @@ def delete_note(id=None):
         return "No Id sent in request."
 
     conn = db.create_connection()
-    with conn:
-        try:
-            db.delete_note(conn, id)
-            return "Note deleted successfully!"
-        except Exception as e:
-            return "Failed to delete Note: %s" % e
+    try:
+        db.delete_note(conn, id)
+        return "Note deleted successfully!"
+    except Exception as e:
+        return "Failed to delete Note: %s" % e
 
 @note.route('/get', methods=['GET'])
 def get_note():
