@@ -18,6 +18,7 @@ def create_connection(name='my_database'):
     except Error as e:
         note.logger.error("Error: cannot connect to db - %s" % e)
 
+    conn.auto_reconnect = True
     return conn
 
 
