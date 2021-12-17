@@ -41,9 +41,11 @@ def create_note(conn, notes):
     except Error as e:
         note.logger.error("Error: cannot create note - %s" % e)
 
+    lastRowId = cur.lastrowid
     conn.commit()
     conn.close()
-    return cur.lastrowid
+    
+    return lastRowId
 
 
 def delete_note(conn, id):
@@ -72,5 +74,6 @@ def select_note_by_id(conn, id=None):
     except Error as e:
         note.logger.error("Error: cannot select note by id - %s" % e)
 
+    allItems = cur.fetchall()
     conn.close()
-    return cur.fetchall()
+    return allItems

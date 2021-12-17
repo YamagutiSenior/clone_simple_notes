@@ -11,21 +11,23 @@ def get_note_ui():
         return db.select_note_by_id(conn, id)
     except Exception as e:
         note.logger.error("Error Creating UI: %s" % e)
-        return ['error', 'error']
+        return []
 
 @note.route('/', methods=['GET', 'POST'])
 @note.route('/index', methods=['GET', 'POST'])
 def index():
     items = get_note_ui()
+
     arr = []
-    for item in items:
-        try:
-            _id = item[0]
-            _note = item[1]
-            note_str = '%s. "%s"' % (_id, _note)
-            arr.append(note_str)
-        except Exception as e:
-            note.logger.error(e)
+    if len(items) > 0:
+        for item in items:
+            try:
+                _id = item[0]
+                _note = item[1]
+                note_str = '%s. "%s"' % (_id, _note)
+                arr.append(note_str)
+            except Exception as e:
+                note.logger.error(e)
 
     add_form = AddForm()
     delete_form = DeleteForm()
