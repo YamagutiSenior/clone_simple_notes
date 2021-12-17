@@ -4,7 +4,7 @@ import mysql.connector as database
 from sqlite3 import Error
 
 
-def create_connection(name='my_database.db'):
+def create_connection(name='my_database'):
     conn = None
 
     try:
