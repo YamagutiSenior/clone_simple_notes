@@ -35,6 +35,7 @@ def create_note(conn, notes):
 
     try:
         cur.execute(query, notes)
+        conn.commit()
     except Error as e:
         logging.error(e)
 
