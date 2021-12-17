@@ -10,7 +10,7 @@ def create_connection(name='my_database.db'):
     try:
         conn = database.connect(
             user="root",
-            password=os.environ("DB_ROOT_PWD"),
+            password=os.environ.get("DB_ROOT_PWD"),
             host="mariadb",
             port=3306,
             database=name
