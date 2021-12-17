@@ -3,7 +3,7 @@ from config import Config
 from flask_bootstrap import Bootstrap
 
 
-note = Flask(__name__)
+note = Flask(__name__, static_url_path='/notes')
 note.config.from_object(Config)
 bootstrap = Bootstrap(note)
 

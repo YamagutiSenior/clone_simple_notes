@@ -28,6 +28,8 @@ def create_table(conn, create_table_sql):
     except Error as e:
         note.logger.error("Error: cannot create table - %s" % e)
 
+    conn.close()
+
 
 def create_note(conn, notes):
     query = "INSERT INTO notes(data) VALUES(?)"
@@ -40,6 +42,7 @@ def create_note(conn, notes):
         note.logger.error("Error: cannot create note - %s" % e)
 
     conn.commit()
+    conn.close()
     return cur.lastrowid
 
 
@@ -54,6 +57,7 @@ def delete_note(conn, id):
         note.logger.error("Error: cannot delete note - %s" % e)
 
     conn.commit()
+    conn.close()
 
 def select_note_by_id(conn, id=None):
     query = "SELECT * FROM notes"
@@ -68,4 +72,5 @@ def select_note_by_id(conn, id=None):
     except Error as e:
         note.logger.error("Error: cannot select note by id - %s" % e)
 
+    conn.close()
     return cur.fetchall()
