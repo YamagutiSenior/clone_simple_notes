@@ -36,10 +36,10 @@ def create_note(conn, notes):
     try:
         note.logger.info("Adding Note %s", notes)
         cur.execute(query, notes)
-        conn.commit()
     except Error as e:
         note.logger.error("Error: cannot create note - %s" % e)
 
+    conn.commit()
     return cur.lastrowid
 
 
@@ -50,10 +50,10 @@ def delete_note(conn, id):
     try:
         note.logger.info("Deleteing Note #%s", id)
         cur.execute(query, (id,))
-        conn.commit()
     except Error as e:
         note.logger.error("Error: cannot delete note - %s" % e)
 
+    conn.commit()
 
 def select_note_by_id(conn, id=None):
     query = "SELECT * FROM notes"
@@ -65,7 +65,6 @@ def select_note_by_id(conn, id=None):
     try:
         note.logger.info("Getting all notes!")
         cur.execute(query)
-        conn.commit()
     except Error as e:
         note.logger.error("Error: cannot select note by id - %s" % e)
 
