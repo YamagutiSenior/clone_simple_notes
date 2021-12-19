@@ -1,6 +1,7 @@
-from notes import db, note
-from notes.forms import AddForm, DeleteForm
+from notes import db, note, auth, users
+from notes.forms import AddForm, AdminForm, DeleteForm
 from flask import render_template, request, flash, redirect, jsonify
+from werkzeug.security import check_password_hash
 
 
 def get_note_ui():
@@ -31,6 +32,7 @@ def index():
 
     add_form = AddForm()
     delete_form = DeleteForm()
+    admin_form = AdminForm
 
     if add_form.validate_on_submit():
         add_note(add_form.note_field.data)
@@ -46,9 +48,26 @@ def index():
             delete_form.id_field.data))
 
         return redirect('/notes')
-    
-    return render_template('index.html', notes=arr, add_form=add_form, delete_form=delete_form)
 
+    if admin_form.validate_on_submit():
+        auth.username = admin_form.username_field
+        auth.password = admin_form.password_field
+        return redirect('/admin')
+    
+    return render_template('index.html', notes=arr, add_form=add_form, delete_form=delete_form, admin_form=admin_form)
+
+
+@note.route('/admin', methods=['POST'])
+@auth.login_required
+def admin():
+    return "Hello, {}!".format(auth.current_user())
+    #return render_template('admin.html', )
+
+@auth.verify_password
+def verify_password(username, password):
+    if username in users and \
+            check_password_hash(users.get(username), password):
+        return username
 
 @note.route('/add', methods=['POST'])
 def add_note(msg=""):

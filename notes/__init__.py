@@ -1,11 +1,17 @@
 from flask import Flask
 from config import Config
 from flask_bootstrap import Bootstrap
-
+from flask_httpauth import HTTPBasicAuth
+from werkzeug.security import generate_password_hash
 
 note = Flask(__name__)
 note.config.from_object(Config)
 bootstrap = Bootstrap(note)
+auth = HTTPBasicAuth()
+
+users = {
+    "admin": generate_password_hash("yeet")
+}
 
 from notes import db, routes
 

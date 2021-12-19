@@ -3,3 +3,5 @@ flask_wtf
 wtforms
 flask-bootstrap
 mariadb
+werkzeug.security
+flask_httpauth
