@@ -1,5 +1,5 @@
 from notes import db, note, auth, users
-from notes.forms import AddForm, AdminForm, DeleteForm
+from notes.forms import AddForm, AdminForm, DeleteAllForm, DeleteForm
 from flask import render_template, request, flash, redirect, jsonify
 from werkzeug.security import check_password_hash
 
@@ -58,7 +58,14 @@ def index():
 @note.route('/admin', methods=['GET', 'POST'])
 @auth.login_required
 def admin():
+    reset_form = DeleteAllForm()
+    if reset_form.validate_on_submit():
+        reset()
+        flash('Database Table "{}" has been rest!'.format(
+            "notes"))
+    
     return render_template('admin.html')
+
 
 @auth.verify_password
 def verify_password(username, password):
@@ -107,6 +114,21 @@ def delete_note(id=None):
         return "Note deleted successfully!"
     except Exception as e:
         return "Failed to delete Note: %s" % e
+
+@note.route('/reset', methods=['POST'])
+@auth.login_required
+def reset():
+    conn = db.create_connection()
+    try:
+        db.drop_table(conn, note.sql_drop_notes_table)
+    except Exception as e:
+        return "Failed to reset database table 'notes': %s" % e
+
+    conn = db.create_connection()
+    try:
+        db.create_table(conn, note.sql_create_notes_table)
+    except Exception as e:
+        return "Failed to re-create database table 'notes': %s" % e
 
 @note.route('/get', methods=['GET'])
 def get_note():

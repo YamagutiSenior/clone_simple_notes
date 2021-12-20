@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
+from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 
 class AddForm(FlaskForm):
@@ -12,3 +12,6 @@ class DeleteForm(FlaskForm):
 
 class AdminForm(FlaskForm):
     login = SubmitField('Login')
+
+class ResetForm(FlaskForm):
+    reset = SubmitField('Reset Database Table')
