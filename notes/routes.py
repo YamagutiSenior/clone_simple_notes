@@ -50,8 +50,6 @@ def index():
         return redirect('/notes')
 
     if admin_form.validate_on_submit():
-        auth.username = admin_form.username_field.data
-        auth.password = admin_form.password_field.data
         return redirect('/notes/admin')
     
     return render_template('index.html', notes=arr, add_form=add_form, delete_form=delete_form, admin_form=admin_form)

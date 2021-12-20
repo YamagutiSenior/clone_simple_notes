@@ -58,12 +58,6 @@
             <form class="form-inline" action="" method="post" novalidate>
                 {{ admin_form.hidden_tag() }}
                 <p>
-                    {{ admin_form.username_field.label }}
-                    {{ admin_form.username_field(size=2) }}
-
-                    {{ admin_form.password_field.label }}
-                    {{ admin_form.password_field(size=2) }}
-
                     {{ admin_form.login() }}
                 </p>
             </form>

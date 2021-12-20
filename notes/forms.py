@@ -11,6 +11,4 @@ class DeleteForm(FlaskForm):
     delete = SubmitField('Delete')
 
 class AdminForm(FlaskForm):
-    username_field = StringField('Username', validators=[DataRequired()])
-    password_field = PasswordField('Password', validators=[DataRequired()])
     login = SubmitField('Login')
