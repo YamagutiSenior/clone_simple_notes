@@ -32,7 +32,7 @@ def index():
 
     add_form = AddForm()
     delete_form = DeleteForm()
-    admin_form = AdminForm
+    admin_form = AdminForm()
 
     if add_form.validate_on_submit():
         add_note(add_form.note_field.data)
