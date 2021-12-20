@@ -58,8 +58,7 @@ def index():
 @note.route('/admin', methods=['GET', 'POST'])
 @auth.login_required
 def admin():
-    return "Hello, {}!".format(auth.current_user())
-    #return render_template('admin.html', )
+    return render_template('admin.html')
 
 @auth.verify_password
 def verify_password(username, password):
