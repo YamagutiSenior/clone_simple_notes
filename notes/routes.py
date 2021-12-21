@@ -3,7 +3,7 @@ from notes.forms import AddForm, AdminForm, ResetForm, DeleteForm
 from flask import render_template, request, flash, redirect, jsonify
 from werkzeug.security import check_password_hash
 
-
+# TODO: Remove this and just use notes
 def get_note_ui():
     id = request.args.get('id')
     conn = db.create_connection()
@@ -41,11 +41,14 @@ def index():
 
         return redirect('/notes')
 
-    # TODO: Add return and flash error if note does not exist
     if delete_form.validate_on_submit():
-        delete_note(delete_form.id_field.data)
-        flash('Note "{}" has been Deleted!'.format(
+        try:
+            delete_note(delete_form.id_field.data)
+            flash('Note "{}" has been Deleted!'.format(
             delete_form.id_field.data))
+        except Exception as e:
+            flash('Failed to delete Note "{}": %s'.format(
+            delete_form.id_field.data, e))
 
         return redirect('/notes')
 
@@ -61,10 +64,10 @@ def admin():
     reset_form = ResetForm()
     if reset_form.validate_on_submit():
         reset()
-        flash('Database Table "{}" has been rest!'.format(
+        flash('Database Table "{}" has been reset!'.format(
             "notes"))
     
-    return render_template('admin.html')
+    return render_template('admin.html', reset_form=reset_form)
 
 
 @auth.verify_password
