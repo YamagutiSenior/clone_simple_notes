@@ -13,7 +13,7 @@ users = {
     "admin": generate_password_hash("yeet")
 }
 
-from notes import db
+from notes import db, routes
 
 sql_create_notes_table = """ CREATE TABLE IF NOT EXISTS notes (
                                         id integer NOT NULL AUTO_INCREMENT,
