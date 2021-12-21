@@ -1,5 +1,5 @@
 from notes import db, note, auth, users
-from notes.forms import AddForm, AdminForm, DeleteAllForm, DeleteForm
+from notes.forms import AddForm, AdminForm, ResetForm, DeleteForm
 from flask import render_template, request, flash, redirect, jsonify
 from werkzeug.security import check_password_hash
 
@@ -58,7 +58,7 @@ def index():
 @note.route('/admin', methods=['GET', 'POST'])
 @auth.login_required
 def admin():
-    reset_form = DeleteAllForm()
+    reset_form = ResetForm()
     if reset_form.validate_on_submit():
         reset()
         flash('Database Table "{}" has been rest!'.format(
