@@ -3,21 +3,19 @@ from notes.forms import AddForm, AdminForm, ResetForm, DeleteForm
 from flask import render_template, request, flash, redirect, jsonify
 from werkzeug.security import check_password_hash
 
-# TODO: Remove this and just use notes
-def get_note_ui():
-    id = request.args.get('id')
-    conn = db.create_connection()
-
-    try:
-        return db.select_note_by_id(conn, id)
-    except Exception as e:
-        note.logger.error("Error Creating UI: %s" % e)
-        return []
 
 @note.route('/', methods=['GET', 'POST'])
 @note.route('/index', methods=['GET', 'POST'])
 def index():
-    items = get_note_ui()
+    items = []
+
+    id = request.args.get('id')
+    conn = db.create_connection()
+
+    try:
+        item = db.select_note_by_id(conn, id)
+    except Exception as e:
+        note.logger.error("Error Creating UI: %s" % e)
 
     arr = []
     if len(items) > 0:
@@ -118,8 +116,6 @@ def delete_note(id=None):
     except Exception as e:
         return "Failed to delete Note: %s" % e
 
-@note.route('/reset', methods=['POST'])
-@auth.login_required
 def reset():
     conn = db.create_connection()
     try:
@@ -135,4 +131,11 @@ def reset():
 
 @note.route('/get', methods=['GET'])
 def get_note():
-    return str(get_note_ui())
+    id = request.args.get('id')
+    conn = db.create_connection()
+
+    try:
+        return str(db.select_note_by_id(conn, id))
+    except Exception as e:
+        note.logger.error("Error Getting Notes: %s" % e)
+        return str([])
