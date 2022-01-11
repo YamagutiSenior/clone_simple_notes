@@ -64,6 +64,7 @@ def admin():
         reset()
         flash('Database Table "{}" has been reset!'.format(
             "notes"))
+        return redirect('/notes')
     
     return render_template('admin.html', reset_form=reset_form)
 
