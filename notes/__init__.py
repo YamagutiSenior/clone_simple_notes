@@ -20,7 +20,7 @@ sql_create_notes_table = """ CREATE TABLE IF NOT EXISTS notes (
                                         data text,
                                         PRIMARY KEY (id)
                                     ); """
-sql_drop_notes_table = "DROP TABLE notes;"
+sql_drop_notes_table = """ DROP TABLE notes;"""
 
 conn = db.create_connection()
 if conn is not None:

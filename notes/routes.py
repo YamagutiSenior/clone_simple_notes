@@ -61,10 +61,13 @@ def index():
 def admin():
     reset_form = ResetForm()
     if reset_form.validate_on_submit():
-        reset()
-        flash('Database Table "{}" has been reset!'.format(
+        try:
+            reset()
+            flash('Database Table "{}" has been reset!'.format(
             "notes"))
-        return redirect('/notes')
+            return redirect('/notes')
+        except Exception as e:
+            return jsonify({"Error": "%s" % e}), 500
     
     return render_template('admin.html', reset_form=reset_form)
 
