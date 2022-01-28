@@ -13,7 +13,7 @@ def index():
     conn = db.create_connection()
 
     try:
-        item = db.select_note_by_id(conn, id)
+        items = db.select_note_by_id(conn, id)
     except Exception as e:
         note.logger.error("Error Creating UI: %s" % e)
 
