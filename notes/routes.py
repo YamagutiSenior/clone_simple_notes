@@ -128,9 +128,17 @@ def reset():
     except Exception as e:
         note.logger.error("Failed to reset database table 'notes': %s" % e)
 
+    # TODO: Refactor this as well as
+    # always check for db and table and
+    # recreate if missing
     conn = db.create_connection()
+    sql_create_notes_table = """ CREATE TABLE IF NOT EXISTS notes (
+                                        id integer NOT NULL AUTO_INCREMENT,
+                                        data text,
+                                        PRIMARY KEY (id)
+                                    ); """
     try:
-        db.create_table(conn, sql_drop_notes_table)
+        db.create_table(conn, sql_create_notes_table)
     except Exception as e:
         note.logger.error("Failed to re-create database table 'notes': %s" % e)
 
