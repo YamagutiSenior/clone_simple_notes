@@ -67,7 +67,7 @@ def admin():
             "notes"))
             return redirect('/notes')
         except Exception as e:
-            return jsonify({"Error": "%s" % e}), 500
+            note.logger.error(e)
     
     return render_template('admin.html', reset_form=reset_form)
 
@@ -122,16 +122,17 @@ def delete_note(id=None):
 
 def reset():
     conn = db.create_connection()
+    sql_drop_notes_table = """ DROP TABLE notes;"""
     try:
-        db.drop_table(conn, note.sql_drop_notes_table)
+        db.drop_table(conn, sql_drop_notes_table)
     except Exception as e:
-        return "Failed to reset database table 'notes': %s" % e
+        note.logger.error("Failed to reset database table 'notes': %s" % e)
 
     conn = db.create_connection()
     try:
-        db.create_table(conn, note.sql_create_notes_table)
+        db.create_table(conn, sql_drop_notes_table)
     except Exception as e:
-        return "Failed to re-create database table 'notes': %s" % e
+        note.logger.error("Failed to re-create database table 'notes': %s" % e)
 
 @note.route('/get', methods=['GET'])
 def get_note():
