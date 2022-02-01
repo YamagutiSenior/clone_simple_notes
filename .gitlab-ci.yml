@@ -61,8 +61,8 @@ deploy_database:
     - helm repo add bitnami https://charts.bitnami.com/bitnami
     # https://github.com/bitnami/charts/tree/master/bitnami/mariadb/
     - helm upgrade --set auth.rootPassword=$DB_ROOT_PWD --set primary.service.clusterIP=None --install mariadb bitnami/mariadb
-  environment:
-    name: staging
+  # environment:
+  #   name: staging
 
 deploy_staging:
   image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image/releases/3.2.4-kube-1.13.12
