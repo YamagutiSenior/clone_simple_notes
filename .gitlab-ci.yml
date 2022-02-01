@@ -78,10 +78,10 @@ deploy_staging:
     url: http://104.198.204.142/
   allow_failure: true
 
-cleanup-db:
-  image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image/releases/3.2.4-kube-1.13.12
-  script:
-    - echo "TODO - cleanup SQLDatabase by dropping table, using client or script, or passing variables to a function via curl"
-  environment:
-    name: staging
-  when: manual
+# cleanup-db:
+#   image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image/releases/3.2.4-kube-1.13.12
+#   script:
+#     - echo "TODO - cleanup SQLDatabase by dropping table, using client or script, or passing variables to a function via curl"
+#   environment:
+#     name: staging
+#   when: manual
