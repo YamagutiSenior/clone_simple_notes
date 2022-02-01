@@ -15,7 +15,7 @@ stages:
   - c-fuzz
   - test
   - db
-  - staging
+  - deploy
   - dast
   - fuzz
 
@@ -66,7 +66,7 @@ deploy_database:
 
 deploy_staging:
   image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image/releases/3.2.4-kube-1.13.12
-  stage: staging
+  stage: deploy
   variables:
     IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
     HELM_HOST: "localhost:44134"
