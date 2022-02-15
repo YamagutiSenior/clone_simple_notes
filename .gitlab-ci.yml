@@ -5,10 +5,10 @@ services:
 
 variables:
   SCAN_KUBERNETES_MANIFESTS: "true"
-  DAST_WEBSITE: http://104.198.204.142/notes
+  DAST_WEBSITE: http://104.154.225.226/notes
   FUZZAPI_PROFILE: Long-100
   FUZZAPI_OPENAPI: test_openapi.v2.0.json
-  FUZZAPI_TARGET_URL: http://104.198.204.142
+  FUZZAPI_TARGET_URL: http://104.154.225.226
 
 stages:
   - build
@@ -61,8 +61,8 @@ deploy_database:
     - helm repo add bitnami https://charts.bitnami.com/bitnami
     # https://github.com/bitnami/charts/tree/master/bitnami/mariadb/
     - helm upgrade --set auth.rootPassword=$DB_ROOT_PWD --set primary.service.clusterIP=None --install mariadb bitnami/mariadb
-  # environment:
-  #   name: staging
+  environment:
+    name: staging
 
 deploy_staging:
   image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image/releases/3.2.4-kube-1.13.12
@@ -75,13 +75,21 @@ deploy_staging:
     - helm upgrade -f helm/values.yaml --set image=$IMAGE --set dbrootpwd=$DB_ROOT_PWD --install notes ./helm
   environment:
     name: staging
-    url: http://104.198.204.142/
+    url: http://104.154.225.226
   allow_failure: true
 
-# cleanup-db:
-#   image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image/releases/3.2.4-kube-1.13.12
-#   script:
-#     - echo "TODO - cleanup SQLDatabase by dropping table, using client or script, or passing variables to a function via curl"
-#   environment:
-#     name: staging
-#   when: manual
+cleanup-db:
+  image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image/releases/3.2.4-kube-1.13.12
+  stage: deploy
+  variables:
+    IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
+    HELM_HOST: "localhost:44134"
+  script:
+    - kubectl config use-context tech-marketing/devsecops/initech/bill-lumbergh-notes:initech-notes
+    - kubectl exec -it deploy/notes -- bash
+    - python app/scripts/drop_table.py
+  environment:
+    name: staging
+    url: http://104.154.225.226
+  allow_failure: true
+  when: manual
