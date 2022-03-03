@@ -1,4 +1,4 @@
-FROM python:3
+FROM python:3.10.2
 
 RUN apt update
 RUN apt install libmariadb3 libmariadb-dev
