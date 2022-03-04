@@ -50,6 +50,7 @@ fuzz-target:
   stage: c-fuzz
   extends: .fuzz_base
   script:
+    - pip install --extra-index-url https://gitlab.com/api/v4/projects/19904939/packages/pypi/simple pythonfuzz
     - ./gitlab-cov-fuzz run --engine pythonfuzz -- fuzz.py
 
 deploy_database:
