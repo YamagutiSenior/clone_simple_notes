@@ -44,7 +44,6 @@ build:
 
 fuzz-target:
   image: python:3.9.1-buster
-  timeout: 180 seconds
   variables:
     COVFUZZ_ADDITIONAL_ARGS: '-max_total_time=90'
     COVFUZZ_USE_REGISTRY: "true"
