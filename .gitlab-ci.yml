@@ -43,15 +43,13 @@ build:
     - docker push $IMAGE
 
 fuzz-target:
-  image: python:3.9.1-buster
+  image: python:latest
   variables:
-    COVFUZZ_ADDITIONAL_ARGS: '-max_total_time=90'
     COVFUZZ_USE_REGISTRY: "true"
     COVFUZZ_CORPUS_NAME: "notes-$CI_COMMIT_SHA"
   stage: c-fuzz
   extends: .fuzz_base
   script:
-    - pip install --extra-index-url https://gitlab.com/api/v4/projects/19904939/packages/pypi/simple pythonfuzz
     - ./gitlab-cov-fuzz run --engine pythonfuzz -- fuzz.py
 
 deploy_database:
