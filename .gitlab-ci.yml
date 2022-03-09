@@ -9,6 +9,8 @@ variables:
   FUZZAPI_PROFILE: Long-100
   FUZZAPI_OPENAPI: test_openapi.v2.0.json
   FUZZAPI_TARGET_URL: http://104.154.225.226
+  CS_DISABLE_LANGUAGE_VULNERABILITY_SCAN: "false"
+  CS_ANALYZER_IMAGE: registry.gitlab.com/security-products/container-scanning/grype:4-ubi
 
 stages:
   - build
@@ -21,9 +23,9 @@ stages:
 
 include:
   - template: Security/SAST.gitlab-ci.yml
-  #- template: Security/Dependency-Scanning.gitlab-ci.yml
+  - template: Security/Dependency-Scanning.gitlab-ci.yml
   - template: Security/License-Scanning.gitlab-ci.yml
-  #- template: Security/Container-Scanning.gitlab-ci.yml
+  - template: Security/Container-Scanning.gitlab-ci.yml
   - template: Security/DAST.gitlab-ci.yml
   - template: Security/Secret-Detection.gitlab-ci.yml
   - template: API-Fuzzing.gitlab-ci.yml
