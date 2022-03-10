@@ -23,7 +23,7 @@ deploy_database:
   image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image/releases/3.2.4-kube-1.13.12
   stage: db
   script:
-    - kubectl config use-context tech-marketing/devsecops/initech/bill-lumbergh-notes:initech-notes
+    - kubectl config use-context tech-marketing/devsecops/initech/bills-notes:initech-notes
     - helm repo add bitnami https://charts.bitnami.com/bitnami
     # https://github.com/bitnami/charts/tree/master/bitnami/mariadb/
     - helm upgrade --set auth.rootPassword=$DB_ROOT_PWD --set primary.service.clusterIP=None --install mariadb bitnami/mariadb
@@ -37,7 +37,7 @@ deploy_staging:
     IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
     HELM_HOST: "localhost:44134"
   script:
-    - kubectl config use-context tech-marketing/devsecops/initech/bill-lumbergh-notes:initech-notes
+    - kubectl config use-context tech-marketing/devsecops/initech/bills-notes:initech-notes
     - helm upgrade -f helm/values.yaml --set image=$IMAGE --set dbrootpwd=$DB_ROOT_PWD --install notes ./helm
   environment:
     name: staging
