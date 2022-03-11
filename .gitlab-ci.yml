@@ -46,9 +46,6 @@ build:
 
 fuzz-target:
   image: python:latest
-  variables:
-    COVFUZZ_USE_REGISTRY: "true"
-    COVFUZZ_CORPUS_NAME: "notes-$CI_COMMIT_SHA"
   stage: c-fuzz
   extends: .fuzz_base
   script:
