@@ -9,8 +9,6 @@ variables:
   FUZZAPI_PROFILE: Long-100
   FUZZAPI_OPENAPI: test_openapi.v2.0.json
   FUZZAPI_TARGET_URL: http://34.67.207.202
-  CI_DEBUG_TRACE: "true"
-  SECURE_LOG_LEVEL: "debug"
 
 stages:
   - build
@@ -51,6 +49,13 @@ fuzz-target:
   script:
     - pip install --extra-index-url https://gitlab.com/api/v4/projects/19904939/packages/pypi/simple pythonfuzz
     - ./gitlab-cov-fuzz run --engine pythonfuzz -- fuzz.py
+
+gemnasium-dependency_scanning:
+  variables:
+    SECURE_LOG_LEVEL: "debug"
+  before_script:
+    - apt update
+    - apt install libmariadb3 libmariadb-dev
 
 deploy_database:
   image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image/releases/3.2.4-kube-1.13.12
