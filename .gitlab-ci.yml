@@ -9,7 +9,8 @@ variables:
   FUZZAPI_PROFILE: Long-100
   FUZZAPI_OPENAPI: test_openapi.v2.0.json
   FUZZAPI_TARGET_URL: http://34.67.207.202
-  CS_ANALYZER_IMAGE: registry.gitlab.com/security-products/container-scanning/grype:4-ubi
+  CI_DEBUG_TRACE: "true"
+  SECURE_LOG_LEVEL: "debug"
 
 stages:
   - build
