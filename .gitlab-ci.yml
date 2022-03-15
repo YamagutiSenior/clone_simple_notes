@@ -4,15 +4,15 @@ services:
   - docker:19.03.8-dind
 
 variables:
-  SCAN_KUBERNETES_MANIFESTS: "true"
-  DAST_WEBSITE: http://34.67.207.202/notes
-  FUZZAPI_PROFILE: Long-100
-  FUZZAPI_OPENAPI: test_openapi.v2.0.json
-  FUZZAPI_TARGET_URL: http://34.67.207.202
+ SCAN_KUBERNETES_MANIFESTS: "true"
+ DAST_WEBSITE: http://34.67.207.202/notes
+ FUZZAPI_PROFILE: Long-100
+ FUZZAPI_OPENAPI: test_openapi.v2.0.json
+ FUZZAPI_TARGET_URL: http://34.67.207.202
 
 stages:
-  #- build
-  #- c-fuzz
+  - build
+ # - c-fuzz
   - test
   - db
   - deploy
