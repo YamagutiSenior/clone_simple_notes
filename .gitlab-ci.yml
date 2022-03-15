@@ -12,7 +12,7 @@ variables:
 
 stages:
   - build
- # - c-fuzz
+  - c-fuzz
   - test
   - db
   - deploy
@@ -42,20 +42,20 @@ build:
     - docker build -t $IMAGE .
     - docker push $IMAGE
 
-# fuzz-target:
-#   image: python:latest
-#   stage: c-fuzz
-#   extends: .fuzz_base
-#   script:
-#     - pip install --extra-index-url https://gitlab.com/api/v4/projects/19904939/packages/pypi/simple pythonfuzz
-#     - ./gitlab-cov-fuzz run --engine pythonfuzz -- fuzz.py
+fuzz-target:
+  image: python:latest
+  stage: c-fuzz
+  extends: .fuzz_base
+  script:
+    - pip install --extra-index-url https://gitlab.com/api/v4/projects/19904939/packages/pypi/simple pythonfuzz
+    - ./gitlab-cov-fuzz run --engine pythonfuzz -- fuzz.py
 
 gemnasium-python-dependency_scanning:
   variables:
     SECURE_LOG_LEVEL: "debug"
   before_script:
     - apt update
-    - apt install libmariadb3 libmariadb-dev
+    - apt install libmariadb3 libmariadb-dev -y
 
 deploy_database:
   image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image/releases/3.2.4-kube-1.13.12
