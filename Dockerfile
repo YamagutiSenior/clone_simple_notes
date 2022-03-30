@@ -1,7 +1,7 @@
 FROM python:latest
 
-RUN apt update
-RUN apt install libmariadb3 libmariadb-dev
+RUN apt update -y
+RUN apt install libmariadb3 libmariadb-dev -y
 
 COPY ./requirements.txt /app/requirements.txt
 
