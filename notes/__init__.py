@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask
 from config import Config
 from flask_bootstrap import Bootstrap
