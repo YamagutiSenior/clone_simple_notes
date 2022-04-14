@@ -7,20 +7,28 @@ from notes import note
 def create_connection(name='my_database'):
     conn = None
 
-    try:
-        conn = mariadb.connect(
-            user="root",
-            password=os.environ.get("DB_ROOT_PWD"),
-            host="mariadb",
-            port=3306,
-            database=name
-        )
-    except Error as e:
-        note.logger.error("Error: cannot connect to db - %s" % e)
+    if db_backend == 'mariadb':
+        try:
+            conn = mariadb.connect(
+                user="root",
+                password=os.environ.get("DB_ROOT_PWD"),
+                host="mariadb",
+                port=3306,
+                database=name
+            )
+            conn.auto_reconnect = True
+        except Exception as e:
+            note.logger.error("Error: cannot connect to db - %s" % e)
+            return
 
-    conn.auto_reconnect = True
+    elif db_backend == 'local':
+        try:
+            conn = sqlite3.connect(name + ".db")
+        except Exception as e:
+            note.logger.error("Error: cannot connect to db - %s" % e)
+            return
+
     return conn
-
 
 def create_table(conn, create_table_sql):
     try:
