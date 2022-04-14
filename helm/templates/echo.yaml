@@ -40,6 +40,9 @@ spec:
   - http:
       paths:
       - path: /
+        pathType: Prefix
         backend:
-          serviceName: echo-svc
-          servicePort: 80
+          service:
+            name: echo-svc
+            port:
+              number: 80
