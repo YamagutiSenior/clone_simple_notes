@@ -1,7 +1,7 @@
 import os
 import mariadb
-from sqlite3 import Error
-from notes import note
+import sqlite3
+from notes import note, db_backend
 
 
 def create_connection(name='my_database'):
