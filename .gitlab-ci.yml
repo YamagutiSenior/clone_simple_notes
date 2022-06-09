@@ -19,7 +19,7 @@ stages:
 
 include:
   - template: Security/SAST.gitlab-ci.yml
-  #- template: Security/Dependency-Scanning.gitlab-ci.yml
+  - template: Security/Dependency-Scanning.gitlab-ci.yml
   #- template: Security/License-Scanning.gitlab-ci.yml
   - template: Security/Container-Scanning.gitlab-ci.yml
   #- template: Security/DAST.gitlab-ci.yml
@@ -57,12 +57,12 @@ unit:
 #     - pip install --extra-index-url https://gitlab.com/api/v4/projects/19904939/packages/pypi/simple pythonfuzz
 #     - ./gitlab-cov-fuzz run --engine pythonfuzz -- fuzz.py
 
-# gemnasium-python-dependency_scanning:
-#   variables:
-#     SECURE_LOG_LEVEL: "debug"
-#   before_script:
-#     - apt update
-#     - apt install libmariadb3 libmariadb-dev sqlite3 libsqlite3-dev -y
+gemnasium-python-dependency_scanning:
+  variables:
+    SECURE_LOG_LEVEL: "debug"
+  before_script:
+    - apt update
+    - apt install libmariadb3 libmariadb-dev sqlite3 libsqlite3-dev -y
 
 deploy_database:
   image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image/releases/3.2.4-kube-1.13.12
