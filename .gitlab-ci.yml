@@ -51,7 +51,7 @@ unit:
     - apt update -y
     - apt install libmariadb3 libmariadb-dev sqlite3 libsqlite3-dev -y
     - pip3 install -r requirements.txt
-    - python -m unittest tests/test_db.py
+    - python -m unittest tests/test_db.py 2>&1 | tee unit.txt
 
 fuzz-target:
   image: python:latest
