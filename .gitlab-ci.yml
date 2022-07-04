@@ -53,7 +53,7 @@ unit:
     - pip3 install -r requirements.txt
     - python -m unittest tests/test_db.py > unit.txt
   variables:
-    - RUNNER_GENERATE_ARTIFACTS_METADATA: "true"
+    RUNNER_GENERATE_ARTIFACTS_METADATA: "true"
   artifacts:
     paths:
       - unit.txt
