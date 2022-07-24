@@ -11,7 +11,7 @@ variables:
  FUZZAPI_TARGET_URL: http://34.132.117.178
  RUNNER_GENERATE_ARTIFACTS_METADATA: "true"
  SCAN_IMAGE_NAME: "quay.io/sysdig/secure-inline-scan:2"
- SYSDIG_SECURE_ENDPOINT: "https://us2.app.sysdig.com"
+ SYSDIG_SECURE_ENDPOINT: "https://us4.app.sysdig.com"
 
 stages:
   - build
