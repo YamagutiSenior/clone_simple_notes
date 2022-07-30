@@ -1,7 +1,7 @@
-image: docker:19.03.8
+image: docker:20.10.17
 
 services:
-  - docker:19.03.8-dind
+  - docker:20.10.17-dind
 
 variables:
  SCAN_KUBERNETES_MANIFESTS: "true"
@@ -10,55 +10,42 @@ variables:
  FUZZAPI_OPENAPI: test_openapi.v2.0.json
  FUZZAPI_TARGET_URL: http://34.132.117.178
  RUNNER_GENERATE_ARTIFACTS_METADATA: "true"
- SCAN_IMAGE_NAME: "quay.io/sysdig/secure-inline-scan:2"
- SYSDIG_SECURE_ENDPOINT: "https://app.us4.sysdig.com/"
 
 stages:
   - build
   - unit
   - test
   - c-fuzz
-  - db
   - deploy
   - dast
   - fuzz
 
 include:
-  - template: Security/SAST.gitlab-ci.yml
-  - template: Security/Dependency-Scanning.gitlab-ci.yml
-  - template: Security/License-Scanning.gitlab-ci.yml
   - template: Security/Container-Scanning.gitlab-ci.yml
   - template: Security/DAST.gitlab-ci.yml
-  - template: Security/Secret-Detection.gitlab-ci.yml
   - template: API-Fuzzing.gitlab-ci.yml
   - template: Coverage-Fuzzing.gitlab-ci.yml
   - template: Security/SAST-IaC.latest.gitlab-ci.yml
-  - template: Code-Quality.gitlab-ci.yml
 
 build:
-  image: docker:19.03.8
   stage: build
   variables:
     IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
   script:
-    - docker info
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker build -t $IMAGE .
-    - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock "$SCAN_IMAGE_NAME" --sysdig-url "$SYSDIG_SECURE_ENDPOINT" --sysdig-token "$SYSDIG_SECURE_TOKEN" "$IMAGE" --storage-type=docker-daemon
     - docker push "$IMAGE"
   only:
     - main
 
 unit:
-  image: python:3
+  image: python:latest
   stage: unit
   script:
     - apt update -y
     - apt install libmariadb3 libmariadb-dev sqlite3 libsqlite3-dev -y
     - pip3 install -r requirements.txt
     - python -m unittest tests/test_db.py 2>&1 | tee unit.txt
-  variables:
-    RUNNER_GENERATE_ARTIFACTS_METADATA: "true"
   artifacts:
     paths:
       - unit.txt
@@ -70,24 +57,6 @@ fuzz-target:
   script:
     - pip install --extra-index-url https://gitlab.com/api/v4/projects/19904939/packages/pypi/simple pythonfuzz
     - ./gitlab-cov-fuzz run --engine pythonfuzz -- fuzz.py
-
-gemnasium-python-dependency_scanning:
-  variables:
-    SECURE_LOG_LEVEL: "debug"
-  before_script:
-    - apt update
-    - apt install libmariadb3 libmariadb-dev sqlite3 libsqlite3-dev -y
-
-deploy_database:
-  image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image/releases/3.2.4-kube-1.13.12
-  stage: db
-  script:
-    - kubectl config use-context tech-marketing/devsecops/initech/simple-notes:simplenotes
-    - helm repo add bitnami https://charts.bitnami.com/bitnami
-    # https://github.com/bitnami/charts/tree/master/bitnami/mariadb/
-    - helm upgrade --set auth.rootPassword=$DB_ROOT_PWD --set primary.service.clusterIP=None --install mariadb bitnami/mariadb
-  environment:
-    name: staging
 
 deploy_staging:
   image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image/releases/3.2.4-kube-1.13.12
