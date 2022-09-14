@@ -5,6 +5,8 @@ services:
 
 variables:
  DAST_WEBSITE: http://34.132.117.178/notes
+ DAST_BROWSER_SCAN: "true"
+ DAST_FULL_SCAN_ENABLED: "true"
  FUZZAPI_PROFILE: Long-100
  FUZZAPI_OPENAPI: test_openapi.v2.0.json
  FUZZAPI_TARGET_URL: http://34.132.117.178
@@ -13,27 +15,14 @@ stages:
   - build
   - unit
   - test
-  - c-fuzz
   - deploy
   - dast
   - fuzz
 
 include:
-  - template: Security/Container-Scanning.gitlab-ci.yml
+  - template: Security/SAST.gitlab-ci.yml
   - template: Security/DAST.gitlab-ci.yml
   - template: API-Fuzzing.gitlab-ci.yml
-  - template: Coverage-Fuzzing.gitlab-ci.yml
-  - template: Security/SAST-IaC.latest.gitlab-ci.yml
-  - template: Security/License-Scanning.gitlab-ci.yml
-  - template: Code-Quality.gitlab-ci.yml
-
-fuzz-target:
-  image: python:latest
-  stage: c-fuzz
-  extends: .fuzz_base
-  script:
-    - pip install --extra-index-url https://gitlab.com/api/v4/projects/19904939/packages/pypi/simple pythonfuzz
-    - ./gitlab-cov-fuzz run --engine pythonfuzz -- fuzz.py
 
 build:
   stage: build
