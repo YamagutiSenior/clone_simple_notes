@@ -10,6 +10,7 @@ variables:
  FUZZAPI_PROFILE: Long-100
  FUZZAPI_OPENAPI: test_openapi.v2.0.json
  FUZZAPI_TARGET_URL: http://34.132.117.178
+ SAST_EXPERIMENTAL_FEATURES: "true"
 
 stages:
   - build
