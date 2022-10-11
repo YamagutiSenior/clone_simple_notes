@@ -33,9 +33,13 @@ def index():
     admin_form = AdminForm()
 
     if add_form.validate_on_submit():
-        add_note(add_form.note_field.data)
-        flash('Note "{}" has been added!'.format(
-            add_form.note_field.data))
+        try:
+            add_note(add_form.note_field.data)
+            flash('Note "{}" has been added!'.format(
+                add_form.note_field.data))
+        except Exception as e:
+            flash('Failed to add Note "{}": %s'.format(
+            add_form.note_field.data, e))
 
         return redirect('/notes')
 
@@ -79,9 +83,8 @@ def verify_password(username, password):
         return username
 
 
-@note.route('/add', methods=['POST'])
+@note.route('/add', methods=['GET', 'POST'])
 def add_note(msg=""):
-
     if not msg:
         data = request.get_json(force=True)
         msg = data.get('message')
@@ -105,8 +108,18 @@ def add_note(msg=""):
         err = "%s" % e
         return jsonify({"Error": err}), 500
 
+@note.route('/get', methods=['GET'])
+def get_note():
+    id = request.args.get('id')
+    conn = db.create_connection()
 
-@note.route('/delete', methods=['DELETE'])
+    try:
+        return str(db.select_note_by_id(conn, id))
+    except Exception as e:
+        note.logger.error("Error Getting Notes: %s" % e)
+        return str([])
+
+@note.route('/delete', methods=['GET', 'DELETE'])
 def delete_note(id=None):
     if not id:
         id = request.args.get('id')
@@ -140,15 +153,3 @@ def reset():
         db.create_table(conn, sql_create_notes_table)
     except Exception as e:
         note.logger.error("Failed to re-create database table 'notes': %s" % e)
-
-
-@note.route('/get', methods=['GET'])
-def get_note():
-    id = request.args.get('id')
-    conn = db.create_connection()
-
-    try:
-        return str(db.select_note_by_id(conn, id))
-    except Exception as e:
-        note.logger.error("Error Getting Notes: %s" % e)
-        return str([])
