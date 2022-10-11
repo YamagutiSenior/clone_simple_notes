@@ -101,7 +101,7 @@ reset-notes-table:
   stage: deploy
   script:
     - kubectl config use-context tech-marketing/devsecops/initech/simple-notes:simplenotes
-    - kubectl exec -it deploy/notes -- ./scripts/drop_table.py
+    - kubectl exec -it deploy/notes -- python scripts/drop_table.py
   environment:
     name: staging
   allow_failure: true
@@ -119,7 +119,7 @@ apifuzzer_fuzz:
   stage: apifuzz
   before_script:
     - sed -i 's@HOST@'"${INGRESS_LB_IP}"'@' test_openapi.v2.0.json
-    - export FUZZAPI_TARGET_URL=http://$(kubectl get svc -n ingress-nginx | grep LoadBalancer | awk '{print $4}')
+    - export FUZZAPI_TARGET_URL=http://${INGRESS_LB_IP}/
   variables:
     FUZZAPI_PROFILE: Long-100
     FUZZAPI_OPENAPI: test_openapi.v2.0.json
