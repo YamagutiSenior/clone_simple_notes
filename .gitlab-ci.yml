@@ -87,6 +87,8 @@ deploy-staging:
   artifacts:
     reports:
       dotenv: deploy.env
+  dependencies:
+    - build
 
 reset-notes-table:
   image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image:helm-3.10.0-kube-1.24.6-alpine-3.15
