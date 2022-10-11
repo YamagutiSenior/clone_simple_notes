@@ -4,26 +4,28 @@ services:
   - docker:20.10.17-dind
 
 variables:
- DAST_WEBSITE: http://34.132.117.178/notes
- DAST_BROWSER_SCAN: "true"
- DAST_FULL_SCAN_ENABLED: "true"
- FUZZAPI_PROFILE: Long-100
- FUZZAPI_OPENAPI: test_openapi.v2.0.json
- FUZZAPI_TARGET_URL: http://34.132.117.178
  SAST_EXPERIMENTAL_FEATURES: "true"
 
 stages:
   - build
   - unit
   - test
-  - deploy
+  - cfuzz
   - dast
+  - deploy
   - fuzz
 
 include:
-  - template: Security/SAST.gitlab-ci.yml
+  - template: Security/Container-Scanning.gitlab-ci.yml
   - template: Security/DAST.gitlab-ci.yml
   - template: API-Fuzzing.gitlab-ci.yml
+  - template: Coverage-Fuzzing.gitlab-ci.yml
+  - template: Security/License-Scanning.gitlab-ci.yml
+  - template: Code-Quality.gitlab-ci.yml
+  - template: Security/Dependency-Scanning.gitlab-ci.yml
+  - template: Security/SAST.gitlab-ci.yml
+  - template: Security/Secret-Detection.gitlab-ci.yml
+  - template: Jobs/SAST-IaC.gitlab-ci.yml
 
 build:
   stage: build
@@ -48,15 +50,50 @@ unit:
     paths:
       - unit.txt
 
-deploy_staging:
-  image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image/releases/3.2.4-kube-1.13.12
+gemnasium-python-dependency_scanning:
+  variables:
+    SECURE_LOG_LEVEL: "debug"
+  before_script:
+    - apt update
+    - apt install libmariadb3 libmariadb-dev sqlite3 libsqlite3-dev -y
+
+coverage-guided-fuzzing:
+  image: python:latest
+  stage: cfuzz
+  extends: .fuzz_base
+  script:
+    - pip install --extra-index-url https://gitlab.com/api/v4/projects/19904939/packages/pypi/simple pythonfuzz
+    - ./gitlab-cov-fuzz run --engine pythonfuzz -- fuzz.py
+
+dast:
+  variables:
+     DAST_BROWSER_SCAN: "true"
+     DAST_FULL_SCAN_ENABLED: "true"
+  services:
+    - name: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
+      alias: notes
+
+deploy-staging:
+  image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image:helm-3.10.0-kube-1.24.6-alpine-3.15
   stage: deploy
   variables:
     IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
     HELM_HOST: "localhost:44134"
+  before_script:
+    - kubectl config use-context tech-marketing/devsecops/initech/simple-notes:simplenotes
+    - helm repo add bitnami https://charts.bitnami.com/bitnami
+    - helm upgrade --set auth.rootPassword=$DB_ROOT_PWD --set primary.service.clusterIP=None --install mariadb bitnami/mariadb
   script:
     - kubectl config use-context tech-marketing/devsecops/initech/simple-notes:simplenotes
     - helm upgrade -f helm/values.yaml --set image=$IMAGE --set dbrootpwd=$DB_ROOT_PWD --install notes ./helm
   environment:
     name: staging
   allow_failure: true
+
+apifuzzer_fuzz:
+  before_script:
+    - sed -i '' 's/HOST/'${FUZZAPI_TARGET_URL}'/' test_openapi.v2.0.json
+  variables:
+    FUZZAPI_PROFILE: Long-100
+    FUZZAPI_OPENAPI: test_openapi.v2.0.json
+    FUZZAPI_TARGET_URL: http://34.132.117.178
