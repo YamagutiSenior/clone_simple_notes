@@ -3,16 +3,13 @@ image: docker:20.10.17
 services:
   - docker:20.10.17-dind
 
-variables:
- SAST_EXPERIMENTAL_FEATURES: "true"
-
 stages:
   - build
   - unit
   - test
   - covfuzz
-  - dast
   - deploy
+  - dast
   - apifuzz
 
 include:
@@ -65,14 +62,6 @@ coverage-guided-fuzzing:
     - pip install --extra-index-url https://gitlab.com/api/v4/projects/19904939/packages/pypi/simple pythonfuzz
     - ./gitlab-cov-fuzz run --engine pythonfuzz -- fuzz.py
 
-dast:
-  variables:
-     DAST_BROWSER_SCAN: "true"
-     DAST_FULL_SCAN_ENABLED: "true"
-  services:
-    - name: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
-      alias: notes
-
 deploy-staging:
   image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image:helm-3.10.0-kube-1.24.6-alpine-3.15
   stage: deploy
@@ -83,6 +72,7 @@ deploy-staging:
     - kubectl config use-context tech-marketing/devsecops/initech/simple-notes:simplenotes
     - helm repo add bitnami https://charts.bitnami.com/bitnami
     - helm upgrade --set auth.rootPassword=$DB_ROOT_PWD --set primary.service.clusterIP=None --install mariadb bitnami/mariadb
+    - helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace
   script:
     - kubectl config use-context tech-marketing/devsecops/initech/simple-notes:simplenotes
     - helm upgrade -f helm/values.yaml --set image=$IMAGE --set dbrootpwd=$DB_ROOT_PWD --install notes ./helm
@@ -90,11 +80,21 @@ deploy-staging:
     name: staging
   allow_failure: true
 
+dast:
+  before_script:
+    - kubectl config use-context tech-marketing/devsecops/initech/simple-notes:simplenotes
+    - export DAST_WEBSITE=http://$(kubectl get svc -n ingress-nginx | grep LoadBalancer | awk '{print $4}')/notes
+  variables:
+     DAST_BROWSER_SCAN: "true"
+     DAST_FULL_SCAN_ENABLED: "true"
+
 apifuzzer_fuzz:
   stage: apifuzz
   before_script:
-    - sed -i '' 's@HOST@'"${FUZZAPI_TARGET_URL}"'@' test_openapi.v2.0.json
+    - kubectl config use-context tech-marketing/devsecops/initech/simple-notes:simplenotes
+    - export INGRESS_LB_IP=$(kubectl get svc -n ingress-nginx | grep LoadBalancer | awk '{print $4}')
+    - sed -i 's@HOST@'"${INGRESS_LB_IP}"'@' test_openapi.v2.0.json
+    - export FUZZAPI_TARGET_URL=http://$(kubectl get svc -n ingress-nginx | grep LoadBalancer | awk '{print $4}')
   variables:
     FUZZAPI_PROFILE: Long-100
     FUZZAPI_OPENAPI: test_openapi.v2.0.json
-    FUZZAPI_TARGET_URL: http://34.132.117.178
