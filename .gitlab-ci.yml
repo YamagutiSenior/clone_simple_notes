@@ -36,6 +36,8 @@ build:
 unit:
   image: python:latest
   stage: unit
+  variables:
+    NOTES_DB_BACKEND: "local"
   before_script:
     - apt update -y
     - apt install libmariadb3 libmariadb-dev sqlite3 libsqlite3-dev -y

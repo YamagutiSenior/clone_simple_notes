@@ -34,7 +34,7 @@ def create_table(conn, create_table_sql):
     try:
         c = conn.cursor()
         c.execute(create_table_sql)
-    except Error as e:
+    except Exception as e:
         note.logger.error("Error: cannot create table - %s" % e)
 
     conn.close()
@@ -43,7 +43,7 @@ def drop_table(conn, drop_table_sql):
     try:
         c = conn.cursor()
         c.execute(drop_table_sql)
-    except Error as e:
+    except Exception as e:
         note.logger.error("Error: cannot drop table - %s" % e)
 
     conn.close()
@@ -55,7 +55,7 @@ def create_note(conn, notes):
     try:
         note.logger.info("Adding Note %s", notes)
         cur.execute(query, notes)
-    except Error as e:
+    except Exception as e:
         note.logger.error("Error: cannot create note - %s" % e)
 
     lastRowId = cur.lastrowid
@@ -72,7 +72,7 @@ def delete_note(conn, id):
     try:
         note.logger.info("Deleteing Note #%s", id)
         cur.execute(query, (id,))
-    except Error as e:
+    except Exception as e:
         note.logger.error("Error: cannot delete note - %s" % e)
 
     conn.commit()
@@ -88,7 +88,7 @@ def select_note_by_id(conn, id=None):
     try:
         note.logger.info("Getting all notes!")
         cur.execute(query)
-    except Error as e:
+    except Exception as e:
         note.logger.error("Error: cannot select note by id - %s" % e)
 
     allItems = cur.fetchall()
