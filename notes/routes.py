@@ -78,6 +78,7 @@ def verify_password(username, password):
             check_password_hash(users.get(username), password):
         return username
 
+
 @note.route('/add', methods=['POST'])
 def add_note(msg=""):
 
@@ -120,6 +121,7 @@ def delete_note(id=None):
     except Exception as e:
         return "Failed to delete Note: %s" % e
 
+
 def reset():
     conn = db.create_connection()
     sql_drop_notes_table = """ DROP TABLE notes;"""
@@ -128,9 +130,6 @@ def reset():
     except Exception as e:
         note.logger.error("Failed to reset database table 'notes': %s" % e)
 
-    # TODO: Refactor this as well as
-    # always check for db and table and
-    # recreate if missing
     conn = db.create_connection()
     sql_create_notes_table = """ CREATE TABLE IF NOT EXISTS notes (
                                         id integer NOT NULL AUTO_INCREMENT,
@@ -141,6 +140,7 @@ def reset():
         db.create_table(conn, sql_create_notes_table)
     except Exception as e:
         note.logger.error("Failed to re-create database table 'notes': %s" % e)
+
 
 @note.route('/get', methods=['GET'])
 def get_note():

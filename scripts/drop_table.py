@@ -1,6 +1,7 @@
+#!/usr/bin/env python
+
 import os
 import mariadb
-from sqlite3 import Error
 
 if __name__ == "__main__":
     conn = None
@@ -13,7 +14,7 @@ if __name__ == "__main__":
             port=3306,
             database='my_database'
         )
-    except Error as e:
+    except Exception as e:
         print("Error: cannot connect to db - %s" % e)
 
     conn.auto_reconnect = True
@@ -21,7 +22,7 @@ if __name__ == "__main__":
     try:
         c = conn.cursor()
         c.execute(""" DROP TABLE notes;""")
-    except Error as e:
+    except Exception as e:
         print("Error: cannot drop table - %s" % e)
 
     conn.close()

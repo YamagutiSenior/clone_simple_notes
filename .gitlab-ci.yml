@@ -32,16 +32,15 @@ build:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker build -t $IMAGE .
     - docker push "$IMAGE"
-  only:
-    - main
 
 unit:
   image: python:latest
   stage: unit
-  script:
+  before_script:
     - apt update -y
     - apt install libmariadb3 libmariadb-dev sqlite3 libsqlite3-dev -y
     - pip3 install -r requirements.txt
+  script:
     - python -m unittest tests/test_db.py 2>&1 | tee unit.txt
   artifacts:
     paths:
@@ -58,8 +57,9 @@ coverage-guided-fuzzing:
   image: python:latest
   stage: covfuzz
   extends: .fuzz_base
-  script:
+  before_script:
     - pip install --extra-index-url https://gitlab.com/api/v4/projects/19904939/packages/pypi/simple pythonfuzz
+  script:
     - ./gitlab-cov-fuzz run --engine pythonfuzz -- fuzz.py
 
 deploy-staging:
@@ -76,25 +76,42 @@ deploy-staging:
   script:
     - kubectl config use-context tech-marketing/devsecops/initech/simple-notes:simplenotes
     - helm upgrade -f helm/values.yaml --set image=$IMAGE --set dbrootpwd=$DB_ROOT_PWD --install notes ./helm
+  after_script:
+    - kubectl config use-context tech-marketing/devsecops/initech/simple-notes:simplenotes
+    - echo "DAST_WEBSITE=http://$(kubectl get svc -n ingress-nginx | grep LoadBalancer | awk '{print $4}')/notes" >> deploy.env
+    - echo "INGRESS_LB_IP=$(kubectl get svc -n ingress-nginx | grep LoadBalancer | awk '{print $4}')" >> deploy.env
+  environment:
+    name: staging
+  artifacts:
+    reports:
+      dotenv: deploy.env
+
+reset-notes-table:
+  image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image:helm-3.10.0-kube-1.24.6-alpine-3.15
+  stage: deploy
+  script:
+    - kubectl config use-context tech-marketing/devsecops/initech/simple-notes:simplenotes
+    - kubectl exec -it deploy/notes -- ./scripts/drop_table.py
   environment:
     name: staging
   allow_failure: true
+  when: manual
 
 dast:
-  before_script:
-    - kubectl config use-context tech-marketing/devsecops/initech/simple-notes:simplenotes
-    - export DAST_WEBSITE=http://$(kubectl get svc -n ingress-nginx | grep LoadBalancer | awk '{print $4}')/notes
+  stage: dast
   variables:
      DAST_BROWSER_SCAN: "true"
      DAST_FULL_SCAN_ENABLED: "true"
+  dependencies:
+    - deploy
 
 apifuzzer_fuzz:
   stage: apifuzz
   before_script:
-    - kubectl config use-context tech-marketing/devsecops/initech/simple-notes:simplenotes
-    - export INGRESS_LB_IP=$(kubectl get svc -n ingress-nginx | grep LoadBalancer | awk '{print $4}')
     - sed -i 's@HOST@'"${INGRESS_LB_IP}"'@' test_openapi.v2.0.json
     - export FUZZAPI_TARGET_URL=http://$(kubectl get svc -n ingress-nginx | grep LoadBalancer | awk '{print $4}')
   variables:
     FUZZAPI_PROFILE: Long-100
     FUZZAPI_OPENAPI: test_openapi.v2.0.json
+  dependencies:
+    - deploy

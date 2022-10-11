@@ -24,7 +24,7 @@ metadata:
   name: echo-svc
 spec:
   ports:
-  - port: 80
+  - port: 8080
     targetPort: 8080
     protocol: TCP
     name: http
@@ -45,4 +45,4 @@ spec:
           service:
             name: echo-svc
             port:
-              number: 80
+              number: 8080
