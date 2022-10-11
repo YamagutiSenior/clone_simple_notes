@@ -10,10 +10,10 @@ stages:
   - build
   - unit
   - test
-  - cfuzz
+  - covfuzz
   - dast
   - deploy
-  - fuzz
+  - apifuzz
 
 include:
   - template: Security/Container-Scanning.gitlab-ci.yml
@@ -59,7 +59,7 @@ gemnasium-python-dependency_scanning:
 
 coverage-guided-fuzzing:
   image: python:latest
-  stage: cfuzz
+  stage: covfuzz
   extends: .fuzz_base
   script:
     - pip install --extra-index-url https://gitlab.com/api/v4/projects/19904939/packages/pypi/simple pythonfuzz
@@ -91,8 +91,9 @@ deploy-staging:
   allow_failure: true
 
 apifuzzer_fuzz:
+  stage: apifuzz
   before_script:
-    - sed -i '' 's/HOST/'${FUZZAPI_TARGET_URL}'/' test_openapi.v2.0.json
+    - sed -i '' 's@HOST@'"${FUZZAPI_TARGET_URL}"'@' test_openapi.v2.0.json
   variables:
     FUZZAPI_PROFILE: Long-100
     FUZZAPI_OPENAPI: test_openapi.v2.0.json

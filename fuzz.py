@@ -1,7 +1,8 @@
-
 def fuzz(buf):
     try:
-        pass
+        print(buf)
+    except:
+        print("An exception occurred")
 
 
 if __name__ == '__main__':
