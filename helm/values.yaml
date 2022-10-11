@@ -1,4 +1,11 @@
-port: 5000
-targetPort: 5000
-path: notes
-replicas: 2
+echo:
+    port: 8080
+    targetPort: 8080
+    path: /
+    replicas: 1
+notes:
+    port: 5000
+    targetPort: 5000
+    path: notes
+    replicas: 2
+    dbBackend: mariadb

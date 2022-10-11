@@ -47,6 +47,7 @@ unit:
   artifacts:
     paths:
       - unit.txt
+  allow_failure: true
 
 gemnasium-python-dependency_scanning:
   variables:
@@ -70,14 +71,14 @@ deploy-staging:
   variables:
     IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
     HELM_HOST: "localhost:44134"
+    NOTES_DB_BACKEND: "mariadb"
   before_script:
     - kubectl config use-context tech-marketing/devsecops/initech/simple-notes:simplenotes
-    - helm repo add bitnami https://charts.bitnami.com/bitnami
-    - helm upgrade --set auth.rootPassword=$DB_ROOT_PWD --set primary.service.clusterIP=None --install mariadb bitnami/mariadb
     - helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace
+    - helm upgrade --install mariadb bitnami/mariadb --repo https://charts.bitnami.com/bitnami --set auth.rootPassword=$DB_ROOT_PWD --set primary.service.clusterIP=None
   script:
     - kubectl config use-context tech-marketing/devsecops/initech/simple-notes:simplenotes
-    - helm upgrade -f helm/values.yaml --set image=$IMAGE --set dbrootpwd=$DB_ROOT_PWD --install notes ./helm
+    - helm upgrade --install notes helm -f helm/values.yaml --set image=$IMAGE --set dbrootpwd=$DB_ROOT_PWD
   after_script:
     - kubectl config use-context tech-marketing/devsecops/initech/simple-notes:simplenotes
     - echo "DAST_WEBSITE=http://$(kubectl get svc -n ingress-nginx | grep LoadBalancer | awk '{print $4}')/notes" >> deploy.env

@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: notes
 spec:
-  replicas: {{ .Values.replicas }}
+  replicas: {{ .Values.notes.replicas }}
   selector:
     matchLabels:
       app: notes
@@ -18,8 +18,10 @@ spec:
         env:
           - name: DB_ROOT_PWD
             value: "{{ .Values.dbrootpwd }}"
+          - name: NOTES_DB_BACKEND
+            value: "{{ .Values.notes.dbBackend }}"
         ports:
-        - containerPort: {{ .Values.targetPort }}
+        - containerPort: {{ .Values.notes.targetPort }}
 ---
 apiVersion: v1
 kind: Service
@@ -27,8 +29,8 @@ metadata:
   name: notes-svc
 spec:
   ports:
-  - port: {{ .Values.port }}
-    targetPort: {{ .Values.targetPort }}
+  - port: {{ .Values.notes.port }}
+    targetPort: {{ .Values.notes.targetPort }}
     protocol: TCP
     name: http
   selector:
@@ -48,10 +50,10 @@ spec:
   rules:
   - http:
       paths:
-      - path: /{{ .Values.path }}(/|$)(.*)
+      - path: /{{ .Values.notes.path }}(/|$)(.*)
         pathType: Prefix
         backend:
           service:
             name: notes-svc
             port:
-              number: {{ .Values.port }}
+              number: {{ .Values.notes.port }}

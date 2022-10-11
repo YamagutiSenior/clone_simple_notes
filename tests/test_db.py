@@ -8,7 +8,7 @@ from notes import db
 class TestDB(unittest.TestCase):
 
     def setUp(self):
-        self.db_name = "test_database"
+        self.db_name = "my_database"
         self.conn = db.create_connection(name=self.db_name)
 
     def tearDown(self):

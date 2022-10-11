@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: echo
 spec:
-  replicas: 2
+  replicas: {{ .Values.echo.replicas }}
   selector:
     matchLabels:
       app: echo
@@ -16,7 +16,7 @@ spec:
       - name: echo
         image: gcr.io/kubernetes-e2e-test-images/echoserver:2.1
         ports:
-        - containerPort: 8080
+        - containerPort: {{ .Values.echo.port }}
 ---
 apiVersion: v1
 kind: Service
@@ -24,8 +24,8 @@ metadata:
   name: echo-svc
 spec:
   ports:
-  - port: 8080
-    targetPort: 8080
+  - port: {{ .Values.echo.port }}
+    targetPort:  {{ .Values.echo.targetPort }}
     protocol: TCP
     name: http
   selector:
@@ -39,10 +39,10 @@ spec:
   rules:
   - http:
       paths:
-      - path: /
+      - path: {{ .Values.echo.path }}
         pathType: Prefix
         backend:
           service:
             name: echo-svc
             port:
-              number: 8080
+              number: {{ .Values.echo.port }}

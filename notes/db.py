@@ -18,14 +18,14 @@ def create_connection(name='my_database'):
             )
             conn.auto_reconnect = True
         except Exception as e:
-            note.logger.error("Error: cannot connect to db - %s" % e)
+            note.logger.error("Error (MariaDB): cannot connect to db - %s" % e)
             return
 
     elif db_backend == 'local':
         try:
             conn = sqlite3.connect(name + ".db")
         except Exception as e:
-            note.logger.error("Error: cannot connect to db - %s" % e)
+            note.logger.error("Error (SQLite): cannot connect to db - %s" % e)
             return
 
     return conn
