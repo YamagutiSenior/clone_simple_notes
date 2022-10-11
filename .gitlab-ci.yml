@@ -103,7 +103,7 @@ dast:
      DAST_BROWSER_SCAN: "true"
      DAST_FULL_SCAN_ENABLED: "true"
   dependencies:
-    - deploy
+    - deploy-staging
 
 apifuzzer_fuzz:
   stage: apifuzz
@@ -114,4 +114,4 @@ apifuzzer_fuzz:
     FUZZAPI_PROFILE: Long-100
     FUZZAPI_OPENAPI: test_openapi.v2.0.json
   dependencies:
-    - deploy
+    - deploy-staging
