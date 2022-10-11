@@ -3,6 +3,9 @@ image: docker:20.10.17
 services:
   - docker:20.10.17-dind
 
+variables:
+  RUNNER_GENERATE_ARTIFACTS_METADATA: "true"
+
 stages:
   - build
   - unit
@@ -47,7 +50,6 @@ unit:
   artifacts:
     paths:
       - unit.txt
-  allow_failure: true
 
 gemnasium-python-dependency_scanning:
   variables:
@@ -56,13 +58,16 @@ gemnasium-python-dependency_scanning:
     - apt update
     - apt install libmariadb3 libmariadb-dev sqlite3 libsqlite3-dev -y
 
+container_scanning:
+  variables:
+    CS_DISABLE_LANGUAGE_VULNERABILITY_SCAN: "false"
+
 coverage-guided-fuzzing:
   image: python:latest
   stage: covfuzz
   extends: .fuzz_base
-  before_script:
-    - pip install --extra-index-url https://gitlab.com/api/v4/projects/19904939/packages/pypi/simple pythonfuzz
   script:
+    - pip install --extra-index-url https://gitlab.com/api/v4/projects/19904939/packages/pypi/simple pythonfuzz
     - ./gitlab-cov-fuzz run --engine pythonfuzz -- fuzz.py
 
 deploy-staging:
@@ -75,7 +80,7 @@ deploy-staging:
   before_script:
     - kubectl config use-context tech-marketing/devsecops/initech/simple-notes:simplenotes
     - helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace
-    - helm upgrade --install mariadb bitnami/mariadb --repo https://charts.bitnami.com/bitnami --set auth.rootPassword=$DB_ROOT_PWD --set primary.service.clusterIP=None
+    - helm upgrade --install mariadb mariadb --repo https://charts.bitnami.com/bitnami --set auth.rootPassword=$DB_ROOT_PWD --set primary.service.clusterIP=None
   script:
     - kubectl config use-context tech-marketing/devsecops/initech/simple-notes:simplenotes
     - helm upgrade --install notes helm -f helm/values.yaml --set image=$IMAGE --set dbrootpwd=$DB_ROOT_PWD
