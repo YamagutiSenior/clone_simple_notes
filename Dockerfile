@@ -9,6 +9,7 @@ WORKDIR /app
 RUN pip3 install -r requirements.txt
 COPY . /app
 
+EXPOSE 3306/tcp
 EXPOSE 5000/tcp
 ENTRYPOINT [ "python" ]
 CMD [ "run.py" ]
