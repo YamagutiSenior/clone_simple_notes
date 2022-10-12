@@ -43,31 +43,43 @@ This application can be deployed to Kubernetes using the provided helm chart.
 
 ### Install and Run the Application
 
-1. Install [Helm3]()
+1. Build and push the notes Docker image, and store image name
+```bash
+$ docker login -u <REGISTRY_USER> -p <REGISTRY_PASSWORD> <CI_REGISTRY>
+$ docker build -t <IMAGE> .
+$ docker push "<IMAGE>"
 
-2. Install [Ingress-Nginx]() onto your cluster
+$ export IMAGE=<IMAGE>
+```
+
+**Note:**  
+If you don't have a container registry, or just don't wanna build, you can also just use my image `registry.gitlab.com/tech-marketing/devsecops/initech/simple-notes/main:latest`.
+
+2. Install [Helm](https://helm.sh/docs/intro/install/)
+
+3. Install [Ingress-Nginx](https://kubernetes.github.io/ingress-nginx/) onto your cluster
 ```bash
 $ helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace
 ```
 
-3. Create and store a password for the DB
+4. Create and store a password for the DB
 ```bash
-$ export $DB_ROOT_PWD="<ADD-A-PASSWORD>"
+$ export DB_ROOT_PWD=<ADD-A-PASSWORD>
 ```
 
-4. Install [MariaDB]() onto your cluster
+5. Install [MariaDB](https://mariadb.org/) onto your cluster
 ```bash
-$ helm upgrade --install mariadb bitnami/mariadb --repo https://charts.bitnami.com/bitnami --set auth.rootPassword=$DB_ROOT_PWD --set primary.service.clusterIP=None
+$ helm upgrade --install mariadb mariadb --repo https://charts.bitnami.com/bitnami --set auth.rootPassword=$DB_ROOT_PWD --set primary.service.clusterIP=None
 ```
 
-5. Deploy Notes Application
+6. Deploy Notes Application
 ```bash
 $ helm upgrade --install notes helm -f helm/values.yaml --set image=$IMAGE --set dbrootpwd=$DB_ROOT_PWD
 ```
 
-5. Get the Ingress IP
+7. Get the Ingress IP
 ```bash
 $ kubectl get svc -n ingress-nginx | grep LoadBalancer | awk '{print $4}'
 ```
 
-6. Open Browser to http://<INGRESS-IP>/notes
+8. Open Browser to http://<INGRESS-IP>/notes
