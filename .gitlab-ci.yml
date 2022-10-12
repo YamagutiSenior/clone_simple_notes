@@ -65,6 +65,12 @@ gemnasium-python-dependency_scanning:
 container_scanning:
   variables:
     CS_DISABLE_LANGUAGE_VULNERABILITY_SCAN: "false"
+    CS_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+      variables:
+        CS_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest
+
 
 coverage-guided-fuzzing:
   image: python:latest
