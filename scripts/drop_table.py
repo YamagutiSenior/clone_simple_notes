@@ -25,14 +25,14 @@ if __name__ == "__main__":
 
     try:
         c = conn.cursor()
+    except Exception as e:
+        print("Error: cannot create cursor - %s" % e)
+
+    try:
         c.execute("""DROP TABLE notes;""")
     except Exception as e:
         print("Error: cannot drop table - %s" % e)
-
-    try:
-        c = conn.cursor()
+    finally:
         c.execute(sql_create_notes_table)
-    except Exception as e:
-        print("Error: cannot create table - %s" % e)
 
     conn.close()
