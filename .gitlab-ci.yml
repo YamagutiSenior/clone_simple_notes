@@ -118,8 +118,6 @@ dast:
   variables:
      DAST_BROWSER_SCAN: "true"
      DAST_FULL_SCAN_ENABLED: "true"
-  after_script:
-    -
   dependencies:
     - deploy-staging
 
@@ -128,8 +126,6 @@ apifuzzer_fuzz:
   before_script:
     - sed -i 's@HOST@'"${INGRESS_LB_IP}"'@' test_openapi.v2.0.json
     - export FUZZAPI_TARGET_URL=http://${INGRESS_LB_IP}/
-  after_script:
-    - 
   variables:
     FUZZAPI_PROFILE: Quick-10
     FUZZAPI_OPENAPI: test_openapi.v2.0.json
