@@ -12,9 +12,8 @@ EMBED_YOUTUBE_VIDEO_HERE
 
 ### Copy project into workspace
 
-1. Make sure you are using [GitLab Ultimate]() and logged in
-
-**Note: You can signup for a [30 day trial]()**
+1. Make sure you are using [GitLab Ultimate](https://about.gitlab.com/pricing/ultimate/) and logged in  
+**Note: You can signup for a [30 day trial](https://gitlab.com/-/trials/new?utm_medium=cpc&utm_source=google&utm_campaign=brand_amer_pr_rsa_br_exact_&utm_content=free-trial_digital_x-pr_english_&_bt=624524579996&_bk=gitlab%20trial&_bm=e&_bn=g&_bg=142303748075)**
 
 2. Create a new GitLab project
 
@@ -30,13 +29,13 @@ EMBED_YOUTUBE_VIDEO_HERE
 
 In this section, we will connect our GitLab project to Kubernetes using the GitLab Kubernetes agent. By doing this, it will allow us to run `kubectl` and `helm` commands from within the CI/CD pipeline.
 
-**Note: A Kubernetes Cluster is required. I am using a [GKE]() cluster**
+**Note: A Kubernetes Cluster is required. I am using a [GKE](https://cloud.google.com/kubernetes-engine) cluster**
 
 1. Click on `Infrastructure > Kubernetes clusters` in the side tab
 
-2. Click on the `Create a cluster (agent)` button
+2. Click on the `Connect a cluster (agent)` button
 
-3. 
+3. Click on the `Register an agent` button
 
 ### Run pipeline and verify
 
@@ -44,7 +43,31 @@ Now we will go ahead and run a pipeline to get everything deployed and run.
 
 1. Click on `CI/CD > Pipelines`
 
-2. 
+2. Click on the `Run pipeline` button
+
+3. Leave the default settings
+
+4. Click on the `Run pipeline` button
+
+5. Wait for the pipeline to complete
+**Note: This will take a few mins, so go grab a coffee/tea!**
+
+6. Make sure all the jobs have completed successfully
+**Note: The fuzzing jobs may fail or provide a warning**
+
+7. Click on the `deploy-staging` job
+
+8. Go to the end of the job output
+
+9. Copy the URL listed in the `Access your application at http://$INGRESS_LB_IP/notes` line.
+
+10. Paste URL into your browser, you should see something like the below:
+
+![]()
+
+### Adding Vulnerabilities
+
+1. 
 
 ## Local Usage
 

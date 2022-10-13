@@ -71,7 +71,6 @@ container_scanning:
       variables:
         CS_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest
 
-
 coverage-guided-fuzzing:
   image: python:latest
   stage: covfuzz
@@ -98,6 +97,7 @@ deploy-staging:
     - kubectl config use-context tech-marketing/devsecops/initech/simple-notes:simplenotes
     - echo "DAST_WEBSITE=http://$(kubectl get svc -n ingress-nginx | grep LoadBalancer | awk '{print $4}')/notes" >> deploy.env
     - echo "INGRESS_LB_IP=$(kubectl get svc -n ingress-nginx | grep LoadBalancer | awk '{print $4}')" >> deploy.env
+    - echo "Access your application at http://$INGRESS_LB_IP/notes"
   environment:
     name: staging
   artifacts:
