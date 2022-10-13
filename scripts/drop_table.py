@@ -32,6 +32,7 @@ if __name__ == "__main__":
         c.execute("""DROP TABLE notes;""")
     except Exception as e:
         print("Error: cannot drop table - %s" % e)
+        pass
     finally:
         c.execute(sql_create_notes_table)
 
