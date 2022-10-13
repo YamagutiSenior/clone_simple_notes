@@ -5,6 +5,10 @@ import mariadb
 
 if __name__ == "__main__":
     conn = None
+    sql_create_notes_table = """CREATE TABLE IF NOT EXISTS notes (
+                                id INTEGER NOT NULL AUTO_INCREMENT,
+                                data TEXT,
+                                PRIMARY KEY (id));"""
 
     try:
         conn = mariadb.connect(
@@ -21,8 +25,14 @@ if __name__ == "__main__":
 
     try:
         c = conn.cursor()
-        c.execute(""" DROP TABLE notes;""")
+        c.execute("""DROP TABLE notes;""")
     except Exception as e:
         print("Error: cannot drop table - %s" % e)
+
+    try:
+        c = conn.cursor()
+        c.execute(sql_create_notes_table)
+    except Exception as e:
+        print("Error: cannot create table - %s" % e)
 
     conn.close()

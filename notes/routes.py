@@ -134,7 +134,6 @@ def delete_note(id=None):
     except Exception as e:
         return "Failed to delete Note: %s" % e
 
-
 def reset():
     conn = db.create_connection()
     sql_drop_notes_table = """ DROP TABLE notes;"""

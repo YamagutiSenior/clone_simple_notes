@@ -149,9 +149,13 @@ apifuzzer_fuzz:
 reset-notes-table:
   image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image:helm-3.10.0-kube-1.24.6-alpine-3.15
   stage: cleanup
+  variables:
+    NOTES_DB_BACKEND: "mariadb"
   script:
     - kubectl config use-context tech-marketing/devsecops/initech/simple-notes:simplenotes
     - kubectl exec -i deploy/notes -- python scripts/drop_table.py
   environment:
     name: staging
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   allow_failure: true
