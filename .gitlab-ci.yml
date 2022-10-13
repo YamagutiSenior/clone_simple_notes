@@ -152,8 +152,6 @@ reset-notes-table:
   script:
     - kubectl config use-context tech-marketing/devsecops/initech/simple-notes:simplenotes
     - kubectl exec -i deploy/notes -- python scripts/drop_table.py
-  dependencies:
-    - deploy-staging
   environment:
     name: staging
   allow_failure: true
