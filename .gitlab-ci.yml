@@ -41,6 +41,20 @@ build:
       variables:
         IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest
 
+docs:
+  image: registry.gitlab.com/pages/hugo/hugo_extended:latest
+  stage: build
+  before_script:
+    - apk add --update --no-cache git
+  script:
+    - hugo --minify docs
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+  artifacts:
+    paths:
+      - public
+  allow_failure: true
+
 unit:
   image: python:latest
   stage: unit
@@ -138,6 +152,4 @@ reset-notes-table:
   script:
     - kubectl config use-context tech-marketing/devsecops/initech/simple-notes:simplenotes
     - kubectl exec -i deploy/notes -- python scripts/drop_table.py
-  environment:
-    name: staging
   allow_failure: true
