@@ -150,7 +150,7 @@ reset-notes-table:
     NOTES_DB_BACKEND: "mariadb"
   script:
     - kubectl config use-context tech-marketing/devsecops/initech/simple-notes:simplenotes
-    - kubectl exec -i deploy/notes -- python scripts/drop_table.py
+    - kubectl exec -i deploy/notes -- python scripts/reset_notes_table.py
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   allow_failure: true
