@@ -14,6 +14,7 @@ stages:
   - deploy
   - dast
   - apifuzz
+  - cleanup
 
 include:
   - template: Security/Container-Scanning.gitlab-ci.yml
@@ -97,9 +98,11 @@ deploy-staging:
     - kubectl config use-context tech-marketing/devsecops/initech/simple-notes:simplenotes
     - echo "DAST_WEBSITE=http://$(kubectl get svc -n ingress-nginx | grep LoadBalancer | awk '{print $4}')/notes" >> deploy.env
     - echo "INGRESS_LB_IP=$(kubectl get svc -n ingress-nginx | grep LoadBalancer | awk '{print $4}')" >> deploy.env
-    - echo "Access your application at http://$(kubectl get svc -n ingress-nginx | grep LoadBalancer | awk '{print $4}')/notes"
+    - export INGRESS_LB_IP=$(kubectl get svc -n ingress-nginx | grep LoadBalancer | awk '{print $4}')
+    - echo "Access your application at http://$INGRESS_LB_IP/notes"
   environment:
     name: staging
+    url: http://$INGRESS_LB_IP
   artifacts:
     reports:
       dotenv: deploy.env
@@ -110,22 +113,13 @@ deploy-staging:
       variables:
         IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest
 
-reset-notes-table:
-  image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image:helm-3.10.0-kube-1.24.6-alpine-3.15
-  stage: deploy
-  script:
-    - kubectl config use-context tech-marketing/devsecops/initech/simple-notes:simplenotes
-    - kubectl exec -i deploy/notes -- python scripts/drop_table.py
-  environment:
-    name: staging
-  allow_failure: true
-  when: manual
-
 dast:
   stage: dast
   variables:
      DAST_BROWSER_SCAN: "true"
      DAST_FULL_SCAN_ENABLED: "true"
+  after_script:
+    -
   dependencies:
     - deploy-staging
 
@@ -134,8 +128,20 @@ apifuzzer_fuzz:
   before_script:
     - sed -i 's@HOST@'"${INGRESS_LB_IP}"'@' test_openapi.v2.0.json
     - export FUZZAPI_TARGET_URL=http://${INGRESS_LB_IP}/
+  after_script:
+    - 
   variables:
     FUZZAPI_PROFILE: Quick-10
     FUZZAPI_OPENAPI: test_openapi.v2.0.json
   dependencies:
     - deploy-staging
+
+reset-notes-table:
+  image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image:helm-3.10.0-kube-1.24.6-alpine-3.15
+  stage: cleanup
+  script:
+    - kubectl config use-context tech-marketing/devsecops/initech/simple-notes:simplenotes
+    - kubectl exec -i deploy/notes -- python scripts/drop_table.py
+  environment:
+    name: staging
+  allow_failure: true
