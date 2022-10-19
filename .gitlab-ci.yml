@@ -11,7 +11,7 @@ stages:
   - deploy
   - dast
   - apifuzz
-  # - cleanup
+  - cleanup
 
 include:
   - template: Security/Container-Scanning.gitlab-ci.yml
