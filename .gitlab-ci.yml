@@ -45,6 +45,7 @@ docs:
   before_script:
     - apk add --update --no-cache git
   script:
+    - cd docs
     - hugo --minify docs
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH

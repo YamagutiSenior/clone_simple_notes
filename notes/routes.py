@@ -1,6 +1,6 @@
 from notes import db, note, auth, users
 from notes.forms import AddForm, AdminForm, ResetForm, DeleteForm
-from flask import render_template, request, flash, redirect, jsonify
+from flask import render_template, request, flash, redirect, jsonify, url_for
 from werkzeug.security import check_password_hash
 
 

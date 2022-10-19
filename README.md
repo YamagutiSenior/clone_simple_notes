@@ -147,4 +147,6 @@ $ helm upgrade --install notes helm -f helm/values.yaml --set image=$IMAGE --set
 $ kubectl get svc -n ingress-nginx | grep LoadBalancer | awk '{print $4}'
 ```
 
-8. Open Browser to `http://<INGRESS-IP>/notes`
+8. Open Browser to `http://<INGRESS-IP>/notes`. You should see something like the below:
+
+![]()
