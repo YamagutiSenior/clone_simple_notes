@@ -40,7 +40,7 @@ build:
         IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest
 
 docs:
-  image: registry.gitlab.com/pages/hugo/hugo_extended:latest
+  image: registry.gitlab.com/pages/hugo/hugo:latest
   stage: build
   before_script:
     - apk add --update --no-cache git
@@ -51,7 +51,7 @@ docs:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   artifacts:
     paths:
-      - public
+      - docs/public
   allow_failure: true
 
 unit:
