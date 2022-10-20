@@ -45,13 +45,12 @@ docs:
   before_script:
     - apk add --update --no-cache git
   script:
-    - cd docs
     - hugo --minify
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   artifacts:
     paths:
-      - docs/public
+      - public
   allow_failure: true
 
 unit:
