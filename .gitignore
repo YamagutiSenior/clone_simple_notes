@@ -128,3 +128,7 @@ dmypy.json
 notes.db
 .DS_Store
 .vscode
+
+# hugo docs
+docs/public
+docs/.hugo_build.lock

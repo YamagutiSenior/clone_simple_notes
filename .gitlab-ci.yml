@@ -45,7 +45,8 @@ pages:
   before_script:
     - apk add --update --no-cache git
   script:
-    - hugo --config public/config.toml --themesDir public/themes
+    - hugo -s docs
+    - cp -r docs/public .
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   artifacts:
