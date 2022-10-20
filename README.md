@@ -1,6 +1,6 @@
 # Simple Notes (Security Demo Application)
 
-This application is used for taking simple notes, like **"Everyone needs to go ahead and come in on Saturday and Sunday to help out with the new code push."** It is used to demo many of GitLab's Security features. Feel free to copy it to your workspace, and read the documentation within the [Security Workshop]() which contains Architecture, Development Guide, Instructions on Creating Vulnerability, and much more.
+This application is used for taking simple notes, like **"Everyone needs to go ahead and come in on Saturday and Sunday to help out with the new code push."** It is used to demo many of GitLab's Security features. Feel free to copy it to your workspace, and read the documentation within the [Simple Notes Documentation](https://tech-marketing.gitlab.io/devsecops/initech/simple-notes/) which contains Architecture, Development Guide, Instructions on Creating Vulnerability, and much more.
 
 **Do not edit this project directly, but rather clone it and configure it within your own GitLab instance.**
 
@@ -63,7 +63,7 @@ Now we will go ahead and run a pipeline to get everything deployed and run.
 
 10. Paste URL into your browser, you should see something like the below:
 
-![]()
+![](./images/screenshot.png)
 
 ### Adding Vulnerabilities
 
@@ -172,4 +172,4 @@ $ kubectl get svc -n ingress-nginx | grep LoadBalancer | awk '{print $4}'
 
 8. Open Browser to `http://<INGRESS-IP>/notes`. You should see something like the below:
 
-![]()
+![](./images/screenshot.png)
