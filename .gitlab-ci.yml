@@ -46,7 +46,6 @@ pages:
   script:
     - hugo -s docs
     - cp -r docs/public .
-    - cp .hugo_build.lock .
   artifacts:
     paths:
       - public
