@@ -1,15 +1,15 @@
 import os
 
-from notes import db, note, auth, users, Config
+from notes import db, note, auth, users, app
 from notes.forms import AddForm, AdminForm, ResetForm, DeleteForm
-from flask import render_template, request, flash, redirect, jsonify, url_for
+from flask import render_template, request, flash, redirect, jsonify
 from werkzeug.security import check_password_hash
 
 
 @note.route('/', methods=['GET', 'POST'])
 @note.route('/index', methods=['GET', 'POST'])
 def index():
-    logo = os.path.join(Config['IMAGE_FOLDER'], 'gitlab-logo-100.png')
+    logo = os.path.join(app.config['IMAGE_FOLDER'], 'gitlab-logo-100.png')
     items = []
 
     id = request.args.get('id')
