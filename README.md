@@ -27,7 +27,7 @@ EMBED_YOUTUBE_VIDEO_HERE
 
 ### Configure Kubernetes agent
 
-In this section, we will connect our GitLab project to Kubernetes using the GitLab Kubernetes agent. By doing this, it will allow us to run `kubectl` and `helm` commands from within the CI/CD pipeline.
+In this section, we will connect our GitLab project to Kubernetes using the GitLab Kubernetes agent. By doing this, it will allow us to run `kubectl` and `helm` commands from within the CI/CD pipeline.  
 
 **Note: A Kubernetes Cluster is required. I am using a [GKE](https://cloud.google.com/kubernetes-engine) cluster**
 
@@ -49,10 +49,10 @@ Now we will go ahead and run a pipeline to get everything deployed and run.
 
 4. Click on the `Run pipeline` button
 
-5. Wait for the pipeline to complete
+5. Wait for the pipeline to complete  
 **Note: This will take a few mins, so go grab a coffee/tea!**
 
-6. Make sure all the jobs have completed successfully
+6. Make sure all the jobs have completed successfully  
 **Note: The fuzzing jobs may fail or provide a warning**
 
 7. Click on the `deploy-staging` job
@@ -67,7 +67,30 @@ Now we will go ahead and run a pipeline to get everything deployed and run.
 
 ### Adding Vulnerabilities
 
-1. 
+You can add some vulnerabilities, that way you can see GitLab DevSecOps in action.
+For advanced details see this projects [documentation page]().
+
+1. Click on the `Web IDE` button
+
+2. Add changes to files as seen in [this MR]()
+
+3. Press the `Create commit...` button
+
+4. Add a commit message
+
+5. Select the `Create a new branch` radio button
+
+6. Check `Start a new merge request`
+
+7. Press the `commit` button
+
+8. Provide information for the merge request
+
+9. Press the `Create merge request` button
+
+10. Wait for the pipeline to finish
+
+11. Vew the scan results within the merge request
 
 ## Local Usage
 
@@ -115,7 +138,7 @@ $ docker build -t <IMAGE> .
 $ docker push "<IMAGE>"
 
 $ export IMAGE=<IMAGE>
-```
+```  
 
 **Note:**  
 If you don't have a container registry, or just don't wanna build, you can also just use my image `registry.gitlab.com/tech-marketing/devsecops/initech/simple-notes/main:latest`.
