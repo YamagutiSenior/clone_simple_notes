@@ -1,4 +1,6 @@
-from notes import db, note, auth, users
+import os
+
+from notes import db, note, auth, users, Config
 from notes.forms import AddForm, AdminForm, ResetForm, DeleteForm
 from flask import render_template, request, flash, redirect, jsonify, url_for
 from werkzeug.security import check_password_hash
@@ -7,6 +9,7 @@ from werkzeug.security import check_password_hash
 @note.route('/', methods=['GET', 'POST'])
 @note.route('/index', methods=['GET', 'POST'])
 def index():
+    logo = os.path.join(Config['IMAGE_FOLDER'], 'gitlab-logo-100.png')
     items = []
 
     id = request.args.get('id')
@@ -57,7 +60,7 @@ def index():
     if admin_form.validate_on_submit():
         return redirect('/notes/admin')
     
-    return render_template('index.html', notes=arr, add_form=add_form, delete_form=delete_form, admin_form=admin_form)
+    return render_template('index.html', notes=arr, add_form=add_form, delete_form=delete_form, admin_form=admin_form, gitlab_logo=logo)
 
 
 @note.route('/admin', methods=['GET', 'POST'])

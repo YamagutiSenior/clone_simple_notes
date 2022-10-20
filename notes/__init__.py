@@ -11,6 +11,10 @@ note.config.from_object(Config)
 bootstrap = Bootstrap(note)
 auth = HTTPBasicAuth()
 db_backend = os.environ.get("NOTES_DB_BACKEND", "local")
+images = os.path.join('static', 'images')
+
+app = Flask(__name__)
+app.config['IMAGE_FOLDER'] = images
 
 users = {
     "admin": generate_password_hash("yeet")
