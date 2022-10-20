@@ -39,7 +39,7 @@ build:
       variables:
         IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest
 
-docs:
+pages:
   image: registry.gitlab.com/pages/hugo/hugo:latest
   stage: build
   before_script:
@@ -51,6 +51,9 @@ docs:
   artifacts:
     paths:
       - public
+  environment:
+    name: production
+    url: https://tech-marketing.gitlab.io/devsecops/initech/$CI_PROJECT_NAME
   allow_failure: true
 
 unit:
