@@ -40,18 +40,18 @@ build:
         IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest
 
 pages:
-  image: registry.gitlab.com/pages/hugo/hugo:latest
-  stage: build
+  image: registry.gitlab.com/pages/hugo/hugo_extended:latest
   before_script:
     - apk add --update --no-cache git
   script:
     - hugo -s docs
     - cp -r docs/public .
-  rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+    - cp .hugo_build.lock .
   artifacts:
     paths:
       - public
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   environment:
     name: documentation
     url: https://tech-marketing.gitlab.io/devsecops/initech/$CI_PROJECT_NAME
