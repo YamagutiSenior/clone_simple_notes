@@ -1,3 +1,5 @@
+#!/bin/bash
+
 DEPLOY=notes
 
 helm delete $DEPLOY
