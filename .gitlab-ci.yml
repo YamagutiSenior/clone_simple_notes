@@ -45,7 +45,7 @@ pages:
     - apk add --update --no-cache git
   script:
     - hugo -s docs
-    - cp -r docs/public .
+    - cp -R docs/public .
   artifacts:
     paths:
       - public
