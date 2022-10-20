@@ -52,7 +52,7 @@ pages:
     paths:
       - public
   environment:
-    name: production
+    name: documentation
     url: https://tech-marketing.gitlab.io/devsecops/initech/$CI_PROJECT_NAME
   allow_failure: true
 
