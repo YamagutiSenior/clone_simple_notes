@@ -1,7 +1,7 @@
 # Simple Notes Documentation
 
 Welcome to the GitLab Simple Notes documentation. You can access the
-documentation by visiting https://tech-marketing.gitlab.io/devsecops/simple-notes/
+documentation by visiting https://tech-marketing.gitlab.io/devsecops/initech/simple-notes/
 
 ---
 
