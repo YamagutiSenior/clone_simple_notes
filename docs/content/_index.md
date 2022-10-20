@@ -3,39 +3,41 @@ title: Introduction
 type: docs
 ---
 
-# Acerbo datus maxime
+# Welcome
 
-{{< columns >}}
-## Astris ipse furtiva
+Welcome to Simple Notes - GitLab DevSecOps Introduction. This Project
+will help you gain a better understanding of how to successfully
+shift security left to find and fix security flaws during development
+and do so more easily, with greater visibility and control than
+typical approaches can provide.
 
-Est in vagis et Pittheus tu arge accipiter regia iram vocatur nurus. Omnes ut
-olivae sensit **arma sorori** deducit, inesset **crudus**, ego vetuere aliis,
-modo arsit? Utinam rapta fiducia valuere litora _adicit cursu_, ad facies
+## Getting Started
 
-<--->
+In order to get started, go through each of the lessons described within the workshop. Be sure to start with the prerequisites.
 
-## Suis quot vota
+To learn about the project we are using you can see the following documentation:
 
-Ea _furtique_ risere fratres edidit terrae magis. Colla tam mihi tenebat:
-miseram excita suadent es pecudes iam. Concilio _quam_ velatus posset ait quod
-nunc! Fragosis suae dextra geruntur functus vulgata.
-{{< /columns >}}
+- [Project Architecture]()
+- [Development Guide]()
+- [Contributing]()
 
+## Outcomes
 
-## Tempora nisi nunc
+- How to achieve comprehensive security scanning without adding a bunch of new tools and processes
+- How to secure your cloud native applications and IaC environments within existing DevOps workflows
+- How to use a single-source-of-truth to improve collaboration between dev and sec
+- How to manage all of your software vulnerabilities in one place
+- How to automate and monitor your security policies and simplify auditing
+- How to detect unknown vulnerabilities and errors using fuzz-testing
 
-Lorem **markdownum** emicat gestu. Cannis sol pressit ducta. **Est** Idaei,
-tremens ausim se tutaeque, illi ulnis hausit, sed, lumina cutem. Quae avis
-sequens!
+## Sections
 
-    var panel = ram_design;
-    if (backup + system) {
-        file.readPoint = network_native;
-        sidebar_engine_device(cell_tftp_raster,
-                dual_login_paper.adf_vci.application_reader_design(
-                graphicsNvramCdma, lpi_footer_snmp, integer_model));
-    }
-
-## Locis suis novi cum suoque decidit eadem
-
-Idmoniae ripis, at aves, ali missa adest, ut _et autem_, et ab?
+| # |     Title     |                Description                   |
+| - |---------------|----------------------------------------------|
+| 1 | Prerequisites | Requirements to get started with the project |
+| 2 | Deploying the Demo Application | Learn how to deploy and expose the demo application |
+| 3 | Setting up and Configuring the Security Scanners | Learn how to setup and configure the different types of security scans. This includes Security Policies as well |
+| 4 | Developer Workflow | Learn how to view and take action on vulnerabilities within a Merge Request |
+| 5 | AppSec Workflow | Learn how to triage vulnerabilities and collaborate with other members of a Security team |
+| 6 | Compliance Management | Learn how to view Compliance and perform Audits |
+| 7 | Fuzz Testing | Use Coverage-Based and Web-API Fuzz Testing to detect vulnerabilities and errors in your code |
