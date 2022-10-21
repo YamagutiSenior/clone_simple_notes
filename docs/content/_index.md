@@ -36,8 +36,6 @@ To learn about the project we are using you can see the following documentation:
 | - |---------------|----------------------------------------------|
 | 1 | Prerequisites | Requirements to get started with the project |
 | 2 | Deploying the Demo Application | Learn how to deploy and expose the demo application |
-| 3 | Setting up and Configuring the Security Scanners | Learn how to setup and configure the different types of security scans. This includes Security Policies as well |
+| 3 | Setting up and Configuring the Security Scanners and Policies | Learn how to setup and configure the different types of security scans. This includes Security Policies as well |
 | 4 | Developer Workflow | Learn how to view and take action on vulnerabilities within a Merge Request |
 | 5 | AppSec Workflow | Learn how to triage vulnerabilities and collaborate with other members of a Security team |
-| 6 | Compliance Management | Learn how to view Compliance and perform Audits |
-| 7 | Fuzz Testing | Use Coverage-Based and Web-API Fuzz Testing to detect vulnerabilities and errors in your code |
