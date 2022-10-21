@@ -102,4 +102,4 @@ $ kubectl get svc -n ingress-nginx
 Congratulations! You have now successfully deployed an application using GitLab CICD.
 
 {{< button relref="/01_prerequisites" >}}Previous Lesson{{< /button >}}
-{{< button relref="/03_setting_up_and_configuring_the_security_scanners" >}}Next Lesson{{< /button >}}
+{{< button relref="/03_setting_up_and_configuring_the_security_scanners_and_policies" >}}Next Lesson{{< /button >}}

@@ -42,7 +42,7 @@ This will save the comment in the Vulnerability page to enable collaboration bet
 ---
 
 Congratulations, you are now able to use some of GitLab's Security Tools within
-your AppSec Workflow and to better collaborate with others.
+your AppSec Workflow and to better collaborate with others. Thanks for going
+through the Getting Started Documentation!
 
 {{< button relref="/04_developer_workflow" >}}Previous Lesson{{< /button >}}
-{{< button relref="/06_compliance_management" >}}Next Lesson{{< /button >}}

@@ -116,5 +116,5 @@ We can now merge the code. This is done so that the Vulnerability Report can be 
 
 Congratulations! You have now successfully viewed vulnerabilities within an MR and the details to their resolution.
 
-{{< button relref="/03_setting_up_and_configuring_the_security_scanners" >}}Previous Lesson{{< /button >}}
+{{< button relref="/03_setting_up_and_configuring_the_security_scanners_and_policies" >}}Previous Lesson{{< /button >}}
 {{< button relref="/05_appsec_workflow" >}}Next Lesson{{< /button >}}
