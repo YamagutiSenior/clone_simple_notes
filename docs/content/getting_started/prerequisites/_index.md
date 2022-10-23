@@ -114,4 +114,4 @@ gke-fern-initech-default-pool-c3bad177-vg5j   Ready    <none>   53d   v1.22.3-gk
 Congratulations! You have just met all the prerequisites and created a Kubernetes Cluster.
 
 {{< button relref="/" >}}Go Home{{< /button >}}
-{{< button relref="/02_deploying_the_demo_application" >}}Next Lesson{{< /button >}}
+{{< button relref="/deploying_the_demo_application" >}}Next Lesson{{< /button >}}

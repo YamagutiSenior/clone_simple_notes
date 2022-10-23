@@ -22,8 +22,8 @@ We will go over the following scanners:
 5. [License Scanning](https://docs.gitlab.com/ee/user/compliance/license_compliance/): scans licenses to see if they are incompatible with a set policy
 6. [Secret Detection](https://docs.gitlab.com/ee/user/application_security/secret_detection/): Scans for secrets checked into source code
 7. [Infrastructure as Code Scanning](https://docs.gitlab.com/ee/user/application_security/iac_scanning/): Scans your IaC configuration files for known vulnerabilities. IaC scanning supports configuration files for Terraform, Ansible, AWS CloudFormation, and Kubernetes.
-8. Coverage-Based Fuzzing
-9. Web-API Fuzzing
+8. [Coverage-Guided Fuzzing](https://docs.gitlab.com/ee/user/application_security/coverage_fuzzing/): Sends random inputs to an instrumented version of your application in an effort to cause unexpected behavior.
+9. [Web-API Fuzzing](https://docs.gitlab.com/ee/user/application_security/api_fuzzing/): Sets operation parameters to unexpected values in an effort to cause unexpected behavior and errors in the API backend
 
 ## Step 1: Adding Security Scans to the pipeline
 
@@ -106,7 +106,7 @@ the previous step.
 
 Congratulations! You have now successfully run Security Scans and enabled DevSecOps for your application.
 
-{{< button relref="/02_deploying_the_demo_application" >}}Previous Lesson{{< /button >}}
-{{< button relref="/04_developer_workflow" >}}Next Lesson{{< /button >}}
+{{< button relref="/deploying_the_demo_application" >}}Previous Lesson{{< /button >}}
+{{< button relref="/developer_workflow" >}}Next Lesson{{< /button >}}
 
 

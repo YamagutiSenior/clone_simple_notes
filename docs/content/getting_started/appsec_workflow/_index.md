@@ -13,7 +13,9 @@ Dashboard and Vulnerability Management Console.
 
 At the project level, the Security Dashboard displays a chart with the number of vulnerabilities introduced to the master branch over time. 
 
-1. Access the Security Dashboard by going to **Security & Compliance** left navigation menu and selecting **Security Dashboard**
+1. Access the Security Dashboard by going to **Security & Compliance** left navigation menu and selecting **Security Dashboard**  
+
+**Note:** Nothing will be present, wait a day for it to be populated.
 
 ## Step 2: Viewing Vulnerability Reports
 
@@ -45,4 +47,5 @@ Congratulations, you are now able to use some of GitLab's Security Tools within
 your AppSec Workflow and to better collaborate with others. Thanks for going
 through the Getting Started Documentation!
 
-{{< button relref="/04_developer_workflow" >}}Previous Lesson{{< /button >}}
+{{< button relref="/developer_workflow" >}}Previous Lesson{{< /button >}}
+{{< button relref="/" >}}Go Home{{< /button >}}

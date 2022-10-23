@@ -130,9 +130,8 @@ before running the application:
 
 ### SQLite
 
-For local testing you can use SQLite. SQLite is a ...
-With this database the application cannot be scaled since
-we are pointing at a single DB file.
+For local testing you can use SQLite. SQLite is an embedded database engine.
+With this database the application cannot be scaled since we are pointing at a single DB file.
 
 In order to enable, add an the following environment variable
 before running the application:

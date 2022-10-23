@@ -22,7 +22,7 @@ Here we will clone the sample project which we will use through this workshop. I
 4. Under **Git repository URL** add the following URL:
 
 ```text
-TODO
+https://gitlab.com/tech-marketing/devsecops/initech/simple-notes.git
 ```
 
 5. Select **Public** under visibility level
@@ -40,9 +40,11 @@ In this section we will be installing the GitLab [Kubernetes Agent](https://docs
 
 1. Click on the **Infrastructure > Kubernetes clusters** in the left navigation menu
 
-2. Click on the **Install new Agent** button
+2. Click on the **Connect a cluster (agent)** button
 
-3. Select your agent (kube-agent) from the drop down and press the **Register** button
+3. Select the `simplenotes` agent from the drop down and press the **Register** button  
+
+**Note:** Save the commands presented to you in the next screen
 
 4. Open a terminal and connect to your cluster
 
@@ -53,19 +55,25 @@ Fetching cluster endpoint and auth data.
 kubeconfig entry generated for fern-initech.
 ```
 
-5. Run the following command to deploy the agent onto your cluster
+5. Run the following command to deploy the agent onto your cluster:
 
 ```bash
-$ 
-```
+$ helm repo add gitlab https://charts.gitlab.io
+$ helm repo update
+$ helm upgrade --install simplenotes gitlab/gitlab-agent \
+    --namespace gitlab-agent \
+    --create-namespace \
+    --set image.tag=v15.5.1 \
+    --set config.token=1gqUgdbmxNsY3pyWLz_HzsqF_8zMgheniaxoCfFx1zPnyWacUQ \
+    --set config.kasAddress=wss://kas.gitlab.com
+```  
 
-**Note** This will allow us to use the kube-context from the agent when
-performing deployments.
+**Note:** Make sure you use the token provided to you
 
 6. Verify the Kubernetes Agent is running
 
 ```bash
-$ kubectl get pods -n gitlab-kubernetes-agent
+$ kubectl get pods -n gitlab-agent
 ```
 
 ## Step 3: Running the Pipelines
@@ -101,5 +109,5 @@ $ kubectl get svc -n ingress-nginx
 
 Congratulations! You have now successfully deployed an application using GitLab CICD.
 
-{{< button relref="/01_prerequisites" >}}Previous Lesson{{< /button >}}
-{{< button relref="/03_setting_up_and_configuring_the_security_scanners_and_policies" >}}Next Lesson{{< /button >}}
+{{< button relref="/prerequisites" >}}Previous Lesson{{< /button >}}
+{{< button relref="/setting_up_and_configuring_the_security_scanners_and_policies" >}}Next Lesson{{< /button >}}

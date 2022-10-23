@@ -17,9 +17,9 @@ In order to get started, go through each of the lessons described within the wor
 
 To learn about the project we are using you can see the following documentation:
 
-- [Project Architecture]()
-- [Development Guide]()
-- [Contributing]()
+- [Project Architecture](./documentation/architecture/)
+- [Development Guide](./documentation/development_guide/)
+- [Contributing](./documentation/contributing/)
 
 ## Outcomes
 

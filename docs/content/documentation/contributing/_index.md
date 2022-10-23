@@ -10,4 +10,4 @@ and then you can:
 
 1. **Open an issue if you find something wrong/missing**
 2. **Open an MR with changes**
-3. **Open an issue with a Feature Request**
+3. **Open an issue with a feature Request**

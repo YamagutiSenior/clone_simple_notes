@@ -8,7 +8,7 @@ This application is used for taking simple notes, like **"Everyone needs to go a
 
 This project is meant to be used within your GitLab instance so that you can view the pipelines, create MRs with security vulnerabilities and much more. To start you can view this YouTube video I have created:
 
-EMBED_YOUTUBE_VIDEO_HERE
+`COMING SOON!`
 
 ### Copy project into workspace
 
@@ -23,7 +23,13 @@ EMBED_YOUTUBE_VIDEO_HERE
 
 5. Add `https://gitlab.com/tech-marketing/devsecops/initech/simple-notes.git` as the Git repository URL
 
-6. Press the `Create project` button
+6. Under `Project URL`, select a group or namespace where you want to create this project  
+**Note:** It can be your GitLab username
+
+7. Select `Public` as the visibility level
+
+8. Press the `Create project` button  
+**Note:** Project will be created in a few seconds
 
 ### Configure Kubernetes agent
 
@@ -31,11 +37,43 @@ In this section, we will connect our GitLab project to Kubernetes using the GitL
 
 **Note: A Kubernetes Cluster is required. I am using a [GKE](https://cloud.google.com/kubernetes-engine) cluster**
 
-1. Click on `Infrastructure > Kubernetes clusters` in the side tab
+1. Click on the **Infrastructure > Kubernetes clusters** in the left navigation menu
 
-2. Click on the `Connect a cluster (agent)` button
+2. Click on the **Connect a cluster (agent)** button
 
-3. Click on the `Register an agent` button
+3. Select the `simplenotes` agent from the drop down and press the **Register** button  
+
+**Note:** Save the commands presented to you in the next screen
+
+4. Open a terminal and connect to your cluster
+
+```bash
+$ gcloud container clusters get-credentials fern-initech --zone us-central1-c --project fdiaz-02874dfa
+
+Fetching cluster endpoint and auth data.
+kubeconfig entry generated for fern-initech.
+```
+
+5. Run the following command to deploy the agent onto your cluster:
+
+```bash
+$ helm repo add gitlab https://charts.gitlab.io
+$ helm repo update
+$ helm upgrade --install simplenotes gitlab/gitlab-agent \
+    --namespace gitlab-agent \
+    --create-namespace \
+    --set image.tag=v15.5.1 \
+    --set config.token=1gqUgdbmxNsY3pyWLz_HzsqF_8zMgheniaxoCfFx1zPnyWacUQ \
+    --set config.kasAddress=wss://kas.gitlab.com
+```  
+
+**Note:** Make sure you use the token provided to you
+
+6. Verify the Kubernetes Agent is running
+
+```bash
+$ kubectl get pods -n gitlab-agent
+```
 
 ### Run pipeline and verify
 
@@ -72,7 +110,7 @@ For advanced details see this projects [documentation page]().
 
 1. Click on the `Web IDE` button
 
-2. Add changes to files as seen in [this MR]()
+2. Add changes to files as seen in [this MR](https://gitlab.com/tech-marketing/devsecops/initech/simple-notes/-/merge_requests/6)
 
 3. Press the `Create commit...` button
 

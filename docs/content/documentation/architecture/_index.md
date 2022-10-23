@@ -14,7 +14,3 @@ is an application developed in Python using the Flask Web Framework.
 ## API Diagram
 
 ![API Diagram]()
-
-## Dependencies
-
-- Flask
