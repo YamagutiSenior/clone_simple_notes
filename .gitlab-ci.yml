@@ -5,7 +5,7 @@ services:
 
 stages:
   - build
-  - unit
+  #- unit
   - test
   - covfuzz
   - deploy
@@ -58,20 +58,20 @@ pages:
     url: https://tech-marketing.gitlab.io/devsecops/initech/$CI_PROJECT_NAME
   allow_failure: true
 
-unit:
-  image: python:latest
-  stage: unit
-  variables:
-    NOTES_DB_BACKEND: "local"
-  before_script:
-    - apt update -y
-    - apt install libmariadb3 libmariadb-dev sqlite3 libsqlite3-dev -y
-    - pip3 install -r requirements.txt
-  script:
-    - python -m unittest tests/test_db.py 2>&1 | tee unit.txt
-  artifacts:
-    paths:
-      - unit.txt
+# unit:
+#   image: python:latest
+#   stage: unit
+#   variables:
+#     NOTES_DB_BACKEND: "local"
+#   before_script:
+#     - apt update -y
+#     - apt install libmariadb3 libmariadb-dev sqlite3 libsqlite3-dev -y
+#     - pip3 install -r requirements.txt
+#   script:
+#     - python -m unittest tests/test_db.py 2>&1 | tee unit.txt
+#   artifacts:
+#     paths:
+#       - unit.txt
 
 gemnasium-python-dependency_scanning:
   variables:
