@@ -7,21 +7,21 @@ stages:
   - build
   #- unit
   - test
-  - covfuzz
+  #- covfuzz
   - deploy
-  - dast
-  - apifuzz
+  #- dast
+  #- apifuzz
   - cleanup
   - starwars
 
 include:
   - template: Security/Container-Scanning.gitlab-ci.yml
   - template: Security/DAST.gitlab-ci.yml
-  - template: API-Fuzzing.gitlab-ci.yml
-  - template: Coverage-Fuzzing.gitlab-ci.yml
+  #- template: API-Fuzzing.gitlab-ci.yml
+  #- template: Coverage-Fuzzing.gitlab-ci.yml
   - template: Security/License-Scanning.gitlab-ci.yml
   - template: Code-Quality.gitlab-ci.yml
-  - template: Security/Dependency-Scanning.gitlab-ci.yml
+  #- template: Security/Dependency-Scanning.gitlab-ci.yml
   - template: Security/SAST.gitlab-ci.yml
   - template: Security/Secret-Detection.gitlab-ci.yml
   - template: Jobs/SAST-IaC.gitlab-ci.yml
@@ -73,12 +73,12 @@ pages:
 #     paths:
 #       - unit.txt
 
-gemnasium-python-dependency_scanning:
-  variables:
-    SECURE_LOG_LEVEL: "debug"
-  before_script:
-    - apt update
-    - apt install libmariadb3 libmariadb-dev sqlite3 libsqlite3-dev -y
+# gemnasium-python-dependency_scanning:
+#   variables:
+#     SECURE_LOG_LEVEL: "debug"
+#   before_script:
+#     - apt update
+#     - apt install libmariadb3 libmariadb-dev sqlite3 libsqlite3-dev -y
 
 container_scanning:
   variables:
@@ -89,13 +89,13 @@ container_scanning:
       variables:
         CS_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest
 
-coverage-guided-fuzzing:
-  image: python:latest
-  stage: covfuzz
-  extends: .fuzz_base
-  script:
-    - pip install --extra-index-url https://gitlab.com/api/v4/projects/19904939/packages/pypi/simple pythonfuzz
-    - ./gitlab-cov-fuzz run --engine pythonfuzz -- fuzz.py
+# coverage-guided-fuzzing:
+#   image: python:latest
+#   stage: covfuzz
+#   extends: .fuzz_base
+#   script:
+#     - pip install --extra-index-url https://gitlab.com/api/v4/projects/19904939/packages/pypi/simple pythonfuzz
+#     - ./gitlab-cov-fuzz run --engine pythonfuzz -- fuzz.py
 
 deploy-staging:
   image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image:helm-3.10.0-kube-1.24.6-alpine-3.15
@@ -116,7 +116,6 @@ deploy-staging:
     - helm upgrade --install notes helm -f helm/values.yaml --set image=$IMAGE --set dbrootpwd=$DB_ROOT_PWD
   after_script:
     - kubectl config use-context tech-marketing/devsecops/initech/simple-notes:simplenotes
-    - kubectl get pods --all-namespaces -o custom-columns=NAMESPACE:.metadata.namespace,NAME:.metadata.name,HOSTNETWORK:.spec.hostNetwork --no-headers=true | grep '<none>' | awk '{print "-n "$1" "$2}' | xargs -L 1 -r kubectl delete pod
     - echo "DAST_WEBSITE=http://$(kubectl get svc -n ingress-nginx | grep LoadBalancer | awk '{print $4}')/notes" >> deploy.env
     - export INGRESS_LB_IP=$(kubectl get svc -n ingress-nginx | grep LoadBalancer | awk '{print $4}')
     - echo "INGRESS_LB_IP=$INGRESS_LB_IP" >> deploy.env
@@ -134,24 +133,24 @@ deploy-staging:
       variables:
         IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest
 
-dast:
-  stage: dast
-  variables:
-     DAST_BROWSER_SCAN: "true"
-     DAST_FULL_SCAN_ENABLED: "true"
-  dependencies:
-    - deploy-staging
+# dast:
+#   stage: dast
+#   variables:
+#      DAST_BROWSER_SCAN: "true"
+#      DAST_FULL_SCAN_ENABLED: "true"
+#   dependencies:
+#     - deploy-staging
 
-apifuzzer_fuzz:
-  stage: apifuzz
-  before_script:
-    - sed -i 's@HOST@'"${INGRESS_LB_IP}"'@' test_openapi.v2.0.json
-    - export FUZZAPI_TARGET_URL=http://${INGRESS_LB_IP}/
-  variables:
-    FUZZAPI_PROFILE: Quick-10
-    FUZZAPI_OPENAPI: test_openapi.v2.0.json
-  dependencies:
-    - deploy-staging
+# apifuzzer_fuzz:
+#   stage: apifuzz
+#   before_script:
+#     - sed -i 's@HOST@'"${INGRESS_LB_IP}"'@' test_openapi.v2.0.json
+#     - export FUZZAPI_TARGET_URL=http://${INGRESS_LB_IP}/
+#   variables:
+#     FUZZAPI_PROFILE: Quick-10
+#     FUZZAPI_OPENAPI: test_openapi.v2.0.json
+#   dependencies:
+#     - deploy-staging
 
 reset-notes-table:
   image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image:helm-3.10.0-kube-1.24.6-alpine-3.15
