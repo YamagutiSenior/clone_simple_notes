@@ -1,1 +1,5 @@
-
+gitops:
+  manifest_projects:
+  - id: tech-marketing/devsecops/initech/simple-notes
+    paths:
+    - glob: 'network-policies/*.yaml'
