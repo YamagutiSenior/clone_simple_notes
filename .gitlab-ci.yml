@@ -67,6 +67,8 @@ unit:
   before_script:
     - apt update -y
     - apt upgrade -y
+    - apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
+    - curl -LsS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | bash
     - apt install gcc libmariadb3 libmariadb-dev mariadb-client sqlite3 libsqlite3-dev openssl -y
     - pip3 install --upgrade pip
     - pip3 install packaging
