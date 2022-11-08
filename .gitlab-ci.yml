@@ -66,9 +66,10 @@ unit:
   before_script:
     - apt update -y
     - apt upgrade -y
+    - apt install gcc curl openssl -y
     - apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
     - curl -LsS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | bash
-    - apt install gcc libmariadb3 libmariadb-dev mariadb-client sqlite3 libsqlite3-dev openssl -y
+    - apt install libmariadb3 libmariadb-dev mariadb-client sqlite3 libsqlite3-dev -y
     - pip3 install --upgrade pip
     - pip3 install packaging
     - pip3 install -r requirements.txt
@@ -84,9 +85,10 @@ gemnasium-python-dependency_scanning:
   before_script:
     - apt update -y
     - apt upgrade -y
+    - apt install gcc curl openssl -y
     - apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
     - curl -LsS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | bash
-    - apt install gcc libmariadb3 libmariadb-dev mariadb-client sqlite3 libsqlite3-dev openssl curl -y
+    - apt install libmariadb3 libmariadb-dev mariadb-client sqlite3 libsqlite3-dev -y
     - pip3 install --upgrade pip
     - pip3 install packaging
 
