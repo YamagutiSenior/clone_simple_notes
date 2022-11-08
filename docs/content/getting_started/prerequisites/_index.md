@@ -12,7 +12,8 @@ In order to get started with GitLab DevSecOps, you will need the following:
 - Kubectl
 - A Kubernetes Cluster
 
-**Note:** I am using GKE for this example, so Google Cloud SDK will also be required
+**Note:** I am using GKE for this example, so if you are following along, 
+Google Cloud SDK will also be required
 
 ## GitLab Account
 
@@ -24,6 +25,8 @@ https://gitlab.com/users/sign_up
 In order to get the most out of GitLab DevSecOps, you will require GitLab
 Ultimate. If you do not have GitLab Ultimate, you can sign-up for a 30-day trial
 license here: https://about.gitlab.com/free-trial/
+
+**Note:** GitLab Ultimate is a requirement for this tutorial.
 
 ## Google Cloud SDK
 

@@ -13,59 +13,15 @@ Now let's go ahead and add some vulnerabilities. We will make sure that somethin
 
 1. Open the **WebIDE**
 
-2. Open `notes/db.py` and add the following under `conn = sqlite3.connect(name)`. This is done to give the database file global permissions, which is a security issue
+2. Copy over the changes found in [this Merge Request](https://gitlab.com/tech-marketing/devsecops/initech/simple-notes/-/merge_requests/6).
 
-```python
-os.chmod(name, 777)
-```
+**Note:** I'll try to keep it up-to-date and rebased.
 
-3. Open `notes/routes.py` and add to the end of the file. This will add a new route that can be accessed at the `/get-with-vuln` URI path that allows us to test DAST in this lab scenario
+3. Select **Commit**
 
-```python
-@note.route('/get-with-vuln', methods=['GET'])
-def get_note_with_vulnerability():
-    id = request.args.get('id')
-    conn = db.create_connection()
+4. Select **Create a new branch** and give that branch a name, then select **Start a new merge request**, and press **Commit**
 
-    with conn:
-        try:
-            return str(db.select_note_by_id(conn, id))
-        except Exception as e:
-            return "Failed to delete Note: %s" % e
-```
-
-4. Create a file in `chart/templates` called `vulns.yaml` and add the following:
-
-```yaml
-apiVersion: v1
-kind: Pod
-metadata:
-    name: kubesec-demo
-spec:
-    containers:
-    - name: kubesec-demo
-      image: gcr.io/google-samples/node-hello:1.0
-      securityContext:
-        readOnlyRootFilesystem: true
-```
-
-5. Open `requirements.txt` and append the following code to the end of the file:
-
-```text
-django==2.0.0
-``` 
-
-6. Open `Dockerfile` and change the alpine version to the following:
-
-```text
-FROM python:alpine3.7
-```
-
-7. Select **Commit**
-
-8. Select **Create a new branch** and give that branch a name, then select **Start a new merge request**, and press **Commit**
-
-9. Create the Merge Request and press **Submit merge request**
+5. Create the Merge Request and press **Submit merge request**
 
 ## Step 2: Viewing Vulnerable Code
 

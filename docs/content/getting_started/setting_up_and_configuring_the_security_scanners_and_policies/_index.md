@@ -25,33 +25,49 @@ We will go over the following scanners:
 8. [Coverage-Guided Fuzzing](https://docs.gitlab.com/ee/user/application_security/coverage_fuzzing/): Sends random inputs to an instrumented version of your application in an effort to cause unexpected behavior.
 9. [Web-API Fuzzing](https://docs.gitlab.com/ee/user/application_security/api_fuzzing/): Sets operation parameters to unexpected values in an effort to cause unexpected behavior and errors in the API backend
 10. [DAST API-Scanning](https://docs.gitlab.com/ee/user/application_security/dast_api/): analyzes the APIs of your running application for known vulnerabilities using REST, SOAP, GraphQL, Form bodies, JSON, or XML definitions.
+11. [Code Quality Scanning](https://docs.gitlab.com/ee/ci/testing/code_quality.html): ensures your project’s code stays simple, readable, and easy to contribute to.
 
 ## Step 1: Adding Security Scans to the pipeline
 
-Security Scanners have already been added to this project via [templates](https://docs.gitlab.com/ee/ci/examples/index.html#cicd-templates). You can see how they are defined and configured and by viewing the [.gitlab-ci.yml]. I'll go ahead and explain how they work.
+Securty scanner can be added in 2 different ways. Either by using the [Security Configuration UI]() or Simply editing the [.gitlab-ci.yml](https://gitlab.com/tech-marketing/devsecops/initech/simple-notes/-/blob/main/.gitlab-ci.yml).
+
+Since security scanners have already been added to this project via [templates](https://docs.gitlab.com/ee/ci/examples/index.html#cicd-templates), you can see how they are defined and configured and by viewing the [.gitlab-ci.yml](https://gitlab.com/tech-marketing/devsecops/initech/simple-notes/-/blob/main/.gitlab-ci.yml). I'll go ahead and explain how they work.
 
 ### Static Scanners
 
 Static scanners examine the static source code in your project, and perform pattern matching on syntax, versions, etc in order find known vulnerabilities. They obtain the vulnerabilites from a CVE database and parse data in order to provide you with the following:
 
+* Description
+* Severity
+* Project (may include line of code)
+* Scanner type
+* Evidence 
+* Relevant links (Education/Training, Solutions)
+* Identifiers (CVE, CWE)
+
 ### Dynamic Scanners
 
+Dynamic scanners examine the running application, and send requests in order to find vulnerabilities within the system. Dynamic scanners are not aware of the underlying code, and perform request on a block-box. Since **requests** are sent to the application and **responses** are recieved, they are included along with the same data as static scanners (listed above). You can also download Postman specs in order to replicate the **requests**, which is useful for manual testing.
+
+### Fuzzing
+
+COMING SOON
 
 ## Step 2: Explaination of each of the CI/CD jobs
 
 There's a bunch of CI/CD jobs that do a bunch of different things, I'll briefly explain them here.
 
-- **build**
-- **pages**
-- **unit**
-- **gemnasium-python-dependency_scanning**
-- **container_scanning**
-- **coverage-guided-fuzzing**
-- **deploy-staging**
-- **dast**
-- **dast_api**
-- **apifuzzer_fuzz**
-- **reset-notes-table**
+- **build**:
+- **pages**:
+- **unit**:
+- **gemnasium-python-dependency_scanning**:
+- **container_scanning**:
+- **coverage-guided-fuzzing**:
+- **deploy-staging**:
+- **dast**:
+- **dast_api**:
+- **apifuzzer_fuzz**:
+- **reset-notes-table**:
 
 ## Step 3: Setting up Merge-Request Approvals (Vulnerabilities)
 

@@ -108,7 +108,7 @@ your application should be available at your Load-Balancers IP under the `/notes
 1. Click on the `deploy-staging` job and scroll to the bottom. You should see the URL which the application was
 deployed to.
 
-![]()
+![](/static/deploy_staging_job.png)
 
 2. Point your browser to the provided link.
 
@@ -118,7 +118,7 @@ deployed to.
 
 **Note:** It should look something like the below:
 
-![]()
+![](/static/simple_notes_homepage.png)
 
 ---
 
