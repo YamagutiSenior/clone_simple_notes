@@ -5,25 +5,25 @@ services:
 
 stages:
   - build
-  #- unit
+  - unit
   - test
-  #- covfuzz
+  - covfuzz
   - deploy
   - dast
   - apifuzz
   - cleanup
-  # - starwars
+  - starwars
 
 include:
-  #- template: Security/Container-Scanning.gitlab-ci.yml
+  - template: Security/Container-Scanning.gitlab-ci.yml
   - template: Security/DAST.gitlab-ci.yml
   - template: API-Fuzzing.gitlab-ci.yml
-  #- template: Coverage-Fuzzing.gitlab-ci.yml
-  #- template: Security/License-Scanning.gitlab-ci.yml
-  #- template: Code-Quality.gitlab-ci.yml
-  #- template: Security/Dependency-Scanning.gitlab-ci.yml
+  - template: Coverage-Fuzzing.gitlab-ci.yml
+  - template: Security/License-Scanning.gitlab-ci.yml
+  - template: Code-Quality.gitlab-ci.yml
+  - template: Security/Dependency-Scanning.gitlab-ci.yml
   - template: Security/SAST.gitlab-ci.yml
-  #- template: Security/Secret-Detection.gitlab-ci.yml
+  - template: Security/Secret-Detection.gitlab-ci.yml
   - template: Jobs/SAST-IaC.gitlab-ci.yml
   - template: DAST-API.gitlab-ci.yml
 
@@ -59,44 +59,44 @@ pages:
     url: https://tech-marketing.gitlab.io/devsecops/initech/$CI_PROJECT_NAME
   allow_failure: true
 
-# unit:
-#   image: python:latest
-#   stage: unit
-#   variables:
-#     NOTES_DB_BACKEND: "local"
-#   before_script:
-#     - apt update -y
-#     - apt install libmariadb3 libmariadb-dev sqlite3 libsqlite3-dev -y
-#     - pip3 install -r requirements.txt
-#   script:
-#     - python -m unittest tests/test_db.py 2>&1 | tee unit.txt
-#   artifacts:
-#     paths:
-#       - unit.txt
+unit:
+  image: python:latest
+  stage: unit
+  variables:
+    NOTES_DB_BACKEND: "local"
+  before_script:
+    - apt update -y
+    - apt install libmariadb3 libmariadb-dev sqlite3 libsqlite3-dev -y
+    - pip3 install -r requirements.txt
+  script:
+    - python -m unittest tests/test_db.py 2>&1 | tee unit.txt
+  artifacts:
+    paths:
+      - unit.txt
 
-# gemnasium-python-dependency_scanning:
-#   variables:
-#     SECURE_LOG_LEVEL: "debug"
-#   before_script:
-#     - apt update
-#     - apt install libmariadb3 libmariadb-dev sqlite3 libsqlite3-dev -y
+gemnasium-python-dependency_scanning:
+  variables:
+    SECURE_LOG_LEVEL: "debug"
+  before_script:
+    - apt update
+    - apt install libmariadb3 libmariadb-dev sqlite3 libsqlite3-dev -y
 
-# container_scanning:
-#   variables:
-#     CS_DISABLE_LANGUAGE_VULNERABILITY_SCAN: "false"
-#     CS_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
-#   rules:
-#     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-#       variables:
-#         CS_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest
+container_scanning:
+  variables:
+    CS_DISABLE_LANGUAGE_VULNERABILITY_SCAN: "false"
+    CS_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+      variables:
+        CS_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest
 
-# coverage-guided-fuzzing:
-  # image: python:latest
-  # stage: covfuzz
-  # extends: .fuzz_base
-  # script:
-  #   - pip install --extra-index-url https://gitlab.com/api/v4/projects/19904939/packages/pypi/simple pythonfuzz
-  #   - ./gitlab-cov-fuzz run --engine pythonfuzz -- fuzz.py
+coverage-guided-fuzzing:
+  image: python:latest
+  stage: covfuzz
+  extends: .fuzz_base
+  script:
+    - pip install --extra-index-url https://gitlab.com/api/v4/projects/19904939/packages/pypi/simple pythonfuzz
+    - ./gitlab-cov-fuzz run --engine pythonfuzz -- fuzz.py
 
 deploy-staging:
   image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image:helm-3.10.0-kube-1.24.6-alpine-3.15
@@ -175,10 +175,10 @@ reset-notes-table:
     - dast
     - apifuzzer_fuzz
 
-# starwars:
-#   image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image:helm-3.10.0-kube-1.24.6-alpine-3.15
-#   stage: starwars
-#   script:
-#     - kubectl config use-context tech-marketing/devsecops/initech/simple-notes:simplenotes
-#     - kubectl create -f https://raw.githubusercontent.com/cilium/cilium/v1.12/examples/minikube/http-sw-app.yaml
+starwars:
+  image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image:helm-3.10.0-kube-1.24.6-alpine-3.15
+  stage: starwars
+  script:
+    - kubectl config use-context tech-marketing/devsecops/initech/simple-notes:simplenotes
+    - kubectl create -f https://raw.githubusercontent.com/cilium/cilium/v1.12/examples/minikube/http-sw-app.yaml
 
