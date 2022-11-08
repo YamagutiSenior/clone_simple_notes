@@ -9,15 +9,10 @@ In order to get started with GitLab DevSecOps, you will need the following:
 
 - A GitLab account
 - A License or Trial for GitLab Ultimate
-- Google Cloud SDK
 - Kubectl
-- A Kubernetes Cluster (I am using GKE)
+- A Kubernetes Cluster
 
-{{< hint info >}}
-**Note**
-In the future I will try and create an example of setting
-up a local cluster and deploying GitLab to that cluster
-{{< /hint >}}
+**Note:** I am using GKE for this example, so Google Cloud SDK will also be required
 
 ## GitLab Account
 

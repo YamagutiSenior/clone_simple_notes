@@ -49,16 +49,10 @@ spec:
         readOnlyRootFilesystem: true
 ```
 
-5. Open `requirements.txt` and change the content to the following:
+5. Open `requirements.txt` and append the following code to the end of the file:
 
 ```text
-Flask
 django==2.0.0
-flask_wtf
-wtforms
-flask-bootstrap
-pysqlite3
-dubbo-client
 ``` 
 
 6. Open `Dockerfile` and change the alpine version to the following:
@@ -104,11 +98,13 @@ Within the same MR view, we can see the licenses that were detected. You'll be a
 
 ## Step 4: Merging the Code
 
-We can now merge the code. This is done so that the Vulnerability Report can be populated with this data.
+We can now merge the code. This is done so that the Vulnerability Report can be populated with the new vulnerability data.
 
 1. Click **view eligible approvers**
 
 2. You should see that the merge request approvals are active
+
+**Note:** Since we are an owner we can merge, but ideally this would only be done if there was approval from the security team.
 
 3. Press **Merge**
 

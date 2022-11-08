@@ -15,7 +15,10 @@ At the project level, the Security Dashboard displays a chart with the number of
 
 1. Access the Security Dashboard by going to **Security & Compliance** left navigation menu and selecting **Security Dashboard**  
 
-**Note:** Nothing will be present, wait a day for it to be populated.
+**Note:** Nothing will be present, wait a day for it to be populated. Eventually over time with new commits introducing and resolving
+vulnerabilities, you'll have something like this:
+
+![]()
 
 ## Step 2: Viewing Vulnerability Reports
 
@@ -40,6 +43,10 @@ This allows for better filtering, enabling the security team to better triage se
 7. Now scroll to the bottom of the page, and add a comment in the text box and press the **Save comment** button
 
 This will save the comment in the Vulnerability page to enable collaboration between different members of the AppSec team.
+
+## Step 3: Policy as Code
+
+COMING SOON!
 
 ---
 

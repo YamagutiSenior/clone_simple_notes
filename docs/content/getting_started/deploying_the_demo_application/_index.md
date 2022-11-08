@@ -92,19 +92,34 @@ Now let's run a pipeline to deploy the application to our Kubernetes cluster.
 
 ## Step 4: Reviewing the Pipeline
 
+Now let's wait for the pipeline to complete, this should take a few mins - so grab a coffee ☕️ or tea 🍵, or whatever you like! If the pipeline happens to fail, please checkout the [troubleshooting documentation]().
+
+1. Verify that all the stages have passed successfully within the pipeline.
+
+**Note:** A completed pipeline should look like the below:
+
+![]()
+
 ## Step 5: Accessing our application
 
 Now let's use the ingress to access our application. With the default settings
-your application should be available at your Load-Balancers IP under the `/notes` path. These items can be configured via the [values.yaml]() within
-the helm path.
+your application should be available at your Load-Balancers IP under the `/notes` path. These items can be configured via the [values.yaml]() within the helm path.
 
-1. Get the Load-Balancer External IP-Address
+1. Click on the `deploy-staging` job and scroll to the bottom. You should see the URL which the application was
+deployed to.
 
-```bash
-$ kubectl get svc -n ingress-nginx
-```
+![]()
 
-2. Point your browser to http://[Load-Balancer External IP-Address]/notes
+2. Point your browser to the provided link.
+
+**Note:** It should look something like `http://xxx.xxx.xxx.xxx/notes`
+
+3. You should now see the Simple Notes Application running. Go ahead and play around by adding and deleting notes.
+
+**Note:** It should look something like the below:
+
+![]()
+
 ---
 
 Congratulations! You have now successfully deployed an application using GitLab CICD.

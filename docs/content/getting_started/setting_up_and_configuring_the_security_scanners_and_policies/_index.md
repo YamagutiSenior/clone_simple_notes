@@ -24,16 +24,36 @@ We will go over the following scanners:
 7. [Infrastructure as Code Scanning](https://docs.gitlab.com/ee/user/application_security/iac_scanning/): Scans your IaC configuration files for known vulnerabilities. IaC scanning supports configuration files for Terraform, Ansible, AWS CloudFormation, and Kubernetes.
 8. [Coverage-Guided Fuzzing](https://docs.gitlab.com/ee/user/application_security/coverage_fuzzing/): Sends random inputs to an instrumented version of your application in an effort to cause unexpected behavior.
 9. [Web-API Fuzzing](https://docs.gitlab.com/ee/user/application_security/api_fuzzing/): Sets operation parameters to unexpected values in an effort to cause unexpected behavior and errors in the API backend
+10. [DAST API-Scanning](https://docs.gitlab.com/ee/user/application_security/dast_api/): analyzes the APIs of your running application for known vulnerabilities using REST, SOAP, GraphQL, Form bodies, JSON, or XML definitions.
 
 ## Step 1: Adding Security Scans to the pipeline
 
-Security Scanners have already been added to this project via templates. I'll go ahead and explain how they work!
+Security Scanners have already been added to this project via [templates](https://docs.gitlab.com/ee/ci/examples/index.html#cicd-templates). You can see how they are defined and configured and by viewing the [.gitlab-ci.yml]. I'll go ahead and explain how they work.
 
 ### Static Scanners
 
+Static scanners examine the static source code in your project, and perform pattern matching on syntax, versions, etc in order find known vulnerabilities. They obtain the vulnerabilites from a CVE database and parse data in order to provide you with the following:
+
 ### Dynamic Scanners
 
-## Step 2: Setting up Merge-Request Approvals (Vulnerabilities)
+
+## Step 2: Explaination of each of the CI/CD jobs
+
+There's a bunch of CI/CD jobs that do a bunch of different things, I'll briefly explain them here.
+
+- **build**
+- **pages**
+- **unit**
+- **gemnasium-python-dependency_scanning**
+- **container_scanning**
+- **coverage-guided-fuzzing**
+- **deploy-staging**
+- **dast**
+- **dast_api**
+- **apifuzzer_fuzz**
+- **reset-notes-table**
+
+## Step 3: Setting up Merge-Request Approvals (Vulnerabilities)
 
 Code review is an essential practice of every successful project. Approving a merge request is an important part of the review process, as it clearly communicates the ability to merge the change.
 
@@ -70,7 +90,7 @@ THEN Require approval from `1` of the following approvers
 
 You will notice a new project was created to store the policies.
 
-## Step 3: Creating a License Policy
+## Step 4: Creating a License Policy
 
 License Policies allow you to declare licenses as either approved or denied.
 When Merge-Request Approvals are set up a denied license will block an MR from
@@ -86,7 +106,7 @@ being merged.
 
 5. The **Apache License 2.0** should now be added with a confirmation
 
-## Step 4: Setting up Merge-Request Approvals (Licenses)
+## Step 5: Setting up Merge-Request Approvals (Licenses)
 
 Setting up the License Check enables us to require approval if any
 licenses within the denylist are present. We setup the denylist in
