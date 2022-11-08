@@ -5,7 +5,8 @@ RUN apt update -y
 RUN apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
 RUN curl -LsS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | bash
 RUN apt install gcc libmariadb3 libmariadb-dev mariadb-client sqlite3 libsqlite3-dev openssl -y
-RUN pip install --upgrade pip
+RUN pip3 install --upgrade pip
+RUN pip3 install packaging
 
 RUN apt-get update -y
 RUN apt-get upgrade -y
