@@ -120,7 +120,8 @@ deploy-staging:
     - kubectl config use-context tech-marketing/devsecops/initech/simple-notes:simplenotes
     - helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace
     - helm upgrade --install mariadb mariadb --repo https://charts.bitnami.com/bitnami --set auth.rootPassword=$DB_ROOT_PWD --set primary.service.clusterIP=None
-    - helm upgrade --install cilium cilium --repo https://helm.cilium.io/ --version 1.12.3 --namespace kube-system --set nodeinit.enabled=true --set nodeinit.reconfigureKubelet=true --set nodeinit.removeCbrBridge=true --set cni.binPath=/home/kubernetes/bin --set gke.enabled=true --set ipam.mode=kubernetes
+    # - helm upgrade --install cilium cilium --repo https://helm.cilium.io/ --version 1.12.3 --namespace kube-system --set nodeinit.enabled=true --set nodeinit.reconfigureKubelet=true --set nodeinit.removeCbrBridge=true --set cni.binPath=/home/kubernetes/bin --set gke.enabled=true --set ipam.mode=kubernetes
+    - sleep 20
   script:
     - kubectl config use-context tech-marketing/devsecops/initech/simple-notes:simplenotes
     - sh scripts/helm_reset.sh
