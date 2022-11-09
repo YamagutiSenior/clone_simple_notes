@@ -1,10 +1,10 @@
 #!/bin/bash
 
-DEPLOY=notes
+NOTES=notes
 
-helm delete $DEPLOY
+helm delete $NOTES
 if [ $retVal -ne 0 ]; then
-    echo "Error: Could not delete deployment."
+    echo "Error: Could not delete notes deployment."
     echo "Maybe it doesn't exist"
 fi
 
