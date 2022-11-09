@@ -116,7 +116,6 @@ deploy-staging:
     NOTES_DB_BACKEND: "mariadb"
   before_script:
     - kubectl config use-context tech-marketing/devsecops/initech/simple-notes:simplenotes
-    - sh scripts/notes_reset.sh
     - sh scripts/install_ingress.sh
     - sh scripts/install_mariadb.sh
   script:
