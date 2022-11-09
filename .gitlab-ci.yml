@@ -154,7 +154,7 @@ dast_api:
   before_script:
     - sed -i 's@HOST@'"${INGRESS_LB_IP}"'@' test_openapi.v2.0.json
   variables:
-     DAST_API_PROFILE: Quick-10
+     DAST_API_PROFILE: Quick
      DAST_API_OPENAPI: test_openapi.v2.0.json
   dependencies:
     - deploy-staging
