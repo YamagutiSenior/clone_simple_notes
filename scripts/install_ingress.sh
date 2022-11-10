@@ -14,7 +14,7 @@ if [ $? -ne 0 ]; then
     else
         # Sleep so that ingress service can pickup LoadBalancerIP. 
         # It only get's here if the ingress-controller is not installed.
-        sleep 30
+        sleep 60
     fi
 fi
 

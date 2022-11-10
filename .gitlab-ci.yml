@@ -7,7 +7,6 @@ stages:
   - build
   - unit
   - test
-  - covfuzz
   - deploy
   - dast
   - apifuzz
@@ -55,7 +54,7 @@ pages:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   environment:
     name: documentation
-    url: https://tech-marketing.gitlab.io/devsecops/initech/$CI_PROJECT_NAME
+    url: $CI_PAGES_URL
   allow_failure: true
 
 unit:
@@ -101,7 +100,7 @@ container_scanning:
 
 coverage-guided-fuzzing:
   image: python:latest
-  stage: covfuzz
+  stage: test
   extends: .fuzz_base
   script:
     - pip install --extra-index-url https://gitlab.com/api/v4/projects/19904939/packages/pypi/simple pythonfuzz
