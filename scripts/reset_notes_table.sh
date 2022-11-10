@@ -10,6 +10,7 @@ CREATE_CMD="CREATE TABLE IF NOT EXISTS notes (id integer NOT NULL AUTO_INCREMENT
 
 # Check if table exists
 EXISTS=$($DB_CLIENT -u $USER --password=$DB_ROOT_PWD -h $DB_SERVER -e "$EXISTS_CMD")
+retVal=$?
 if [ -z "$EXISTS" ]; then
     echo "Error: Table does not exists."
     echo "Attempting to create it."
