@@ -5,7 +5,7 @@ services:
 
 stages:
   - build
-  - unit
+  - test
   - deploy
   - dast
   - apifuzz
