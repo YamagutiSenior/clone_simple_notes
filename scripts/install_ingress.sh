@@ -10,13 +10,12 @@ if [ $retVal -ne 0 ]; then
     if [ $retVal -ne 0 ]; then
         echo "Error: Could not install $INGRESS in namespace $NAMESPACE, Checking Logs:\n"
         kubectl logs $(kubectl get pods -n $NAMESPACE | grep $INGRESS-controller | awk '{print $1}')
-        exit $retVal
+        exit 1
     else
         # Sleep so that ingress service can pickup LoadBalancerIP. 
         # It only get's here if the ingress-controller is not installed.
         sleep 15
     fi
 fi
-
 
 exit 0

@@ -11,7 +11,7 @@ if [ $retVal -ne 0 ]; then
     if [ $retVal -ne 0 ]; then
         echo "Error: Could not install $MARIADB in namespace $NAMESPACE, Checking Logs:\n"
         kubectl logs $(kubectl get pods -n $NAMESPACE | grep $MARIADB | awk '{print $1}')
-        exit $retVal
+        exit 1
     fi
 fi
 
