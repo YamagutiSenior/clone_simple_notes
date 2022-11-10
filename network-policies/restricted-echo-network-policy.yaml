@@ -5,7 +5,7 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app: echo
+      app: restricted-echo
   ingress:
   - from:
     - podSelector:

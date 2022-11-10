@@ -2,6 +2,10 @@ echo:
     port: 8080
     targetPort: 8080
     replicas: 1
+restricted-echo:
+    port: 8080
+    targetPort: 8080
+    replicas: 1
 notes:
     port: 5000
     targetPort: 5000
