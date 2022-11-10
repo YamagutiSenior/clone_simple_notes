@@ -2,6 +2,7 @@
 
 MARIADB=mariadb
 NAMESPACE=default
+DB_ROOT_PWD=y33tboi
 
 helm get all $MARIADB
 if [ $retVal -ne 0 ]; then
