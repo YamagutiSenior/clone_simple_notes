@@ -6,7 +6,6 @@ services:
 stages:
   - build
   - unit
-  - test
   - deploy
   - dast
   - apifuzz
@@ -59,7 +58,7 @@ pages:
 
 unit:
   image: python:latest
-  stage: unit
+  stage: test
   variables:
     NOTES_DB_BACKEND: "local"
   before_script:
