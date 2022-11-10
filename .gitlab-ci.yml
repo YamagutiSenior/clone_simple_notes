@@ -114,6 +114,7 @@ deploy-staging:
     IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
     HELM_HOST: "localhost:44134"
     NOTES_DB_BACKEND: "mariadb"
+    DB_ROOT_PWD: y33tboi
   before_script:
     - kubectl config use-context $CI_PROJECT_PATH:simplenotes
     - sh scripts/install_ingress.sh
