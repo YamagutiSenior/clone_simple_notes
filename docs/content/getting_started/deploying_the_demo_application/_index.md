@@ -43,7 +43,6 @@ In this section we will be installing the GitLab [Kubernetes Agent](https://docs
 2. Click on the **Connect a cluster (agent)** button
 
 3. Select the `simplenotes` agent from the drop down and press the **Register** button  
-
 **Note:** Save the commands presented to you in the next screen
 
 4. Open a terminal and connect to your cluster
@@ -87,7 +86,6 @@ Now let's run a pipeline to deploy the application to our Kubernetes cluster.
 3. Ensure that the **main** branch is selected
 
 4. Press the **Run Pipeline** button
-
 **Note:** You should now see the pipeline running on your project
 
 ## Step 4: Reviewing the Pipeline
@@ -95,10 +93,9 @@ Now let's run a pipeline to deploy the application to our Kubernetes cluster.
 Now let's wait for the pipeline to complete, this should take a few mins - so grab a coffee ☕️ or tea 🍵, or whatever you like! If the pipeline happens to fail, please checkout the [troubleshooting documentation]().
 
 1. Verify that all the stages have passed successfully within the pipeline.
-
 **Note:** A completed pipeline should look like the below:
 
-![]()
+![](completed_pipeline.png)
 
 ## Step 5: Accessing our application
 
@@ -108,14 +105,12 @@ your application should be available at your Load-Balancers IP under the `/notes
 1. Click on the `deploy-staging` job and scroll to the bottom. You should see the URL which the application was
 deployed to.
 
-![](/static/deploy_staging_job.png)
+![](static/deploy_staging_job.png)
 
 2. Point your browser to the provided link.
-
 **Note:** It should look something like `http://xxx.xxx.xxx.xxx/notes`
 
 3. You should now see the Simple Notes Application running. Go ahead and play around by adding and deleting notes.
-
 **Note:** It should look something like the below:
 
 ![](/static/simple_notes_homepage.png)

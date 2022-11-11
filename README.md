@@ -1,16 +1,20 @@
 # Simple Notes (Security Demo Application)
 
-This application is used for taking simple notes, like **"Everyone needs to go ahead and come in on Saturday and Sunday to help out with the new code push."** It is used to demo many of GitLab's Security features. Feel free to copy it to your workspace, and read the documentation within the [Simple Notes Documentation](https://tech-marketing.gitlab.io/devsecops/initech/simple-notes/) which contains Architecture, Development Guide, Instructions on Creating Vulnerability, and much more.
+This application is used for taking simple notes, like **"Everyone needs to go ahead and come in on Saturday and Sunday to help out with the new code push."** It is used to demo many of GitLab's Security features.
 
-**Do not edit this project directly, but rather clone it and configure it within your own GitLab instance.**
+Be sure to ead the documentation within the [Simple Notes Documentation](https://tech-marketing.gitlab.io/devsecops/initech/simple-notes/) which contains Architecture, Development Guide, Instructions on Creating Vulnerability, and much more.
 
-## Using on your own GitLab instance
+**Note: Do not edit this project directly, but rather clone it and configure it within your own GitLab instance.**
+
+---
+
+# Deploying on Public GitLab
 
 This project is meant to be used within your GitLab instance so that you can view the pipelines, create MRs with security vulnerabilities and much more. To start you can view this YouTube video I have created:
 
 `COMING SOON!`
 
-### Copy project into workspace
+## Step 1: Copy Project into Workspace
 
 1. Make sure you are using [GitLab Ultimate](https://about.gitlab.com/pricing/ultimate/) and logged in  
 **Note: You can signup for a [30 day trial](https://gitlab.com/-/trials/new?utm_medium=cpc&utm_source=google&utm_campaign=brand_amer_pr_rsa_br_exact_&utm_content=free-trial_digital_x-pr_english_&_bt=624524579996&_bk=gitlab%20trial&_bm=e&_bn=g&_bg=142303748075)**
@@ -27,11 +31,13 @@ This project is meant to be used within your GitLab instance so that you can vie
 **Note:** It can be your GitLab username
 
 7. Select `Public` as the visibility level
+**Note:** This is so we don't need to create a token to access our container registry from
+our Kubernetes deployment
 
 8. Press the `Create project` button  
 **Note:** Project will be created in a few seconds
 
-### Configure Kubernetes agent
+## Step 2: Configure Kubernetes Agent
 
 In this section, we will connect our GitLab project to Kubernetes using the GitLab Kubernetes agent. By doing this, it will allow us to run `kubectl` and `helm` commands from within the CI/CD pipeline.  
 
@@ -75,7 +81,7 @@ $ helm upgrade --install simplenotes gitlab/gitlab-agent \
 $ kubectl get pods -n gitlab-agent
 ```
 
-### Run pipeline and verify
+## Step 3: Run Pipeline and Verify
 
 Now we will go ahead and run a pipeline to get everything deployed and run.
 
@@ -102,14 +108,14 @@ Now we will go ahead and run a pipeline to get everything deployed and run.
 
 ![](./images/screenshot.png)
 
-### Adding Vulnerabilities
+## Step 4: Add Vulnerabilities to test scanners
 
 You can add some vulnerabilities, that way you can see GitLab DevSecOps in action.
-For advanced details see this projects [documentation page]().
+For advanced details see this projects [documentation page](https://tech-marketing.gitlab.io/devsecops/initech/simple-notes/getting_started/developer_workflow/).
 
 1. Click on the `Web IDE` button
 
-2. Add changes to files as seen in [this MR](https://gitlab.com/tech-marketing/devsecops/initech/simple-notes/-/merge_requests/6)
+2. Add changes to files as seen in [this MR](https://gitlab.com/tech-marketing/devsecops/initech/simple-notes/-/merge_requests/7)
 
 3. Press the `Create commit...` button
 
@@ -131,84 +137,7 @@ For advanced details see this projects [documentation page]().
 
 ---
 
-## Local Usage
+# Resources
 
-This application can be also be run on your local machine. It automatically creates an SQLite DB in order to store the notes.
-
-### Install and Run the Application
-
-1. Install [SQLite](https://www.sqlite.org/index.html)
-
-2. Download Required Packages
-```bash
-$ pip install virtualenv
-```
-
-3. Create a Virtual Environment
-```bash
-$ virtualenv venv
-```
-
-4. Activate Virtual Environment
-```bash
-$ source venv/bin/activate
-```
-
-5. Download Dependencies
-```bash
-$ pip install -r requirements.txt
-```
-
-6. Run the application
-```bash
-$ python run.py
-```
-
-## Deploying to Kubernetes (without GitLab CI/CD)
-
-This application can be deployed to Kubernetes using the provided helm chart. It requires ingress-nginx and mariadb to be running on your cluster.
-
-### Install and Run the Application
-
-1. Build and push the notes Docker image, and store image name
-```bash
-$ docker login -u <REGISTRY_USER> -p <REGISTRY_PASSWORD> <CI_REGISTRY>
-$ docker build -t <IMAGE> .
-$ docker push "<IMAGE>"
-
-$ export IMAGE=<IMAGE>
-```  
-
-**Note:**  
-If you don't have a container registry, or just don't wanna build, you can also just use my image `registry.gitlab.com/tech-marketing/devsecops/initech/simple-notes/main:latest`.
-
-2. Install [Helm](https://helm.sh/docs/intro/install/)
-
-3. Install [Ingress-Nginx](https://kubernetes.github.io/ingress-nginx/) onto your cluster
-```bash
-$ helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace
-```
-
-4. Create and store a password for the DB
-```bash
-$ export DB_ROOT_PWD=<ADD-A-PASSWORD>
-```
-
-5. Install [MariaDB](https://mariadb.org/) onto your cluster
-```bash
-$ helm upgrade --install mariadb mariadb --repo https://charts.bitnami.com/bitnami --set auth.rootPassword=$DB_ROOT_PWD --set primary.service.clusterIP=None
-```
-
-6. Deploy Notes Application
-```bash
-$ helm upgrade --install notes helm -f helm/values.yaml --set image=$IMAGE --set dbrootpwd=$DB_ROOT_PWD
-```
-
-7. Get the Ingress IP
-```bash
-$ kubectl get svc -n ingress-nginx | grep LoadBalancer | awk '{print $4}'
-```
-
-8. Open Browser to `http://<INGRESS-IP>/notes`. You should see something like the below:
-
-![](./images/screenshot.png)
+* [Local Development]()
+* [Deploying without GitLab]()

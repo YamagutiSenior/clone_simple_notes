@@ -32,15 +32,15 @@ has completely run. Let's dig into the vulnerabilities and perform some actions 
 
 2. Within the merge request, press **Expand** on the Security Scans
 
-3. Click on the **Chmod setting a permissive mask 0o1411 on file (name)** vulnerability and you'll get a popup
+3. Click on any of the detected vulnerabilities
 
-6. Dismiss the Vulnerability by clicking **Dismiss vulnerability**
+4. Within the popup, dismiss the Vulnerability by clicking **Dismiss vulnerability**
 
 **Note:** This allows AppSec teams to see what developers are dismissing as well as why. If this MR were to be merged, then the vulnerability will automatically be tagged as dismissed in the vulnerability report.
 
-8. Click on the same vulnerability
+5. Click on the same vulnerability
 
-10. Click on **Create issue**
+6. Click on **Create issue**
 
 Now let's go back to the Merge Request by pressing the back button on your browser.
 
