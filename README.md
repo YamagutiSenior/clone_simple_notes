@@ -91,7 +91,6 @@ Now we will go ahead and run a pipeline to get everything deployed and run.
 **Note: This will take a few mins, so go grab a coffee/tea!**
 
 6. Make sure all the jobs have completed successfully  
-**Note: The fuzzing jobs may fail or provide a warning**
 
 7. Click on the `deploy-staging` job
 
@@ -130,6 +129,8 @@ For advanced details see this projects [documentation page]().
 
 11. Vew the scan results within the merge request
 
+---
+
 ## Local Usage
 
 This application can be also be run on your local machine. It automatically creates an SQLite DB in order to store the notes.
@@ -163,7 +164,7 @@ $ pip install -r requirements.txt
 $ python run.py
 ```
 
-## Running on Kubernetes
+## Deploying to Kubernetes (without GitLab CI/CD)
 
 This application can be deployed to Kubernetes using the provided helm chart. It requires ingress-nginx and mariadb to be running on your cluster.
 
