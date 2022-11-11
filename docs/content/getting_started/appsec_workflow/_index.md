@@ -18,7 +18,7 @@ At the project level, the Security Dashboard displays a chart with the number of
 **Note:** Nothing will be present, wait a day for it to be populated. Eventually over time with new commits introducing and resolving
 vulnerabilities, you'll have something like this:
 
-![](security_dashboard.png)
+![](/security_dashboard.png)
 
 ## Step 2: Viewing Vulnerability Reports
 
