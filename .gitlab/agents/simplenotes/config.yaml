@@ -1,5 +1,5 @@
 gitops:
   manifest_projects:
-  - id: $CI_PROJECT_PATH
+  - id: tech-marketing/devsecops/initech/simple-notes
     paths:
     - glob: '/network-policies/*.yaml'
