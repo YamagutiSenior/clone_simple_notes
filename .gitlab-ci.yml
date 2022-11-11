@@ -91,6 +91,18 @@ container_scanning:
   before_script:
     - if [ $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH ]; then CS_IMAGE=$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest; fi
 
+license_scanning:
+  variables:
+    CI_DEBUG_TRACE: "true"
+  before_script:
+    - apt update -y; apt upgrade -y
+    - apt install gcc curl openssl -y
+    - apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
+    - curl -LsS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | bash
+    - apt install libmariadb3 libmariadb-dev mariadb-client sqlite3 libsqlite3-dev -y
+    - pip3 install --upgrade pip
+    - pip3 install packaging 
+
 coverage-guided-fuzzing:
   image: python:latest
   stage: test
