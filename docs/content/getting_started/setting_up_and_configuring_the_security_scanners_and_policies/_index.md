@@ -5,7 +5,7 @@ weight: 40
 
 # Enabling and Configuring Security Scans and Policies
 
-In this section, we will go over the security scans which GitLab offers. We will then setup all of the scans and run them on our master branch.
+In this section, we will go over the security scans which GitLab offers. We will then setup all of the scans and run them on our main branch.
 
 ## What Security Scans does GitLab offer
 
@@ -29,13 +29,13 @@ We will go over the following scanners:
 
 ## Step 1: Adding Security Scans to the pipeline
 
-Securty scanner can be added in 2 different ways. Either by using the [Security Configuration UI]() or Simply editing the [.gitlab-ci.yml](https://gitlab.com/tech-marketing/devsecops/initech/simple-notes/-/blob/main/.gitlab-ci.yml).
+Securty scanner can be added in 2 different ways. Either by using the [Security Configuration UI](https://docs.gitlab.com/ee/user/application_security/configuration/#security-testing) or by simply editing the [.gitlab-ci.yml](https://gitlab.com/tech-marketing/devsecops/initech/simple-notes/-/blob/main/.gitlab-ci.yml).
 
 Since security scanners have already been added to this project via [templates](https://docs.gitlab.com/ee/ci/examples/index.html#cicd-templates), you can see how they are defined and configured and by viewing the [.gitlab-ci.yml](https://gitlab.com/tech-marketing/devsecops/initech/simple-notes/-/blob/main/.gitlab-ci.yml). I'll go ahead and explain how they work.
 
 ### Static Scanners
 
-Static scanners examine the static source code in your project, and perform pattern matching on syntax, versions, etc in order find known vulnerabilities. They obtain the vulnerabilites from a CVE database and parse data in order to provide you with the following:
+Static scanners examine the static source code in your project, and perform pattern matching on syntax, versions, etc in order find known vulnerabilities. They obtain the vulnerabilities from a CVE database and parse data in order to provide you with the following:
 
 * Description
 * Severity
@@ -47,27 +47,28 @@ Static scanners examine the static source code in your project, and perform patt
 
 ### Dynamic Scanners
 
-Dynamic scanners examine the running application, and send requests in order to find vulnerabilities within the system. Dynamic scanners are not aware of the underlying code, and perform request on a block-box. Since **requests** are sent to the application and **responses** are recieved, they are included along with the same data as static scanners (listed above). You can also download Postman specs in order to replicate the **requests**, which is useful for manual testing.
+Dynamic scanners examine the running application, and send requests in order to find vulnerabilities within the system. Dynamic scanners are not aware of the underlying code, and perform request on a block-box. Since **requests** are sent to the application and **responses** are received, they are included along with the same data as static scanners (listed above). You can also download Postman specs in order to replicate the **requests**, which is useful for manual testing.
 
 ### Fuzzing
 
 COMING SOON
 
-## Step 2: Explaination of each of the CI/CD jobs
+## Step 2: Explanation of each of the CI/CD jobs
 
 There's a bunch of CI/CD jobs that do a bunch of different things, I'll briefly explain them here.
 
-- **build**:
-- **pages**:
-- **unit**:
-- **gemnasium-python-dependency_scanning**:
-- **container_scanning**:
-- **coverage-guided-fuzzing**:
-- **deploy-staging**:
-- **dast**:
-- **dast_api**:
-- **apifuzzer_fuzz**:
-- **reset-notes-table**:
+- **build**: Builds the container image for using the application in Kubernetes
+- **pages**: Build the documentation using [Go Hugo]() Static Site Generator
+- **unit**: Runs Unit Tests from the application
+- **gemnasium-python-dependency_scanning**: overwrites the pre_script of dependency scanning to install required system dependencies
+- **container_scanning**: overwrites the image being scanned depending on the branch
+- **license_scanning**: overwrites the pre_script of license scanning to install required system dependencies 
+- **coverage-guided-fuzzing**: runs fuzzing on a provided instrumented file
+- **deploy-staging**: installs ingress, mariadb, and notes application to Kubernetes cluster
+- **dast**: overwrites paths used for running dast
+- **dast_api**: overwrites paths used for running dast_api
+- **apifuzzer_fuzz**: overwrites paths used for running api-fuzzing
+- **reset-notes-table**: Resets notes which have been added via dynamic security scans
 
 ## Step 3: Setting up Merge-Request Approvals (Vulnerabilities)
 
@@ -98,7 +99,7 @@ vulnerabilities in an open merge request targeting `main`
 
 THEN Require approval from `1` of the following approvers
 
-8. Add yourself in the **Search users or groups** drop down
+8. Add any username/group other than yours in the **Search users or groups** drop down
 
 9. Click on the **Configure with a merge request** button
 
@@ -134,7 +135,7 @@ the previous step.
 
 3. Click on **Enable** for **License-Check**  
 
-4. Type in your username in the **Approvers** dropdown
+4. Type in any username/group other than yours in the **Approvers** dropdown
 
 5. Press **Add approval rule**
 

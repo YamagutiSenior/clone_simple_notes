@@ -15,10 +15,9 @@ At the project level, the Security Dashboard displays a chart with the number of
 
 1. Access the Security Dashboard by going to **Security & Compliance** left navigation menu and selecting **Security Dashboard**  
 
-**Note:** Nothing will be present, wait a day for it to be populated. Eventually over time with new commits introducing and resolving
-vulnerabilities, you'll have something like this:
+**Note:** Nothing will be present, wait a day for it to be populated. Eventually over time with new commits introducing and resolving vulnerabilities, you'll have something like this:
 
-![](/devsecops/initech/simple-notes/security_dashboard.png)
+![](/devsecops/initech/simple-notes/images/security_dashboard.png)
 
 ## Step 2: Viewing Vulnerability Reports
 
@@ -28,19 +27,17 @@ The vulnerability reports display the total number of vulnerabilities by severit
 
 1. In order to access vulnerability reports, navigate to **Security & Compliance** left navigation menu and selecting **Vulnerability Reports** 
 
-2. Filter by **Scanner** and select **SAST**
+2. Click on the any vulnerability within the list
 
-3. Click on the **Possible binding to all interfaces** description
+3. Select the **Status** box
 
-4. Select the **Status** box
+4. Select **Confirm**
 
-5. Select **Confirm**
-
-6. Press **Change Status**
+5. Press **Change Status**
 
 This allows for better filtering, enabling the security team to better triage security issues.
 
-7. Now scroll to the bottom of the page, and add a comment in the text box and press the **Save comment** button
+6. Now scroll to the bottom of the page, and add a comment in the text box and press the **Save comment** button
 
 This will save the comment in the Vulnerability page to enable collaboration between different members of the AppSec team.
 

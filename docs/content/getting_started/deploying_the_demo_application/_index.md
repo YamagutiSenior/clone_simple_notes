@@ -30,7 +30,6 @@ https://gitlab.com/tech-marketing/devsecops/initech/simple-notes.git
 6. Press the **Create project** button
 
 7. Wait for the project to be imported. It will take a few seconds
-
 **Note:** You should be redirected to the newly imported project along with
 the message "The project was successfully imported"
 
@@ -90,22 +89,19 @@ Now let's run a pipeline to deploy the application to our Kubernetes cluster.
 
 ## Step 4: Reviewing the Pipeline
 
-Now let's wait for the pipeline to complete, this should take a few mins - so grab a coffee ☕️ or tea 🍵, or whatever you like! If the pipeline happens to fail, please checkout the [troubleshooting documentation]().
+Now let's wait for the pipeline to complete, this should take a few mins - so grab a coffee ☕️ or tea 🍵, or whatever you like! If the pipeline happens to fail, please checkout the [troubleshooting documentation](../../documentation/troubleshooting).
 
 1. Verify that all the stages have passed successfully within the pipeline.
 **Note:** A completed pipeline should look like the below:
 
-![](completed_pipeline.png)
+![](/devsecops/initech/simple-notes/images/completed_pipeline.png)
 
-## Step 5: Accessing our application
+## Step 5: Accessing our Application
 
 Now let's use the ingress to access our application. With the default settings
-your application should be available at your Load-Balancers IP under the `/notes` path. These items can be configured via the [values.yaml]() within the helm path.
+your application should be available at your Load-Balancers IP under the `/notes` path. These items can be configured via the [values.yaml](https://gitlab.com/tech-marketing/devsecops/initech/simple-notes/-/blob/main/helm/values.yaml) within the helm path.
 
-1. Click on the `deploy-staging` job and scroll to the bottom. You should see the URL which the application was
-deployed to.
-
-![](static/deploy_staging_job.png)
+1. Click on the `deploy-staging` job and scroll to the bottom. You should see the URL which the application was deployed to.
 
 2. Point your browser to the provided link.
 **Note:** It should look something like `http://xxx.xxx.xxx.xxx/notes`
@@ -113,7 +109,7 @@ deployed to.
 3. You should now see the Simple Notes Application running. Go ahead and play around by adding and deleting notes.
 **Note:** It should look something like the below:
 
-![](/static/simple_notes_homepage.png)
+![](/devsecops/initech/simple-notes/images/simple_notes_homepage.png)
 
 ---
 

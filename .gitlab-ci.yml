@@ -96,12 +96,12 @@ license_scanning:
     CI_DEBUG_TRACE: "true"
   before_script:
     - apt update -y; apt upgrade -y
-    - apt install gcc curl openssl -y
+    - apt install gcc curl openssl python3-pip -y
     - apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
     - curl -LsS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | bash
     - apt install libmariadb3 libmariadb-dev mariadb-client sqlite3 libsqlite3-dev -y
-    - pip install --upgrade pip
-    - pip install packaging 
+    - pip3 install --upgrade pip
+    - pip3 install packaging 
 
 coverage-guided-fuzzing:
   image: python:latest
