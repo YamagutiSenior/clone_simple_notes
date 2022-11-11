@@ -139,6 +139,7 @@ deploy-staging:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
       variables:
         IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest
+    - when: always
 
 dast:
   stage: dast
@@ -175,8 +176,6 @@ reset-notes-table:
   script:
     - kubectl config use-context $CI_PROJECT_PATH:simplenotes
     - kubectl exec -i deploy/notes -- sh scripts/reset_notes_table.sh
-  rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   dependencies:
     - dast
     - apifuzzer_fuzz
