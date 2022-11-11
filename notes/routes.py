@@ -173,10 +173,10 @@ def add_note(msg="", admin=False):
         msg = data.get('message')
 
     if not msg:
-         return jsonify({"Error": "No message in Request"}), 400
+         return jsonify({"Error": "No message in Request"}), 500
 
     if len(msg) > 100:
-         return jsonify({"Error": "Message too long, keep at chars or less"}), 400
+         return jsonify({"Error": "Message too long, keep at chars or less"}), 500
 
     if (msg == "\""):
         response = jsonify({"Success": "Maybe a Security Issue!"}), 200

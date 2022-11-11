@@ -1,4 +1,4 @@
-FROM python:latest
+FROM python:3.8
 
 RUN apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
 RUN curl -LsS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | bash
