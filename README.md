@@ -139,5 +139,5 @@ For advanced details see this projects [documentation page](https://tech-marketi
 
 # Resources
 
-* [Local Development]()
+* [Development Guide](https://tech-marketing.gitlab.io/devsecops/initech/simple-notes/documentation/development_guide/)
 * [Deploying without GitLab]()
