@@ -26,19 +26,15 @@ include:
 
 build:
   stage: build
+  variables:
+    IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA 
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY 
   script:
     - sh scripts/delete_latest.sh
+    - if [ $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH ]; then IMAGE=$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest; fi
     - docker build -t $IMAGE .
     - docker push "$IMAGE"
-  rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-      variables:
-        IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest
-    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
-      variables:
-        IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA 
 
 pages:
   image: registry.gitlab.com/pages/hugo/hugo_extended:latest
@@ -92,13 +88,9 @@ gemnasium-python-dependency_scanning:
 container_scanning:
   variables:
     CS_DISABLE_LANGUAGE_VULNERABILITY_SCAN: "false"
-  rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-      variables:
-        CS_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest
-    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
-      variables:
-        CS_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA 
+    IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA  
+  before_script:
+    - if [ $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH ]; then IMAGE=$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest; fi
 
 coverage-guided-fuzzing:
   image: python:latest
@@ -115,12 +107,14 @@ deploy-staging:
     HELM_HOST: "localhost:44134"
     NOTES_DB_BACKEND: "mariadb"
     DB_ROOT_PWD: y33tboi
+    IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
   before_script:
     - kubectl config use-context $CI_PROJECT_PATH:simplenotes
     - sh scripts/install_ingress.sh
     - sh scripts/install_mariadb.sh
   script:
     - kubectl config use-context $CI_PROJECT_PATH:simplenotes
+    - if [ $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH ]; then IMAGE=$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest; fi
     - helm upgrade --install notes helm -f helm/values.yaml --set image=$IMAGE --set dbrootpwd=$DB_ROOT_PWD
   after_script:
     - kubectl config use-context $CI_PROJECT_PATH:simplenotes
@@ -137,13 +131,6 @@ deploy-staging:
       dotenv: deploy.env
   dependencies:
     - build
-  rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-      variables:
-        IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest
-    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
-      variables:
-        IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
 
 dast:
   stage: dast
