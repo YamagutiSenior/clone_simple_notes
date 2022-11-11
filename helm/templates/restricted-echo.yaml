@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: restricted-echo
 spec:
-  replicas: {{ .Values.restricted-echo.replicas }}
+  replicas: {{ .Values.restrictedecho.replicas }}
   selector:
     matchLabels:
       app: restricted-echo
@@ -16,7 +16,7 @@ spec:
       - name: restricted-echo
         image: gcr.io/kubernetes-e2e-test-images/echoserver:2.1
         ports:
-        - containerPort: {{ .Values.restricted-echo.port }}
+        - containerPort: {{ .Values.restrictedecho.port }}
 ---
 apiVersion: v1
 kind: Service
@@ -24,8 +24,8 @@ metadata:
   name: restricted-echo-svc
 spec:
   ports:
-  - port: {{ .Values.restricted-echo.port }}
-    targetPort:  {{ .Values.restricted-echo.targetPort }}
+  - port: {{ .Values.restrictedecho.port }}
+    targetPort:  {{ .Values.restrictedecho.targetPort }}
     protocol: TCP
     name: http
   selector:

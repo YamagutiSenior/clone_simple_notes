@@ -2,7 +2,7 @@ echo:
     port: 8080
     targetPort: 8080
     replicas: 1
-restricted-echo:
+restrictedecho:
     port: 8080
     targetPort: 8080
     replicas: 1
