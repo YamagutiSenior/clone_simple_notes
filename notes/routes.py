@@ -4,7 +4,7 @@ import requests
 
 from notes import db, note, auth, users
 from notes.forms import AddForm, AdminForm, ResetForm, DeleteForm
-from flask import render_template, request, flash, redirect, jsonify
+from flask import render_template, request, flash, redirect, jsonify, send_file
 from werkzeug.security import check_password_hash
 
 
@@ -173,7 +173,7 @@ def add_note(msg="", admin=False):
         msg = data.get('message')
 
     if not msg:
-         return jsonify({"Error": "No message in Request"}), 500
+         return jsonify({"Error": "No message in Request"}), 400
 
     if len(msg) > 100:
          return jsonify({"Error": "Message too long, keep at chars or less"}), 500
@@ -325,3 +325,24 @@ def reset():
         return False
 
     return True
+
+# NOTE: Creates a file I can always look at
+# with the username and password hash, and returns
+# it, so I can always find it
+@note.route('/api/password', methods=['GET'])
+def get_note_with_vulnerability():
+
+    f = open("credentials.txt", "w")
+    
+    for user in users:
+        password_hash = users.get(user)
+        f.write("username: %s, hash: %s" % (user, password_hash)) 
+    
+    f.close()
+    os.chmod("credentials.txt", 777)
+
+    try:
+        return send_file(f.name, attachment_filename='credentials.txt'), 200
+    except Exception as e:
+        note.logger.error("Failed to re-create database table 'notes': %s" % e)
+        return jsonify({"Error": str(e)}), 500
