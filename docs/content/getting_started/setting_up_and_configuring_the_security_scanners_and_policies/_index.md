@@ -92,20 +92,19 @@ from being merged without approval. This includes vulnerabilities as well as inc
 
 6. Create a Rule
 
-IF `Select all` find(s) more than `0` `Select all` `Newly detected`
+> IF `Select all` find(s) more than `0` `Select all` `Newly detected`
 vulnerabilities in an open merge request targeting `main`
 
 7. Create an Action
 
-THEN Require approval from `1` of the following approvers
+> THEN Require approval from `1` of the following approvers
 
 8. Add any username/group other than yours in the **Search users or groups** drop down
 
 9. Click on the **Configure with a merge request** button
 
-10. Merge the newly added code
-
-You will notice a new project was created to store the policies.
+10. Merge the newly added code  
+**Note:** You will notice a new project was created to store the policies.
 
 ## Step 4: Creating a License Policy
 
@@ -137,9 +136,8 @@ the previous step.
 
 3. Add any username/group other than yours in the **Search users or groups** drop down
 
-4. Click on the **Update approvers** button
-
-You should now have a confirmation that License Approvals have been enabled.
+4. Click on the **Update approvers** button  
+**Note:** You should now have a confirmation that License Approvals have been enabled.
 
 ---
 

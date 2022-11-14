@@ -39,12 +39,12 @@ Let's dig into the vulnerabilities and perform some actions on them.
 
 3. Click on any of the detected vulnerabilities
 
-4. Within the popup, dismiss the Vulnerability by clicking **Dismiss vulnerability**
+4. Within the popup, dismiss the Vulnerability by clicking **Dismiss vulnerability**  
 **Note:** This allows AppSec teams to see what developers are dismissing as well as why. If this MR were to be merged, then the vulnerability will automatically be tagged as dismissed in the vulnerability report.
 
 5. Click on the same vulnerability
 
-6. Click on **Create issue**
+6. Click on **Create issue**  
 **Note:** This creates a confidential issue to allow developers and the security team to
 work together to resolve without showing information of the vulnerability to others
 
@@ -60,13 +60,13 @@ Within the same MR view, we can see the licenses that were detected. You'll be a
 
 ## Step 4: Viewing the Security Guardrails
 
-We can now merge the code. This is done so that the Vulnerability Report can be populated with the new vulnerability data.
-
 1. Click **view eligible approvers**
 
-2. You should see that the merge request approvals are active
+2. You should see that the merge request approvals are active  
+
 **Note:** We won't be able to merge because the security approvals are present and there
-are vulnerabilities. If you want to merge this, you either need to resolve the vulnerabilities (which doesn't make sense in this context, since the code only introduces them to test the scanner) or remove the security approvals.
+are vulnerabilities. If you want to merge this, you either need to resolve the vulnerabilities (which doesn't make sense in this context, since the code only introduces them to test the scanner) or remove the security approvals. Merging the code will add the new results to
+the Vulnerability Dashboard and Reports
 
 ---
 

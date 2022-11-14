@@ -36,10 +36,10 @@ The vulnerability reports display the total number of vulnerabilities by severit
 
 This allows for better filtering, enabling the security team to better triage security issues.
 
-6. Now scroll to the bottom of the page, and add a comment in the text box and press the **Save comment** button
+6. Now scroll to the bottom of the page, and add a comment in the text box and press the **Save comment** button  
 **Note:** This will save the comment in the Vulnerability page to enable collaboration between different members of the AppSec team.
 
-7. Now click on **Create Issue** button
+7. Now click on **Create Issue** button  
 **Note:** This will take you to an issue creation prompt. This allows you to create an issue (confidential or not) in order to
 collaborate with developers on a resolution.
 
@@ -73,7 +73,11 @@ gitops:
 
 4. Press the **Create commit...** button
 
-5. Press **Commit**
+5. Selext **Commit to main branch**
+
+6. Press the **Commit** button
+
+Now let's wait for the pipeline to complete, this should take a few mins - so grab a coffee ☕️ or tea 🍵, or whatever you like! If the pipeline happens to fail, please checkout the [troubleshooting documentation](../../documentation/troubleshooting).
 
 ## Step 4: Testing Policy as Code
 
