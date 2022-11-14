@@ -4,10 +4,12 @@ bookCollapseSection: false
 
 # Troubleshooting
 
-COMING SOON
+`COMING SOON`
 
 ## Troubleshooting Failed Pipeline
 
 ## Troubleshooting Failed Local Installation
+
+## Troubleshooting Failed Kubernetes Cluster Installation
 
 ## Common Issues

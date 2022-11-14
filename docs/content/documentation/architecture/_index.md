@@ -9,8 +9,8 @@ is an application developed in Python using the Flask Web Framework.
 
 ## Architecture Diagram
 
-![Architecture Diagram]()
+`COMING SOON`
 
 ## API Diagram
 
-![API Diagram]()
+`COMING SOON`

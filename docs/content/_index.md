@@ -5,21 +5,15 @@ type: docs
 
 # Welcome
 
-Welcome to Simple Notes - GitLab DevSecOps Introduction. This Project
-will help you gain a better understanding of how to successfully
-shift security left to find and fix security flaws during development
-and do so more easily, with greater visibility and control than
+Welcome to Simple Notes - GitLab DevSecOps Introduction. This Project will help you gain a better understanding of how to successfully
+shift security left to find and fix security flaws during development and do so more easily, with greater visibility and control than
 typical approaches can provide.
 
 ## Getting Started
 
-In order to get started, go through each of the lessons described within the workshop. Be sure to start with the prerequisites.
+In order to get started, go through each of the lessons described within the workshop. The lessons are displayed in the table of contents to the left, under **Getting Started**.
 
-To learn about the project we are using you can see the following documentation:
-
-- [Project Architecture](./documentation/architecture/)
-- [Development Guide](./documentation/development_guide/)
-- [Contributing](./documentation/contributing/)
+Be sure to start with [Lesson 1: Prerequisites](./getting_started/lesson_1_prerequisites/)
 
 ## Outcomes
 
@@ -39,3 +33,11 @@ To learn about the project we are using you can see the following documentation:
 | 3 | Setting up and Configuring the Security Scanners and Policies | Learn how to setup and configure the different types of security scans. This includes Security Policies as well |
 | 4 | Developer Workflow | Learn how to view and take action on vulnerabilities within a Merge Request |
 | 5 | AppSec Workflow | Learn how to triage vulnerabilities and collaborate with other members of a Security team |
+
+## Additional Resources
+
+To learn about the project we are using you can see the following documentation:
+
+- [Project Architecture](./documentation/architecture/)
+- [Development Guide](./documentation/development_guide/)
+- [Contributing](./documentation/contributing/)

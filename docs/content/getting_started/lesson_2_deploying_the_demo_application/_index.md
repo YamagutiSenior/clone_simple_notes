@@ -133,5 +133,5 @@ your application should be available at your Load-Balancers IP under the `/notes
 
 Congratulations! You have now successfully deployed an application using GitLab CICD.
 
-{{< button relref="/prerequisites" >}}Previous Lesson{{< /button >}}
-{{< button relref="/setting_up_and_configuring_the_security_scanners_and_policies" >}}Next Lesson{{< /button >}}
+{{< button relref="/lesson_1_prerequisites" >}}Previous Lesson{{< /button >}}
+{{< button relref="/lesson_3_setting_up_and_configuring_the_security_scanners_and_policies" >}}Next Lesson{{< /button >}}

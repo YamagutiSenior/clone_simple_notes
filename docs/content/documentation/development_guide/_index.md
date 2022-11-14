@@ -7,6 +7,8 @@ bookCollapseSection: false
 This is the development guide which goes over how to develop and
 test the application locally.
 
+`TODO: NEED TO UPDATE DEPENDENCIES HERE`
+
 ## Local Deployment
 
 1. Install SQLite dependencies
@@ -99,6 +101,12 @@ $ python run.py
 application.  
 
 **Note:** Default Port is 5001.
+
+## Kubernetes Cluster Deployment
+
+`COMING SOON`
+
+---
 
 ## Structure
 

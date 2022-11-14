@@ -143,7 +143,7 @@ the previous step.
 
 Congratulations! You have now successfully run Security Scans and enabled DevSecOps for your application.
 
-{{< button relref="/deploying_the_demo_application" >}}Previous Lesson{{< /button >}}
-{{< button relref="/developer_workflow" >}}Next Lesson{{< /button >}}
+{{< button relref="/lesson_2_deploying_the_demo_application" >}}Previous Lesson{{< /button >}}
+{{< button relref="/lesson_4_developer_workflow" >}}Next Lesson{{< /button >}}
 
 
