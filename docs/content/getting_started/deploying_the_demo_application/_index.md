@@ -17,7 +17,7 @@ Here we will clone the sample project which we will use through this workshop. I
 
 2. Select **Import project**
 
-3. Press the **Repo By URL** button=
+3. Press the **Repo By URL** button
 
 4. Under **Git repository URL** add the following URL:
 
@@ -26,6 +26,8 @@ https://gitlab.com/tech-marketing/devsecops/initech/simple-notes.git
 ```
 
 5. Select **Public** under visibility level
+**Note:** Public is set so that we don't need to take extra steps to be able to [pull
+from a private container-registry](https://chris-vermeulen.com/using-gitlab-registry-with-kubernetes/)
 
 6. Press the **Create project** button
 
@@ -65,13 +67,14 @@ $ helm upgrade --install simplenotes gitlab/gitlab-agent \
     --set config.token=1gqUgdbmxNsY3pyWLz_HzsqF_8zMgheniaxoCfFx1zPnyWacUQ \
     --set config.kasAddress=wss://kas.gitlab.com
 ```  
-
 **Note:** Make sure you use the token provided to you
 
 6. Verify the Kubernetes Agent is running
 
 ```bash
 $ kubectl get pods -n gitlab-agent
+
+
 ```
 
 ## Step 3: Running the Pipelines

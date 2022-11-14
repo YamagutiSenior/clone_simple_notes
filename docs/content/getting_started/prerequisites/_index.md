@@ -10,8 +10,7 @@ In order to get started with GitLab DevSecOps, you will need the following:
 - A GitLab account
 - A License or Trial for GitLab Ultimate
 - Kubectl
-- A Kubernetes Cluster
-
+- A Kubernetes Cluster  
 **Note:** I am using GKE for this example, so if you are following along, 
 Google Cloud SDK will also be required
 
@@ -24,21 +23,17 @@ https://gitlab.com/users/sign_up
 
 In order to get the most out of GitLab DevSecOps, you will require GitLab
 Ultimate. If you do not have GitLab Ultimate, you can sign-up for a 30-day trial
-license here: https://about.gitlab.com/free-trial/
-
+license here: https://about.gitlab.com/free-trial/  
 **Note:** GitLab Ultimate is a requirement for this tutorial.
 
 ## Google Cloud SDK
 
 Before starting, you should download and install the Google Cloud SDK. It will allow us to interact with set our cluster via the command-line.
-
 Download it from here: https://cloud.google.com/sdk/docs/quickstart
 
 ## KubeCtl
 
-The Kubernetes command-line tool, kubectl, allows you to run commands against Kubernetes clusters. We will need it to interact with the cluster we have created via the CLI.
-
-You can download it from here: https://kubernetes.io/docs/tasks/tools/
+The Kubernetes command-line tool, kubectl, allows you to run commands against Kubernetes clusters. We will need it to interact with the cluster we have created via the CLI. You can download it from here: https://kubernetes.io/docs/tasks/tools/
 
 ## Kubernetes Cluster
 
@@ -63,15 +58,13 @@ Once you have access to the Google cloud console, you can create a cluster as fo
 
 8. In the **Nodes** menu, select the **Series** and a **Machine type** and then
 press the **Create** button  
+**Note:** I selected the e2-medium (2 vCPU, 4GB memory) machine, since this workshop doesn't require anything more than that.
 
-**Note:** I selected the e2-micro (2 vCPU, 1GB memory) machine, since this workshop doesn't require anything more than that.
-
-9. Under **Networking** scroll down and select **HTTP load balancing** if it isn't already
+9. Under **Networking** scroll down and select **Enable Kubernetes Network Policy** as well as **HTTP load balancing** if they aren't already selected
 
 10. Press the **Create** Button
 
-11. Wait for the cluster to render
-
+11. Wait for the cluster to render  
 **Note:** This may take a few mins.
 
 12. Click on the rendered cluster

@@ -51,14 +51,14 @@ Dynamic scanners examine the running application, and send requests in order to 
 
 ### Fuzzing
 
-COMING SOON
+Fuzzing or Fuzz-Testing is the process of sending **random** or **malformed** data to an application or instrumented function in order to cause unexpected behavior. This helps you discover bugs and potential security issues that other QA processes may miss. GitLab includes Web-API Fuzzing (fuzz testing of API operation parameters) and Coverage-Guided Fuzzing (sends random inputs to an instrumented version of your application). Each have their own uses and benefits.
 
 ## Step 2: Explanation of each of the CI/CD jobs
 
 There's a bunch of CI/CD jobs that do a bunch of different things, I'll briefly explain them here.
 
 - **build**: Builds the container image for using the application in Kubernetes
-- **pages**: Build the documentation using [Go Hugo]() Static Site Generator
+- **pages**: Build the documentation using [Go Hugo](https://gohugo.io/) Static Site Generator
 - **unit**: Runs Unit Tests from the application
 - **gemnasium-python-dependency_scanning**: overwrites the pre_script of dependency scanning to install required system dependencies
 - **container_scanning**: overwrites the image being scanned depending on the branch
@@ -123,21 +123,23 @@ being merged.
 
 5. The **Apache License 2.0** should now be added with a confirmation
 
+6. Follow Steps 3-5 for **GNU Affero General Public License v3 or later (AGPLv3+)**
+
 ## Step 5: Setting up Merge-Request Approvals (Licenses)
 
 Setting up the License Check enables us to require approval if any
 licenses within the denylist are present. We setup the denylist in
 the previous step.
 
-1. Go to the the **Settings** left navigation menu and press **General**:  
+1. Click on the **Update approvals** button
 
-2. Expand **Merge request approvals**   
+2. Set **Approvals required** to `1`
 
-3. Click on **Enable** for **License-Check**  
+3. Add any username/group other than yours in the **Search users or groups** drop down
 
-4. Type in any username/group other than yours in the **Approvers** dropdown
+4. Click on the **Update approvers** button
 
-5. Press **Add approval rule**
+You should now have a confirmation that License Approvals have been enabled.
 
 ---
 

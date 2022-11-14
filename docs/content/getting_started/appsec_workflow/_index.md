@@ -14,7 +14,6 @@ Dashboard and Vulnerability Management Console.
 At the project level, the Security Dashboard displays a chart with the number of vulnerabilities introduced to the master branch over time. 
 
 1. Access the Security Dashboard by going to **Security & Compliance** left navigation menu and selecting **Security Dashboard**  
-
 **Note:** Nothing will be present, wait a day for it to be populated. Eventually over time with new commits introducing and resolving vulnerabilities, you'll have something like this:
 
 ![](/devsecops/initech/simple-notes/images/security_dashboard.png)
@@ -38,12 +37,49 @@ The vulnerability reports display the total number of vulnerabilities by severit
 This allows for better filtering, enabling the security team to better triage security issues.
 
 6. Now scroll to the bottom of the page, and add a comment in the text box and press the **Save comment** button
+**Note:** This will save the comment in the Vulnerability page to enable collaboration between different members of the AppSec team.
 
-This will save the comment in the Vulnerability page to enable collaboration between different members of the AppSec team.
+7. Now click on **Create Issue** button
+**Note:** This will take you to an issue creation prompt. This allows you to create an issue (confidential or not) in order to
+collaborate with developers on a resolution.
 
-## Step 3: Policy as Code
+8. Fill anything you want, scroll down, and click on the **Create Issue** button
 
-COMING SOON!
+## Step 3: Enable Policy as Code
+
+Policy as Code is a way of creating policies by just editing code. In this section we will be using [GitOps](https://docs.gitlab.com/ee/user/clusters/agent/gitops.html) in order to deploy network policies which will limit access to our **restricted-echo** pods from other pods.
+
+1. Open the **WebIDE**
+
+2. Open up [**.gitlab > agents > simplenotes > config.yaml**](https://gitlab.com/tech-marketing/devsecops/initech/simple-notes/-/blob/main/.gitlab/agents/simplenotes/config.yaml)
+
+3. Add the following to the file, updating the `<your-full-project-path>`:
+```
+gitops:
+  manifest_projects:
+  - id: <your-full-project-path>
+    paths:
+    - glob: '/network-policies/*.yaml'
+```
+
+It looks as follows for this particular project:
+```
+gitops:
+  manifest_projects:
+  - id: tech-marketing/devsecops/initech/simple-notes
+    paths:
+    - glob: '/network-policies/*.yaml'
+```
+
+4. Press the **Create commit...** button
+
+5. Press **Commit**
+
+## Step 4: Testing Policy as Code
+
+1. Open your terminal
+
+2. TODO
 
 ---
 
