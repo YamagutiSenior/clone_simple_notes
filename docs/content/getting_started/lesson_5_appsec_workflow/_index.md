@@ -23,9 +23,8 @@ The vulnerability reports display the total number of vulnerabilities by severit
 
 4. Select **Confirm**
 
-5. Press **Change Status**
-
-This allows for better filtering, enabling the security team to better triage security issues.
+5. Press **Change Status**  
+**Note:** This allows for better filtering, enabling the security team to better triage security issues.
 
 6. Now scroll to the bottom of the page, and add a comment in the text box and press the **Save comment** button  
 **Note:** This will save the comment in the Vulnerability page to enable collaboration between different members of the AppSec team.
@@ -47,7 +46,7 @@ At the project level, the Security Dashboard displays a chart with the number of
 
 ## Step 3: Operational Container Scanning
 
-1. Go to the the **Security & Compliance** left navigation menu and press **Policies**:  
+1. Go to the the **Security & Compliance** left navigation menu and press **Policies**
 
 2. Click on the **New policy** button   
 
@@ -75,7 +74,9 @@ At the project level, the Security Dashboard displays a chart with the number of
 9. Merge the newly added code  
 **Note:** Now that the policy has been created, we must wait until the scheduled time for the scanner to run
 
-10. 
+10. Go to the the **Security & Compliance** left navigation menu and press **Vulnerability report**
+
+11. Click on the **Operational vulnerabilities** tab
 
 ## Step 4: Viewing Audit Events
 
@@ -119,7 +120,7 @@ gitops:
 
 4. Press the **Create commit...** button
 
-5. Selext **Commit to main branch**
+5. Select **Commit to main branch**
 
 6. Press the **Commit** button
 
