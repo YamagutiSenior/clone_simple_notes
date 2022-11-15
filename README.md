@@ -1,8 +1,10 @@
 # Simple Notes (Security Demo Application)
 
-This application is used for taking simple notes, like "Everyone needs to go ahead and come in on Saturday and Sunday to help out with the new code push." It is used to demo many of GitLab's Security features. This project is meant to be used within your GitLab instance so that you can view the pipelines, create MRs with security vulnerabilities and much more.
+---
 
 ## **Note: Do not edit this project directly, but rather clone it and configure it within your own GitLab instance.**
+
+This application is used for taking simple notes, like "Everyone needs to go ahead and come in on Saturday and Sunday to help out with the new code push." It is used to demo many of GitLab's Security features. This project is meant to be used within your GitLab instance so that you can view the pipelines, create MRs with security vulnerabilities and much more.
 
 ---
 
