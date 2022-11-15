@@ -4,9 +4,11 @@
 
 ## **Note: Do not edit this project directly, but rather clone it and configure it within your own GitLab instance.**
 
-This application is used for taking simple notes, like "Everyone needs to go ahead and come in on Saturday and Sunday to help out with the new code push." It is used to demo many of GitLab's Security features. This project is meant to be used within your GitLab instance so that you can view the pipelines, create MRs with security vulnerabilities and much more.
+This application is used for taking simple notes, like "Everyone needs to go ahead and come in on Saturday and Sunday to help out with the new code push." It is used to demo many of GitLab's Security features. This project is meant to be used within your GitLab instance so that you can view the pipelines, create MRs with security vulnerabilities and much more.  
 
-Created and maintained by [Fern](https://gitlab.com/fjdiaz)
+![](./images/screenshoot.png)  
+
+Created and maintained by [Fern](https://gitlab.com/fjdiaz) 🌿
 * [LinkedIn](https://www.linkedin.com/in/awkwardferny/)
 * [Twitter](https://twitter.com/awkwardferny)
 
@@ -24,7 +26,7 @@ Be sure to read the documentation within the [**Simple Notes Documentation**](ht
 
 ---
 
-## Resources
+## Useful Resources
 
 - [GitLab Ultimate Pricing Page](https://about.gitlab.com/pricing/ultimate/)
 - [DevOps Solution Resource - DevSecOps](https://about.gitlab.com/handbook/marketing/strategic-marketing/usecase-gtm/devsecops/)
