@@ -49,6 +49,8 @@ collaborate with developers on a resolution.
 
 Policy as Code is a way of creating policies by just editing code. In this section we will be using [GitOps](https://docs.gitlab.com/ee/user/clusters/agent/gitops.html) in order to deploy network policies which will limit access to our **restricted-echo** pods from other pods.
 
+We can see the Network Policy we will be applying in the [network-policies/restricted-echo.yaml file](https://gitlab.com/tech-marketing/devsecops/initech/simple-notes/-/blob/main/network-policies/restricted-echo.yaml), which prevents any pod without the label `access=true` from accessing the `restricted-echo` pod.
+
 1. Open the **WebIDE**
 
 2. Open up [**.gitlab > agents > simplenotes > config.yaml**](https://gitlab.com/tech-marketing/devsecops/initech/simple-notes/-/blob/main/.gitlab/agents/simplenotes/config.yaml)
@@ -81,9 +83,45 @@ Now let's wait for the pipeline to complete, this should take a few mins - so gr
 
 ## Step 4: Testing Policy as Code
 
-1. Open your terminal
+1. Open a terminal and connect to your cluster
+**Note:** You should use the command, provided by GKE as seen in previous lessons
 
-2. TODO
+```bash
+$ gcloud container clusters get-credentials fern-initech --zone us-central1-c --project fdiaz-02874dfa
+
+Fetching cluster endpoint and auth data.
+kubeconfig entry generated for fern-initech.
+```
+
+2. Create a `busybox` container and try and access our `restricted-echo` pod
+
+```bash
+$ kubectl run busybox --rm -ti --image=busybox:1.28 -- /bin/sh
+
+  # wget --spider --timeout=1 restricted-echo-svc
+
+  Connecting to nginx (10.100.0.16:80)
+  wget: download timed out
+```
+
+3. Exit from the container by pressing `ctrl + c`
+
+4.  Create a `busybox` container, with the `access=true` label, and try and access our `restricted-echo` pod
+
+```bash
+$ kubectl run busybox --rm -ti --labels="access=true" --image=busybox:1.28 -- /bin/sh
+
+  # wget --spider --timeout=1 restricted-echo-svc
+
+  Connecting to nginx (10.100.0.16:80)
+  remote file exists
+```
+
+## Step 5: Viewing Audit Events
+
+Audit Events
+
+1. In order to access audit events, navigate to **Security & Compliance** left navigation menu and selecting **Audit events**
 
 ---
 
