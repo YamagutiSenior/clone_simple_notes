@@ -45,7 +45,23 @@ At the project level, the Security Dashboard displays a chart with the number of
 
 ![](/devsecops/initech/simple-notes/images/security_dashboard.png)
 
-## Step 3: Enable Policy as Code
+## Step 3: Operational Container Scanning
+
+
+
+## Step 4: Viewing Audit Events
+
+Audit Events track important events, including who performed the related action and when. You can use audit events to track, for example:
+
+* Who changed the permission level of a particular user for a GitLab project, and when.
+* Who added a new user or removed a user, and when.
+
+You can see a list of available Audit Events in the [documentation](https://docs.gitlab.com/ee/administration/audit_events.html).
+
+1. In order to access audit events, navigate to **Security & Compliance** left navigation menu and selecting **Audit events**  
+**Note:** You should see a few basic events around adding security policies
+
+## Step 5: Enable Policy as Code
 
 Policy as Code is a way of creating policies by just editing code. In this section we will be using [GitOps](https://docs.gitlab.com/ee/user/clusters/agent/gitops.html) in order to deploy network policies which will limit access to our **restricted-echo** pods from other pods.
 
@@ -81,7 +97,7 @@ gitops:
 
 Now let's wait for the pipeline to complete, this should take a few mins - so grab a coffee ☕️ or tea 🍵, or whatever you like! If the pipeline happens to fail, please checkout the [troubleshooting documentation](../../documentation/troubleshooting).
 
-## Step 4: Testing Policy as Code
+## Step 6: Testing Policy as Code
 
 1. Open a terminal and connect to your cluster
 **Note:** You should use the command, provided by GKE as seen in previous lessons
@@ -97,8 +113,6 @@ kubeconfig entry generated for fern-initech.
 
 ```bash
 $ kubectl get networkpolicy
-
-
 ```
 
 3. Create a `busybox` container and try and access our `restricted-echo` pod
@@ -124,23 +138,6 @@ $ kubectl run busybox --rm -ti --labels="access=true" --image=busybox:1.28 -- /b
   Connecting to nginx (10.100.0.16:80)
   remote file exists
 ```
-
-## Step 5: Operational Container Scanning
-
-COMING SOON
-
-## Step 6: Viewing Audit Events
-
-Audit Events track important events, including who performed the related action and when. You can use audit events to track, for example:
-
-* Who changed the permission level of a particular user for a GitLab project, and when.
-* Who added a new user or removed a user, and when.
-
-You can see a list of available Audit Events in the [documentation](https://docs.gitlab.com/ee/administration/audit_events.html).
-
-
-1. In order to access audit events, navigate to **Security & Compliance** left navigation menu and selecting **Audit events**  
-**Note:** You should see a few basic events around adding security policies
 
 ---
 
