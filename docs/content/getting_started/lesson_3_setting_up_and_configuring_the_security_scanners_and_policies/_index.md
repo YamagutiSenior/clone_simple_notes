@@ -48,11 +48,15 @@ Static scanners examine the static source code in your project, and perform patt
 
 ### Dynamic Scanners
 
-Dynamic scanners examine the running application, and send requests in order to find vulnerabilities within the system. Dynamic scanners are not aware of the underlying code, and perform request on a block-box. Since **requests** are sent to the application and **responses** are received, they are included along with the same data as static scanners (listed above). You can also download Postman specs in order to replicate the **requests**, which is useful for manual testing.
+Dynamic scanners examine the running application, and send requests in order to find vulnerabilities within the system. Dynamic scanners are not aware of the underlying code, and perform request on a block-box. Since **requests** are sent to the application and **responses** are received, they are included along with the same data as static scanners (listed above).
+
+You can also download Postman specs in order to replicate the **requests**, which is useful for manual testing.
 
 ### Fuzzing
 
-Fuzzing or Fuzz-Testing is the process of sending **random** or **malformed** data to an application or instrumented function in order to cause unexpected behavior. This helps you discover bugs and potential security issues that other QA processes may miss. GitLab includes Web-API Fuzzing (fuzz testing of API operation parameters) and Coverage-Guided Fuzzing (sends random inputs to an instrumented version of your application). Each have their own uses and benefits.
+Fuzzing or Fuzz-Testing is the process of sending **random** or **malformed** data to an application or instrumented function in order to cause unexpected behavior. This helps you discover bugs and potential security issues that other QA processes may miss.
+
+GitLab includes Web-API Fuzzing (fuzz testing of API operation parameters) and Coverage-Guided Fuzzing (sends random inputs to an instrumented version of your application). Each have their own uses and benefits.
 
 ## Step 2: Explanation of each of the CI/CD jobs
 
@@ -124,6 +128,7 @@ being merged.
 5. The **Apache License 2.0** should now be added with a confirmation
 
 6. Follow Steps 3-5 for **GNU Affero General Public License v3 or later (AGPLv3+)**
+**Note:** Make sure you type it completely as is, and don't select from the dropdown, License Scanning currently requires exact patterns
 
 ## Step 5: Setting up Merge-Request Approvals (Licenses)
 
