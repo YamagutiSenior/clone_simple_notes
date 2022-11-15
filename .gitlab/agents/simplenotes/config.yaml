@@ -1,3 +1,4 @@
-ci_access:
-  groups:
-    - id: tech-marketing/devsecops/initech
+observability:
+  logging:
+    level: debug
+    grpc_level: debug
