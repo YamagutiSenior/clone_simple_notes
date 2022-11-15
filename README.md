@@ -6,7 +6,7 @@
 
 This application is used for taking simple notes, like "Everyone needs to go ahead and come in on Saturday and Sunday to help out with the new code push." It is used to demo many of GitLab's Security features. This project is meant to be used within your GitLab instance so that you can view the pipelines, create MRs with security vulnerabilities and much more.  
 
-![](./images/screenshoot.png)  
+![](./images/screenshot.png)  
 
 Created and maintained by [Fern](https://gitlab.com/fjdiaz) 🌿
 * [LinkedIn](https://www.linkedin.com/in/awkwardferny/)
