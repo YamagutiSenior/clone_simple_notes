@@ -17,7 +17,7 @@ We will go over the following scanners:
 
 1. [Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/): analyzes your source code for known vulnerabilities.
 2. [Dynamic Application Security Testing (DAST)](https://docs.gitlab.com/ee/user/application_security/dast/): analyzes your running application for known vulnerabilities.
-3. [Container Scanning](https://docs.gitlab.com/ee/user/application_security/container_scanning/): scans Docker images for  known vulnerabilities
+3. [Container Scanning](https://docs.gitlab.com/ee/user/application_security/container_scanning/): scans Docker images for known vulnerabilities
 4. [Dependency Scanning](https://docs.gitlab.com/ee/user/application_security/dependency_scanning/): scans project dependencies for known vulnerabilities
 5. [License Scanning](https://docs.gitlab.com/ee/user/compliance/license_compliance/): scans licenses to see if they are incompatible with a set policy
 6. [Secret Detection](https://docs.gitlab.com/ee/user/application_security/secret_detection/): Scans for secrets checked into source code
@@ -26,6 +26,7 @@ We will go over the following scanners:
 9. [Web-API Fuzzing](https://docs.gitlab.com/ee/user/application_security/api_fuzzing/): Sets operation parameters to unexpected values in an effort to cause unexpected behavior and errors in the API backend
 10. [DAST API-Scanning](https://docs.gitlab.com/ee/user/application_security/dast_api/): analyzes the APIs of your running application for known vulnerabilities using REST, SOAP, GraphQL, Form bodies, JSON, or XML definitions.
 11. [Code Quality Scanning](https://docs.gitlab.com/ee/ci/testing/code_quality.html): ensures your project’s code stays simple, readable, and easy to contribute to.
+12. [Operational Container Scanning](https://docs.gitlab.com/ee/user/clusters/agent/vulnerabilities.html): scans the container images in your cluster for known vulnerabilities.
 
 ## Step 1: Adding Security Scans to the pipeline
 
@@ -81,19 +82,19 @@ from being merged without approval. This includes vulnerabilities as well as inc
 
 2. Click on the  **New policy** button   
 
-3. Select  **Scan Result** from the **Policy Type** dropdown 
+3. Press the **Select policy** button under the **Scan result policy** section
 
 4. Fill out the following information:
 
 - Name: Policy Name
 - Description: Policy Description
 
-5. Check the **Policy status** button
+5. Check the **Enabled** button under **Policy status**
 
 6. Create a Rule
 
 > IF `Select all` find(s) more than `0` `Select all` `Newly detected`
-vulnerabilities in an open merge request targeting `main`
+  vulnerabilities in an open merge request targeting `main`
 
 7. Create an Action
 

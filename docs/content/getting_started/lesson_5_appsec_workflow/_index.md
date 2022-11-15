@@ -47,7 +47,35 @@ At the project level, the Security Dashboard displays a chart with the number of
 
 ## Step 3: Operational Container Scanning
 
+1. Go to the the **Security & Compliance** left navigation menu and press **Policies**:  
 
+2. Click on the **New policy** button   
+
+3. Press the **Select policy** button under the **Scan execution policy** section
+
+4. Fill out the following information:
+
+- Name: Policy Name
+- Description: Policy Description
+
+5. Check the **Enabled** button under **Policy status**
+
+6. Create a Rule
+
+> IF `Schedule` actions for the `agent` **<agent-name>**
+  in namespaces **<namespace_1,namespace_2>**
+  `daily` at `00:00`
+
+7. Create an Action
+
+> THEN Require a `Container Scanning` scan to run
+
+8. Click on the **Configure with a merge request** button
+
+9. Merge the newly added code  
+**Note:** Now that the policy has been created, we must wait until the scheduled time for the scanner to run
+
+10. 
 
 ## Step 4: Viewing Audit Events
 
