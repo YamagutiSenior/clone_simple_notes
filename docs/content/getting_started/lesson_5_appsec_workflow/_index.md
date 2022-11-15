@@ -9,16 +9,7 @@ GitLab offers several Dashboards and Management tools in order to triage
 and track vulnerabilities. In this lesson, we will go over the Security
 Dashboard and Vulnerability Management Console.
 
-## Step 1: Accessing the Security Dashboard
-
-At the project level, the Security Dashboard displays a chart with the number of vulnerabilities introduced to the master branch over time. 
-
-1. Access the Security Dashboard by going to **Security & Compliance** left navigation menu and selecting **Security Dashboard**  
-**Note:** Nothing will be present, wait a day for it to be populated. Eventually over time with new commits introducing and resolving vulnerabilities, you'll have something like this:
-
-![](/devsecops/initech/simple-notes/images/security_dashboard.png)
-
-## Step 2: Viewing Vulnerability Reports
+## Step 1: Viewing Vulnerability Reports
 
 Each vulnerability report contains vulnerabilities from the scans of the most recent branch merged into the default branch.
 
@@ -44,6 +35,15 @@ This allows for better filtering, enabling the security team to better triage se
 collaborate with developers on a resolution.
 
 8. Fill anything you want, scroll down, and click on the **Create Issue** button
+
+## Step 2: Accessing the Security Dashboard
+
+At the project level, the Security Dashboard displays a chart with the number of vulnerabilities introduced to the master branch over time. 
+
+1. Access the Security Dashboard by going to **Security & Compliance** left navigation menu and selecting **Security Dashboard**  
+**Note:** Nothing will be present, wait a day for it to be populated. Eventually over time with new commits introducing and resolving vulnerabilities, you'll have something like this:
+
+![](/devsecops/initech/simple-notes/images/security_dashboard.png)
 
 ## Step 3: Enable Policy as Code
 
@@ -93,7 +93,15 @@ Fetching cluster endpoint and auth data.
 kubeconfig entry generated for fern-initech.
 ```
 
-2. Create a `busybox` container and try and access our `restricted-echo` pod
+2. Verify that the network policy has been installed
+
+```bash
+$ kubectl get networkpolicy
+
+
+```
+
+3. Create a `busybox` container and try and access our `restricted-echo` pod
 
 ```bash
 $ kubectl run busybox --rm -ti --image=busybox:1.28 -- /bin/sh
@@ -104,9 +112,9 @@ $ kubectl run busybox --rm -ti --image=busybox:1.28 -- /bin/sh
   wget: download timed out
 ```
 
-3. Exit from the container by pressing `ctrl + c`
+4. Exit from the container by pressing `ctrl + c`
 
-4.  Create a `busybox` container, with the `access=true` label, and try and access our `restricted-echo` pod
+5.  Create a `busybox` container, with the `access=true` label, and try and access our `restricted-echo` pod
 
 ```bash
 $ kubectl run busybox --rm -ti --labels="access=true" --image=busybox:1.28 -- /bin/sh
@@ -117,11 +125,22 @@ $ kubectl run busybox --rm -ti --labels="access=true" --image=busybox:1.28 -- /b
   remote file exists
 ```
 
-## Step 5: Viewing Audit Events
+## Step 5: Operational Container Scanning
 
-Audit Events
+COMING SOON
 
-1. In order to access audit events, navigate to **Security & Compliance** left navigation menu and selecting **Audit events**
+## Step 6: Viewing Audit Events
+
+Audit Events track important events, including who performed the related action and when. You can use audit events to track, for example:
+
+* Who changed the permission level of a particular user for a GitLab project, and when.
+* Who added a new user or removed a user, and when.
+
+You can see a list of available Audit Events in the [documentation](https://docs.gitlab.com/ee/administration/audit_events.html).
+
+
+1. In order to access audit events, navigate to **Security & Compliance** left navigation menu and selecting **Audit events**  
+**Note:** You should see a few basic events around adding security policies
 
 ---
 
