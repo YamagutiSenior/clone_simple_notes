@@ -8,10 +8,6 @@ This application is used for taking simple notes, like `Everyone needs to go ahe
 
 ![](./images/screenshot.png)  
 
-Created and maintained by [Fern](https://gitlab.com/fjdiaz)🌿
-* [LinkedIn](https://www.linkedin.com/in/awkwardferny/)
-* [Twitter](https://twitter.com/awkwardferny)
-
 ---
 
 ## Usage / Tutorial
@@ -34,3 +30,9 @@ Be sure to read the documentation within the [**Simple Notes Documentation**](ht
 - [Integrating Security into your DevOps workflow](https://about.gitlab.com/solutions/dev-sec-ops/)
 - [GitLab Secure Direction Page](https://about.gitlab.com/direction/secure/)
 - [GitLab Govern Direction Page](https://about.gitlab.com/direction/govern/)
+
+---
+
+Created and maintained by [Fern](https://gitlab.com/fjdiaz)🌿
+* [LinkedIn](https://www.linkedin.com/in/awkwardferny/)
+* [Twitter](https://twitter.com/awkwardferny)
