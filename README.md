@@ -4,11 +4,11 @@
 
 ## **Note: Do not edit this project directly, but rather clone it and configure it within your own GitLab instance.**
 
-This application is used for taking simple notes, like `Everyone needs to go ahead and come in on Saturday and Sunday to help out with the new code push`. It is used to demo many of GitLab's Security features.
+This application is used for taking simple notes, like `Everyone needs to go ahead and come in on Saturday and Sunday to help out with the new code push`. It is used to demo many of GitLab's Security features. Get started by viewing the [**Simple Notes Documentation**](https://tech-marketing.gitlab.io/devsecops/initech/simple-notes/)!
 
 ![](./images/screenshot.png)  
 
-Created and maintained by [Fern](https://gitlab.com/fjdiaz) 🌿
+Created and maintained by [Fern](https://gitlab.com/fjdiaz)🌿
 * [LinkedIn](https://www.linkedin.com/in/awkwardferny/)
 * [Twitter](https://twitter.com/awkwardferny)
 
