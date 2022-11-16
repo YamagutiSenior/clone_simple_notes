@@ -10,9 +10,9 @@ This application is used for taking simple notes, like `Everyone needs to go ahe
 
 ---
 
-## Usage / Tutorial
+## Tutorial / Lessons
 
-Be sure to read the documentation within the [**Simple Notes Documentation**](https://tech-marketing.gitlab.io/devsecops/initech/simple-notes/) which contains Architecture, Development Guide, Instructions on Creating Vulnerability, and much more. You can get started using this project on your own GitLab account with the following lessons:
+You can get started using this project on your own GitLab account with the following lessons:
 
 - Lesson 1: [Prerequisites](https://tech-marketing.gitlab.io/devsecops/initech/simple-notes/getting_started/lesson_1_prerequisites/)
 - Lesson 2: [Deploying the Demo application](https://tech-marketing.gitlab.io/devsecops/initech/simple-notes/getting_started/lesson_2_deploying_the_demo_application/)
