@@ -23,26 +23,41 @@ The vulnerability reports display the total number of vulnerabilities by severit
 
 4. Select **Confirm**
 
-5. Press **Change Status**  
-**Note:** This allows for better filtering, enabling the security team to better triage security issues.
+5. Press **Change Status**
+
+{{< hint info >}}
+**Note:** This allows for better filtering, enabling the security team to better triage security issues
+{{< /hint >}}
 
 6. Now scroll to the bottom of the page, and add a comment in the text box and press the **Save comment** button  
-**Note:** This will save the comment in the Vulnerability page to enable collaboration between different members of the AppSec team.
+
+{{< hint info >}}
+**Note:** This will save the comment in the Vulnerability page to enable collaboration between different members of the AppSec team
+{{< /hint >}}
 
 7. Now click on **Create Issue** button  
+
+{{< hint info >}}
 **Note:** This will take you to an issue creation prompt. This allows you to create an issue (confidential or not) in order to
 collaborate with developers on a resolution.
+{{< /hint >}}
 
 8. Fill anything you want, scroll down, and click on the **Create Issue** button
+
+{{< hint info >}}
+**Note:** Now you have an issue which can be used for AppSec and Development teams to collaborate on resolving the vulnerability.
+{{< /hint >}}
 
 ## Step 2: Accessing the Security Dashboard
 
 At the project level, the Security Dashboard displays a chart with the number of vulnerabilities introduced to the master branch over time. 
 
 1. Access the Security Dashboard by going to **Security & Compliance** left navigation menu and selecting **Security Dashboard**  
-**Note:** Nothing will be present, wait a day for it to be populated. Eventually over time with new commits introducing and resolving vulnerabilities, you'll have something like this:
 
+{{< hint info >}}
+**Note:** Nothing will be present, wait a day for it to be populated. Eventually over time with new commits introducing and resolving vulnerabilities, you'll have something like this:  
 ![](/devsecops/initech/simple-notes/images/security_dashboard.png)
+{{< /hint >}}
 
 ## Step 3: Operational Container Scanning
 
@@ -61,9 +76,18 @@ At the project level, the Security Dashboard displays a chart with the number of
 
 6. Create a Rule
 
-> IF `Schedule` actions for the `agent` **<agent-name>**
-  in namespaces **<namespace_1,namespace_2>**
+> IF `Schedule` actions for the `agent` **simplenotes**
+  in namespaces **default,kube-system**
   `daily` at `00:00`
+
+{{< hint info >}}
+**Note:** Make sure that the **agent-name (simplenotes)** is typed in correctly, this will be the agent running in our cluster which
+we will use to scan our pods for vulnerabilities.
+
+The **namespaces** we are scanning here are **default** and **kube-system**, where all our pods are loaded.
+
+The **00:00** is measured in [UTC](https://www.timeanddate.com/worldclock/timezone/utc) time according to the system-time of the **kubernetes agent (simplenotes)** pod.
+{{< /hint >}}
 
 7. Create an Action
 
@@ -71,12 +95,17 @@ At the project level, the Security Dashboard displays a chart with the number of
 
 8. Click on the **Configure with a merge request** button
 
-9. Merge the newly added code  
+9. Merge the newly added code
+
+{{< hint info >}}
 **Note:** Now that the policy has been created, we must wait until the scheduled time for the scanner to run
+{{< /hint >}}
 
 10. Go to the the **Security & Compliance** left navigation menu and press **Vulnerability report**
 
 11. Click on the **Operational vulnerabilities** tab
+
+12. View all the different vulnerabilities found in the cluster, there should be a good amount
 
 ## Step 4: Viewing Audit Events
 
@@ -87,8 +116,11 @@ Audit Events track important events, including who performed the related action 
 
 You can see a list of available Audit Events in the [documentation](https://docs.gitlab.com/ee/administration/audit_events.html).
 
-1. In order to access audit events, navigate to **Security & Compliance** left navigation menu and selecting **Audit events**  
+1. In order to access audit events, navigate to **Security & Compliance** left navigation menu and selecting **Audit events**
+
+{{< hint info >}}
 **Note:** You should see a few basic events around adding security policies
+{{< /hint >}}
 
 ## Step 5: Enable Policy as Code
 
@@ -129,7 +161,6 @@ Now let's wait for the pipeline to complete, this should take a few mins - so gr
 ## Step 6: Testing Policy as Code
 
 1. Open a terminal and connect to your cluster
-**Note:** You should use the command, provided by GKE as seen in previous lessons
 
 ```bash
 $ gcloud container clusters get-credentials fern-initech --zone us-central1-c --project fdiaz-02874dfa
@@ -138,10 +169,17 @@ Fetching cluster endpoint and auth data.
 kubeconfig entry generated for fern-initech.
 ```
 
+{{< hint info >}}
+**Note:** You should use the command, provided by GKE as seen in previous lessons
+{{< /hint >}}
+
 2. Verify that the network policy has been installed
 
 ```bash
 $ kubectl get networkpolicy
+
+NAME          POD-SELECTOR          AGE
+access-echo   app=restricted-echo   35m
 ```
 
 3. Create a `busybox` container and try and access our `restricted-echo` pod
@@ -149,24 +187,34 @@ $ kubectl get networkpolicy
 ```bash
 $ kubectl run busybox --rm -ti --image=busybox:1.28 -- /bin/sh
 
-  # wget --spider --timeout=1 restricted-echo-svc
+  If you don't see a command prompt, try pressing enter.
+  / # wget --spider --timeout=1 restricted-echo
 
-  Connecting to nginx (10.100.0.16:80)
+  Connecting to restricted-echo (10.4.5.28:80)
   wget: download timed out
 ```
 
-4. Exit from the container by pressing `ctrl + c`
+{{< hint info >}}
+**Note:** When performing a wget, we should timeout since we cannot access the pod without the label `access=true`
+{{< /hint >}}
+
+4. Exit from the container by typing `exit` in the commandline
 
 5.  Create a `busybox` container, with the `access=true` label, and try and access our `restricted-echo` pod
 
 ```bash
 $ kubectl run busybox --rm -ti --labels="access=true" --image=busybox:1.28 -- /bin/sh
 
-  # wget --spider --timeout=1 restricted-echo-svc
+  If you don't see a command prompt, try pressing enter.
+  / # wget --spider --timeout=1 restricted-echo
 
-  Connecting to nginx (10.100.0.16:80)
+  Connecting to restricted-echo (10.4.5.28:80)
   remote file exists
 ```
+
+{{< hint info >}}
+**Note:** This time the wget should work since we have the label present
+{{< /hint >}}
 
 ---
 

@@ -108,8 +108,11 @@ from being merged without approval. This includes vulnerabilities as well as inc
 
 9. Click on the **Configure with a merge request** button
 
-10. Merge the newly added code  
-**Note:** You will notice a new project was created to store the policies.
+10. Merge the newly added code
+
+{{< hint info >}}
+**Note:** You will notice a new project was created to store the policies
+{{< /hint >}}
 
 ## Step 4: Creating a License Policy
 
@@ -128,7 +131,11 @@ being merged.
 5. The **Apache License 2.0** should now be added with a confirmation
 
 6. Follow Steps 3-5 for **GNU Affero General Public License v3 or later (AGPLv3+)**
-**Note:** Make sure you type it completely as is, and don't select from the dropdown, License Scanning currently requires exact patterns
+
+{{< hint info >}}
+**Note:** Make sure you type it completely as is, and don't select from the dropdown,
+License Scanning currently requires exact patterns
+{{< /hint >}}
 
 ## Step 5: Setting up Merge-Request Approvals (Licenses)
 
@@ -142,8 +149,11 @@ the previous step.
 
 3. Add any username/group other than yours in the **Search users or groups** drop down
 
-4. Click on the **Update approvers** button  
-**Note:** You should now have a confirmation that License Approvals have been enabled.
+4. Click on the **Update approvers** button
+
+{{< hint info >}}
+**Note:** You should now have a confirmation that License Approvals have been enabled
+{{< /hint >}}
 
 ---
 

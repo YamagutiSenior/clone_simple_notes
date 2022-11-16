@@ -17,8 +17,11 @@ Now let's go ahead and add some vulnerabilities. We will make sure that somethin
 
 1. Open the **WebIDE**
 
-2. Copy over the changes found in [this Merge Request](https://gitlab.com/tech-marketing/devsecops/initech/simple-notes/-/merge_requests/7)  
+2. Copy over the changes found in [this Merge Request](https://gitlab.com/tech-marketing/devsecops/initech/simple-notes/-/merge_requests/7)
+
+{{< hint info >}}
 **Note:** I'll try to keep it up-to-date and re-based, if it isn't open up an issue within the project
+{{< /hint >}}
 
 3. Select **Commit**
 
@@ -39,16 +42,22 @@ Let's dig into the vulnerabilities and perform some actions on them.
 
 3. Click on any of the detected vulnerabilities
 
-4. Within the popup, dismiss the Vulnerability by clicking **Dismiss vulnerability**  
-**Note:** This allows AppSec teams to see what developers are dismissing as well as why. If this MR were to be merged, then the vulnerability will automatically be tagged as dismissed in the vulnerability report.
+4. Within the popup, dismiss the Vulnerability by clicking **Dismiss vulnerability**
+
+{{< hint info >}}
+**Note:** This allows AppSec teams to see what developers are dismissing as well as why. If this MR were to be merged, then the vulnerability will automatically be tagged as dismissed in the vulnerability report
+{{< /hint >}}
 
 5. Click on the same vulnerability
 
 6. Click on **Create issue**  
+
+{{< hint info >}}
 **Note:** This creates a confidential issue to allow developers and the security team to
 work together to resolve without showing information of the vulnerability to others
+{{< /hint >}}
 
-Now let's go back to the Merge Request by pressing the back button on your browser.
+7. Now let's go back to the Merge Request by pressing the back button on your browser.
 
 ## Step 3: Viewing Denied Licenses
 
@@ -64,9 +73,10 @@ Within the same MR view, we can see the licenses that were detected. You'll be a
 
 2. You should see that the merge request approvals are active  
 
-**Note:** We won't be able to merge because the security approvals are present and there
-are vulnerabilities. If you want to merge this, you either need to resolve the vulnerabilities (which doesn't make sense in this context, since the code only introduces them to test the scanner) or remove the security approvals. Merging the code will add the new results to
-the Vulnerability Dashboard and Reports
+{{< hint info >}}
+**Note:** We won't be able to merge because the security approvals are present and there are vulnerabilities. If you want to merge this,
+you either need to resolve the vulnerabilities (which doesn't make sense in this context, since the code is meant to introduce vulnerabilities) or remove the security approvals. Merging the code will add the new results to the vulnerability reports and dashboard
+{{< /hint >}}
 
 ---
 

@@ -10,9 +10,12 @@ In order to get started with GitLab DevSecOps, you will need the following:
 - A GitLab account
 - A License or Trial for GitLab Ultimate
 - Kubectl
-- A Kubernetes Cluster  
+- A Kubernetes Cluster
+
+{{< hint info >}}
 **Note:** I am using GKE for this example, so if you are following along, 
 Google Cloud SDK will also be required
+{{< /hint >}}
 
 ## GitLab Account
 
@@ -23,8 +26,11 @@ https://gitlab.com/users/sign_up
 
 In order to get the most out of GitLab DevSecOps, you will require GitLab
 Ultimate. If you do not have GitLab Ultimate, you can sign-up for a 30-day trial
-license here: https://about.gitlab.com/free-trial/  
-**Note:** GitLab Ultimate is a requirement for this tutorial.
+license here: https://about.gitlab.com/free-trial/
+
+{{< hint info >}}
+**Note:** GitLab Ultimate is a requirement for this tutorial
+{{< /hint >}}
 
 ## Google Cloud SDK
 
@@ -56,16 +62,21 @@ Once you have access to the Google cloud console, you can create a cluster as fo
 
 7. Make sure there are 3 nodes under **Size** in the Node Pools section
 
-8. In the **Nodes** menu, select the **Series** and a **Machine type** and then
-press the **Create** button  
-**Note:** I selected the e2-medium (2 vCPU, 4GB memory) machine, since this workshop doesn't require anything more than that.
+8. In the **Nodes** menu, select the **Series** and a **Machine type** and then press the **Create** button
+
+{{< hint info >}}
+**Note:** I selected the e2-medium (2 vCPU, 4GB memory) machine, since this workshop doesn't require anything more than that
+{{< /hint >}}
 
 9. Under **Networking** scroll down and select **Enable Kubernetes Network Policy** as well as **HTTP load balancing** if they aren't already selected
 
 10. Press the **Create** Button
 
-11. Wait for the cluster to render  
-**Note:** This may take a few mins.
+11. Wait for the cluster to render
+
+{{< hint info >}}
+**Note:** This may take a few mins
+{{< /hint >}}
 
 12. Click on the rendered cluster
 

@@ -25,15 +25,21 @@ Here we will clone the sample project which we will use through this workshop. I
 https://gitlab.com/tech-marketing/devsecops/initech/simple-notes.git
 ```
 
-5. Select **Public** under visibility level  
+5. Select **Public** under visibility level
+
+{{< hint info >}}
 **Note:** Public is set so that we don't need to take extra steps to be able to [pull
 from a private container-registry](https://chris-vermeulen.com/using-gitlab-registry-with-kubernetes/)
+{{< /hint >}}
 
 6. Press the **Create project** button
 
-7. Wait for the project to be imported. It will take a few seconds  
+7. Wait for the project to be imported. It will take a few seconds
+
+{{< hint info >}}
 **Note:** You should be redirected to the newly imported project along with
 the message "The project was successfully imported"
+{{< /hint >}}
 
 ## Step 2. Setting up the Project to use the Cluster
 
@@ -43,8 +49,11 @@ In this section we will be installing the GitLab [Kubernetes Agent](https://docs
 
 2. Click on the **Connect a cluster (agent)** button
 
-3. Select the `simplenotes` agent from the drop down and press the **Register** button  
+3. Select the `simplenotes` agent from the drop down and press the **Register** button
+
+{{< hint info >}}
 **Note:** Save the commands presented to you in the next screen
+{{< /hint >}}
 
 4. Open a terminal and connect to your cluster
 
@@ -81,7 +90,9 @@ REVISION: 1
 TEST SUITE: None
 ```
 
+{{< hint info >}}
 **Note:** Make sure you use the token provided to you
+{{< /hint >}}
 
 6. Verify the Kubernetes Agent is running
 
@@ -103,16 +114,21 @@ Now let's run a pipeline to deploy the application to our Kubernetes cluster.
 3. Ensure that the **main** branch is selected
 
 4. Press the **Run Pipeline** button  
+
+{{< hint info >}}
 **Note:** You should now see the pipeline running on your project
+{{< /hint >}}
 
 ## Step 4: Reviewing the Pipeline
 
 Now let's wait for the pipeline to complete, this should take a few mins - so grab a coffee ☕️ or tea 🍵, or whatever you like! If the pipeline happens to fail, please checkout the [troubleshooting documentation](../../documentation/troubleshooting).
 
-1. Verify that all the stages have passed successfully within the pipeline.  
-**Note:** A completed pipeline should look like the below:
+1. Verify that all the stages have passed successfully within the pipeline.
 
+{{< hint info >}}
+**Note:** A completed pipeline should look like the below:  
 ![](/devsecops/initech/simple-notes/images/completed_pipeline.png)
+{{< /hint >}}
 
 ## Step 5: Accessing our Application
 
@@ -121,13 +137,18 @@ your application should be available at your Load-Balancers IP under the `/notes
 
 1. Click on the `deploy-staging` job and scroll to the bottom. You should see the URL which the application was deployed to.
 
-2. Point your browser to the provided link.  
+2. Point your browser to the provided link
+
+{{< hint info >}}
 **Note:** It should look something like `http://xxx.xxx.xxx.xxx/notes`
+{{< /hint >}}
 
-3. You should now see the Simple Notes Application running. Go ahead and play around by adding and deleting notes.  
-**Note:** It should look something like the below:
+3. You should now see the Simple Notes Application running. Go ahead and play around by adding and deleting notes  
 
+{{< hint info >}}
+**Note:** It should look something like the below:  
 ![](/devsecops/initech/simple-notes/images/simple_notes_homepage.png)
+{{< /hint >}}
 
 ---
 

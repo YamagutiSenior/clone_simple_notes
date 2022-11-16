@@ -21,7 +21,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: restricted-echo-svc
+  name: restricted-echo
 spec:
   ports:
   - port: {{ .Values.restrictedecho.port }}
