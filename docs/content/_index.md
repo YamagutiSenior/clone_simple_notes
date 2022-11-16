@@ -11,9 +11,13 @@ typical approaches can provide.
 
 ## Getting Started
 
-In order to get started, go through each of the lessons described within the workshop. The lessons are displayed in the table of contents to the left, under **Getting Started**.
+In order to get started, go through each of the lessons described within the workshop:
 
-Be sure to start with [Lesson 1: Prerequisites](./getting_started/lesson_1_prerequisites/)
+[Lesson 1: Prerequisites](./getting_started/lesson_1_prerequisites/)
+[Lesson 2: Deploying the Demo Application](./getting_started/lesson_2_deploying_the_demo_application/)
+[Lesson 3: Setting up and Configuring the Security Scanners and Policies](./getting_started/lesson_3_setting_up_and_configuring_the_security_scanners_and_policies/)
+[Lesson 4: Developer Workflow](./getting_started/lesson_4_developer_workflow/)
+[Lesson 5: AppSec Workflow](./getting_started/lesson_5_appsec_workflow/)
 
 ## Outcomes
 
