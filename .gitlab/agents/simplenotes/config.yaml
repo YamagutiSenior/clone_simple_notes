@@ -1,14 +1,1 @@
-# container_scanning:
-#   vulnerability_report:
-#     namespaces:
-#       - default
-#       - kube-system
 
-observability:
-  logging:
-    level: debug
-    grpc_level: debug
-
-# ci_access:
-#   projects:
-#     - id: tech-marketing/devsecops/initech/simple-notes-security-policy-project
