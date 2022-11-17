@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: restricted-nginx
 spec:
-  replicas: {{ .Values.restrictedecho.replicas }}
+  replicas: {{ .Values.restrictednginx.replicas }}
   selector:
     matchLabels:
       app: restricted-nginx
