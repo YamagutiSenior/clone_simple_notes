@@ -82,7 +82,7 @@ Code review is an essential practice of every successful project. Approving a me
 GitLab provides Security guard-rails to prevent vulnerable code
 from being merged without approval. This includes vulnerabilities as well as incompatible licenses. Now let's setup these guardrails, known as merge-request approvals.
 
-1. Go to the the **Security & Compliance** left navigation menu and press **Policies**:  
+1. Go to the the **Security & Compliance** left navigation menu and press **Policies**  
 
 2. Click on the  **New policy** button   
 

@@ -178,8 +178,8 @@ kubeconfig entry generated for fern-initech.
 ```bash
 $ kubectl get networkpolicy
 
-NAME          POD-SELECTOR          AGE
-access-echo   app=restricted-echo   35m
+NAME                      POD-SELECTOR           AGE
+access-restricted-nginx   app=restricted-nginx   35m
 ```
 
 3. Create a `busybox` container and try and access our `restricted-echo` pod
@@ -188,9 +188,9 @@ access-echo   app=restricted-echo   35m
 $ kubectl run busybox --rm -ti --image=busybox:1.28 -- /bin/sh
 
   If you don't see a command prompt, try pressing enter.
-  / # wget --spider --timeout=1 restricted-echo
+  / # wget --spider --timeout=1 restricted-nginx
 
-  Connecting to restricted-echo (10.4.5.28:80)
+  Connecting to restricted-nginx (10.4.5.28:80)
   wget: download timed out
 ```
 
@@ -206,9 +206,9 @@ $ kubectl run busybox --rm -ti --image=busybox:1.28 -- /bin/sh
 $ kubectl run busybox --rm -ti --labels="access=true" --image=busybox:1.28 -- /bin/sh
 
   If you don't see a command prompt, try pressing enter.
-  / # wget --spider --timeout=1 restricted-echo
+  / # wget --spider --timeout=1 restricted-nginx
 
-  Connecting to restricted-echo (10.4.5.28:80)
+  Connecting to restricted-nginx (10.4.5.28:80)
   remote file exists
 ```
 

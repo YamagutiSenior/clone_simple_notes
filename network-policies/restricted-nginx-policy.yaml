@@ -1,11 +1,11 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: access-restricted-echo
+  name: access-restricted-nginx
 spec:
   podSelector:
     matchLabels:
-      app: restricted-echo
+      app: restricted-nginx
   ingress:
   - from:
     - podSelector:
