@@ -158,7 +158,7 @@ gitops:
 
 Now let's wait for the pipeline to complete, this should take a few mins - so grab a coffee ☕️ or tea 🍵, or whatever you like! If the pipeline happens to fail, please checkout the [troubleshooting documentation](../../documentation/troubleshooting).
 
-## Step 6: Testing Policy as Code
+### Testing Policy as Code
 
 1. Open a terminal and connect to your cluster
 
