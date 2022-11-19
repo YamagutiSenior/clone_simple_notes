@@ -4,26 +4,62 @@ bookCollapseSection: false
 
 # Development Guide
 
-This is the development guide which goes over how to develop and
-test the application locally.
+This is the development guide which goes over:
 
-`TODO: NEED TO UPDATE DEPENDENCIES HERE`
+1. How to deploy and test the application locally
+2. How to deploy to a Kubernetes cluster
+3. Application file structure
+4. Database options and configurations  
 
-## Local Deployment
+Being familiar with the above will allow you to get started
+creating new features or fixing bugs in this application.
 
-1. Install SQLite dependencies
+MRs are welcome 😁!
+
+## Local Deployment (Mac OSX)
+
+1. Download and Install [Python3](https://www.python.org/downloads/)  
+
+{{< hint info >}}
+**Note:** You probably already have it! Verify with:
+```bash
+$ python3 --version
+
+Python 3.10.6
+```
+{{< /hint >}}
+
+2. Install SQLite & MariaDB dependencies
 
 ```bash
-$ apt install sqlite3 libsqlite3-dev -y
+$ xcode-select --install
+# Follow the prompted info
+
+$ brew install gcc mariadb sqlite3 openssl
+brew install gcc mariadb sqlite3 openssl
+sqlite  is already installed but outdated (so it will be upgraded).
+==> Downloading https://ghcr.io/v2/homebrew/core/isl/manifests/0.25
+######################################################################## 100.0%
+....
 ```
 
-or
+3. Upgrade pip3
 
 ```bash
-$ brew install sqlite3 libsqlite3-dev -y
+$ pip3 install --upgrade pip
+
+Collecting pip
+  Downloading pip-22.3.1-py3-none-any.whl (2.1 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.1/2.1 MB 14.5 MB/s eta 0:00:00
+Installing collected packages: pip
+  Attempting uninstall: pip
+    Found existing installation: pip 22.2.2
+    Uninstalling pip-22.2.2:
+      Successfully uninstalled pip-22.2.2
+Successfully installed pip-22.3.1
 ```
 
-2. Install python virtualenv
+4. Install python virtualenv
 
 ```bash
 $ pip3 install virtualenv
@@ -46,7 +82,7 @@ $ virtualenv --version
 virtualenv 20.13.4 from /opt/homebrew/lib/python3.9/site-packages/virtualenv/__init__.py
 ```
 
-3. Create and Start using the virtualenv named venv
+5. Create and Start using the virtualenv named venv
 
 ```bash
 $ virtualenv venv
@@ -54,27 +90,16 @@ created virtual environment CPython3.9.10.final.0-64 in 343ms
 
 $ source venv/bin/activate
 
-$ which pip
+$ which pip3
 /Users/fern/Documents/Development/Work/DevSecOps-Workshop/workshop-notes/venv/bin/pip
 ```
 
 **Note:** Pip should now be pointing at a package in your venv folder
 
-4. Install Dependencies
+5. Install Dependencies
 
 ```bash
-$ brew install mariadb-connector-c
-
-Downloading https://ghcr.io/v2/homebrew/core/mariadb-connector-c/manifests/3.2.6
-######################################################################## 100.0%
-==> Downloading https://ghcr.io/v2/homebrew/core/mariadb-connector-c/blobs/sha256:a26f011092cfc5962d0fe3331ace48a40e4d7fc9001bd7fca89efbfe68308a08
-==> Downloading from https://pkg-containers.githubusercontent.com/ghcr1/blobs/sha256:a26f011092cfc5962d0fe3331ace48a40e4d7fc9001bd7fca89efbfe68308a08?
-######################################################################## 100.0%
-==> Pouring mariadb-connector-c--3.2.6.arm64_monterey.bottle.tar.gz
-🍺  /opt/homebrew/Cellar/mariadb-connector-c/3.2.6: 153 files, 1.4MB
-==> Running `brew cleanup mariadb-connector-c`...
-
-$ pip install -r requirements.txt
+$ pip3 install -r requirements.txt
 
 ...
 Successfully built flask-bootstrap mariadb visitor
@@ -82,7 +107,7 @@ Installing collected packages: visitor, Werkzeug, MarkupSafe, mariadb, itsdanger
 Successfully installed Flask-2.0.3 Jinja2-3.0.3 MarkupSafe-2.1.1 Werkzeug-2.0.3 click-8.0.4 dominate-2.6.0 flask-bootstrap-3.3.7.1 flask_httpauth-4.5.0 flask_wtf-1.0.0 itsdangerous-2.1.1 mariadb-1.0.10 visitor-0.1.3 wtforms-3.0.1
 ```
 
-5. Run the application locally
+6. Run the application locally
 
 ```bash
 $ python run.py
@@ -94,13 +119,13 @@ $ python run.py
  * Debug mode: off
  * Running on all addresses.
    WARNING: This is a development server. Do not use it in a production deployment.
- * Running on http://192.168.3.7:5001/ (Press CTRL+C to quit)
+ * Running on http://192.168.3.7:5000/ (Press CTRL+C to quit)
 ```
 
-6. Point your browser to "http://localhost:port", and you should see the notes
+7. Point your browser to "http://localhost:port", and you should see the notes
 application.  
 
-**Note:** Default Port is 5001.
+**Note:** Default Port is 5000, it can be changed by setting the `PORT` environment variable.
 
 ## Kubernetes Cluster Deployment
 

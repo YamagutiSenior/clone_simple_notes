@@ -8,6 +8,8 @@ This application is used for taking simple notes, like `Everyone needs to go ahe
 
 ![](./images/screenshot.png)  
 
+If there is something you wanna see featured in this application, please open an issue!
+
 ---
 
 ## Tutorial / Lessons
@@ -34,5 +36,6 @@ You can get started using this project on your own GitLab account with the follo
 ---
 
 Created and maintained by [Fern](https://gitlab.com/fjdiaz)🌿
-* [LinkedIn](https://www.linkedin.com/in/awkwardferny/)
-* [Twitter](https://twitter.com/awkwardferny)
+
+- [LinkedIn](https://www.linkedin.com/in/awkwardferny/)
+- [Twitter](https://twitter.com/awkwardferny)
