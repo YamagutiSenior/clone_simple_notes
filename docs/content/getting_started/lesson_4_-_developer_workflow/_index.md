@@ -82,5 +82,5 @@ you either need to resolve the vulnerabilities (which doesn't make sense in this
 
 Congratulations! You have now successfully viewed vulnerabilities within an MR and the details to their resolution.
 
-{{< button relref="/lesson_3:_setting_up_and_configuring_the_security_scanners_and_policies" >}}Previous Lesson{{< /button >}}
-{{< button relref="/lesson_5:_appsec_workflow" >}}Next Lesson{{< /button >}}
+{{< button relref="/lesson_3_-_setting_up_and_configuring_the_security_scanners_and_policies" >}}Previous Lesson{{< /button >}}
+{{< button relref="/lesson_5_-_appsec_workflow" >}}Next Lesson{{< /button >}}

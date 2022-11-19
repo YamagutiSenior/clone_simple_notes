@@ -16,11 +16,11 @@ If there is something you wanna see featured in this application, please open an
 
 You can get started using this project on your own GitLab account with the following lessons:
 
-- Lesson 1: [Prerequisites](https://tech-marketing.gitlab.io/devsecops/initech/simple-notes/getting_started/lesson_1_prerequisites/)
-- Lesson 2: [Deploying the Demo application](https://tech-marketing.gitlab.io/devsecops/initech/simple-notes/getting_started/lesson_2_deploying_the_demo_application/)
-- Lesson 3: [Setting Up and Configuring the Security Scanners and Policies](https://tech-marketing.gitlab.io/devsecops/initech/simple-notes/getting_started/lesson_3_setting_up_and_configuring_the_security_scanners_and_policies/)
-- Lesson 4: [Developer Workflow](https://tech-marketing.gitlab.io/devsecops/initech/simple-notes/getting_started/lesson_4_developer_workflow/)
-- Lesson 5: [AppSec Workflow](https://tech-marketing.gitlab.io/devsecops/initech/simple-notes/getting_started/lesson_5_appsec_workflow/)
+- Lesson 1: [Prerequisites](https://tech-marketing.gitlab.io/devsecops/initech/simple-notes/getting_started/lesson_1_-_prerequisites/)
+- Lesson 2: [Deploying the Demo application](https://tech-marketing.gitlab.io/devsecops/initech/simple-notes/getting_started/lesson_2_-_deploying_the_demo_application/)
+- Lesson 3: [Setting Up and Configuring the Security Scanners and Policies](https://tech-marketing.gitlab.io/devsecops/initech/simple-notes/getting_started/lesson_3_-_setting_up_and_configuring_the_security_scanners_and_policies/)
+- Lesson 4: [Developer Workflow](https://tech-marketing.gitlab.io/devsecops/initech/simple-notes/getting_started/lesson_4_-_developer_workflow/)
+- Lesson 5: [AppSec Workflow](https://tech-marketing.gitlab.io/devsecops/initech/simple-notes/getting_started/lesson_5_-_appsec_workflow/)
 
 ---
 
