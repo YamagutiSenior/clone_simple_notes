@@ -122,7 +122,7 @@ You can see a list of available Audit Events in the [documentation](https://docs
 **Note:** You should see a few basic events around adding security policies
 {{< /hint >}}
 
-## Step 5: Enable Policy as Code
+## Step 5: Enabling and Testing Policy as Code
 
 Policy as Code is a way of creating policies by just editing code. In this section we will be using [GitOps](https://docs.gitlab.com/ee/user/clusters/agent/gitops.html) in order to deploy network policies which will limit access to our **restricted-echo** pods from other pods.
 

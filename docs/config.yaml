@@ -28,7 +28,7 @@ languages:
 
 menu:
   after:
-    - name: "Simple Notes Project Repo"
+    - name: "Simple Notes - GitLab Project Repository"
       url: "https://gitlab.com/tech-marketing/devsecops/initech/simple-notes"
       weight: 10
 
