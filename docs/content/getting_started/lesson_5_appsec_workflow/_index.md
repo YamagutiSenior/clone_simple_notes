@@ -222,5 +222,5 @@ Congratulations, you are now able to use some of GitLab's Security Tools within
 your AppSec Workflow and to better collaborate with others. Thanks for going
 through the Getting Started Documentation!
 
-{{< button relref="/lesson_4_-_developer_workflow" >}}Previous Lesson{{< /button >}}
+{{< button relref="/lesson_4_developer_workflow" >}}Previous Lesson{{< /button >}}
 {{< button relref="/" >}}Go Home{{< /button >}}
