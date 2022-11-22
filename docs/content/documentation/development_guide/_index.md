@@ -11,10 +11,7 @@ This is the development guide which goes over:
 3. Application file structure
 4. Database options and configurations  
 
-Being familiar with the above will allow you to get started
-creating new features or fixing bugs in this application.
-
-MRs are welcome 😁!
+Being familiar with the above will allow you to get started creating new features or fixing bugs in this application. MRs are welcome 😁!
 
 ## Local Deployment (Mac OSX)
 
@@ -122,7 +119,7 @@ $ python run.py
  * Running on http://192.168.3.7:5000/ (Press CTRL+C to quit)
 ```
 
-7. Point your browser to "http://localhost:port", and you should see the notes
+7. Point your browser to `http://localhost:5000`, and you should see the notes
 application.  
 
 **Note:** Default Port is 5000, it can be changed by setting the `PORT` environment variable.
@@ -133,40 +130,42 @@ application.
 
 ---
 
-## Structure
+## Main Repository Structure
+
+Here is the main repository structure, which show where to look when adding code:
 
 | Directory/File | Purpose |
 | -------------- | ------- |
 | run.py         | Runs the Application as a webserver on the given port |
+| config.py | Contains the key used in securely signing the session cookie |
 | notes/__init__.py | Initializes the Application, and Creates DB and Tables if they don't exist. Also contains Auth Data |
 | notes/db.py | Contains all the calls which interact with the database |
 | notes/routes.py | Contains all the routes and logic for generating pages, and returns based on the routes |
 | notes/forms.py | Contains the web forms used in our Flask Site |
 | notes/templates | Contains the html files we render |
+| helm | Contains the helm chart for this application |
+| docs | Builds a hugo static site with application documentation |
+| tests | Contains the application unit tests |
+| scripts | General purpose scripts for CICD |
+| network-policies | Policies for limiting connectivity to pods |
 
-## Database
+---
 
-Depending on if you are working with the application or locally, there are different
-databases which can be used in the backed.
+## Databases
+
+Depending on if you are working with the application locally or within a cluster, there are different
+databases which can be used in the backend.
 
 ### MariaDB
 
-A full MariaDB database can be used with this application,
+A full [MariaDB](https://mariadb.org/) database can be used with this application,
 allowing you to scale the notes. I know it's overkill for a
 demo application, but the point is to allow scaling.
 
-In order to enable, add an the following environment variable
-before running the application:
-
-- **DB_BACKEND: "mariadb"**
-- **DB_PASSWORD: "PASSWORD"**
+MariaDB is included when using this application with GitLab.
 
 ### SQLite
 
-For local testing you can use SQLite. SQLite is an embedded database engine.
-With this database the application cannot be scaled since we are pointing at a single DB file.
-
-In order to enable, add an the following environment variable
-before running the application:
-
-- **DB_BACKEND: "local"**
+For local testing you can use [SQLite](https://www.sqlite.org/index.html). SQLite is an embedded database engine.
+With this database the application cannot be scaled since we are pointing at a single DB file. It is loaded by
+default when not deploying using helm.

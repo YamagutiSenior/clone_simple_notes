@@ -12,3 +12,4 @@ notes:
     path: notes
     replicas: 1
     dbBackend: mariadb
+    dbrootpwd: y33tboi

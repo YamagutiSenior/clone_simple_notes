@@ -116,8 +116,6 @@ deploy-staging:
   stage: deploy
   variables:
     HELM_HOST: "localhost:44134"
-    NOTES_DB_BACKEND: "mariadb"
-    DB_ROOT_PWD: y33tboi
     IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
   before_script:
     - kubectl config use-context $CI_PROJECT_PATH:simplenotes
@@ -126,7 +124,7 @@ deploy-staging:
   script:
     - kubectl config use-context $CI_PROJECT_PATH:simplenotes
     - if [ $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH ]; then IMAGE=$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest; fi
-    - helm upgrade --install notes helm -f helm/values.yaml --set image=$IMAGE --set dbrootpwd=$DB_ROOT_PWD
+    - helm upgrade --install notes helm -f helm/values.yaml --set image=$IMAGE
   after_script:
     - kubectl config use-context $CI_PROJECT_PATH:simplenotes
     - echo "DAST_WEBSITE=http://$(kubectl get svc -n ingress-nginx | grep LoadBalancer | awk '{print $4}')/notes" >> deploy.env
