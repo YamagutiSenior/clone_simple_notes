@@ -81,8 +81,7 @@ gemnasium-python-dependency_scanning:
     - apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
     - curl -LsS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | bash
     - apt install libmariadb3 libmariadb-dev mariadb-client sqlite3 libsqlite3-dev -y
-    - pip3 install --upgrade pip
-    - pip3 install packaging
+    - pip3 install --upgrade pip; pip3 install packaging
 
 container_scanning:
   variables:
@@ -101,8 +100,7 @@ license_scanning:
     - apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
     - curl -LsS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | bash
     - apt install libmariadb3 libmariadb-dev mariadb-client sqlite3 libsqlite3-dev -y
-    - pip3 install --upgrade pip
-    - pip3 install packaging
+    - pip3 install --upgrade pip; pip3 install packaging
 
 coverage-guided-fuzzing:
   image: python:latest
@@ -126,6 +124,7 @@ deploy-staging:
     - kubectl config use-context $CI_PROJECT_PATH:simplenotes
     - if [ $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH ]; then IMAGE=$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest; fi
     - helm upgrade --install notes helm -f helm/values.yaml --set image=$IMAGE
+    - kubectl rollout restart deployment notes
   after_script:
     - kubectl config use-context $CI_PROJECT_PATH:simplenotes
     - echo "DAST_WEBSITE=http://$(kubectl get svc -n ingress-nginx | grep LoadBalancer | awk '{print $4}')/notes" >> deploy.env
