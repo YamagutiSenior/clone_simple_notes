@@ -57,6 +57,7 @@ unit:
   stage: test
   variables:
     NOTES_DB_BACKEND: "local"
+    RUNNER_GENERATE_ARTIFACTS_METADATA: "true"
   before_script:
     - apt update -y; apt upgrade -y
     - apt install gcc curl openssl -y
