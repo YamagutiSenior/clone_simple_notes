@@ -15,8 +15,8 @@ It is meant primarily for demo purposes and to showcase how DevSecOps can be imp
 
 ## Deployment Architecture Diagram
 
-![](/devsecops/initech/simple-notes/images/deployment_architecture.png)
+![](devsecops/initech/simple-notes/images/deployment_architecture.png)
 
 ## API Flowchart Diagram
 
-![](/devsecops/initech/simple-notes/images/api_flowchart.png)
+![](devsecops/initech/simple-notes/images/api_flowchart.png)

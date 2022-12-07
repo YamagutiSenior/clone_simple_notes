@@ -3,9 +3,6 @@ image: docker:20.10.17
 services:
   - docker:20.10.17-dind
 
-variables:
-  RUNNER_GENERATE_ARTIFACTS_METADATA: "true"
-
 stages:
   - build
   - test
@@ -77,6 +74,7 @@ unit:
 gemnasium-python-dependency_scanning:
   variables:
     SECURE_LOG_LEVEL: "debug"
+    RUNNER_GENERATE_ARTIFACTS_METADATA: "true"
   before_script:
     - apt update -y; apt upgrade -y
     - apt install gcc curl openssl -y
@@ -89,7 +87,8 @@ gemnasium-python-dependency_scanning:
 container_scanning:
   variables:
     CS_DISABLE_LANGUAGE_VULNERABILITY_SCAN: "false"
-    CS_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA  
+    CS_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
+    RUNNER_GENERATE_ARTIFACTS_METADATA: "true" 
   before_script:
     - if [ $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH ]; then CS_IMAGE=$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest; fi
 
