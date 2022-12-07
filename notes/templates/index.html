@@ -1,6 +1,7 @@
 {% extends 'bootstrap/base.html' %}
 {% block title %}Simple Notes{% endblock %}
 <html>
+    {% block content %}
     <head>
         <style>
             footer {
@@ -12,7 +13,6 @@
         </style>
     </head>
 
-    {% block content %}
     <body>
         <center>
             <h1>Simple Notes</h1>
@@ -75,6 +75,7 @@
 
         </center>
     </body>
+    
     <footer>
         <p>Created by GitLab's <a href="https://about.gitlab.com/handbook/marketing/strategic-marketing/technical-marketing/#which-technical-marketing-manager">Technical Marketing Team</a></p>
     </footer>
