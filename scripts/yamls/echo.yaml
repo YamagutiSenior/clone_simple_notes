@@ -1,31 +1,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name:  {{ .Values.echo.name }}
+  name:  echo
 spec:
-  replicas: {{ .Values.echo.replicas }}
+  replicas: 1
   selector:
     matchLabels:
-      app: {{ .Values.echo.name }}
+      app: echo
   template:
     metadata:
       labels:
-        app: {{ .Values.echo.name }}
+        app: echo
     spec:
       containers:
-      - name: {{ .Values.echo.name }}
+      - name: echo
         image: gcr.io/kubernetes-e2e-test-images/echoserver:2.1
         ports:
-        - containerPort: {{ .Values.echo.port }}
+        - containerPort: 8080
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.echo.name }}
+  name: echo
 spec:
   ports:
-  - port: {{ .Values.echo.port }}
-    targetPort:  {{ .Values.echo.targetPort }}
+  - port: 8080
+    targetPort:  8080
     protocol: TCP
     name: http
   selector:
@@ -34,7 +34,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ .Values.echo.name }}
+  name: echo
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/proxy-connect-timeout: "30"
@@ -48,6 +48,11 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: {{ .Values.echo.name }}
+            name: echo
             port:
-              number: {{ .Values.echo.port }}
+              number: 8080
+
+    name: echo-production
+    port: 8080
+    targetPort: 8080
+    replicas: 1
