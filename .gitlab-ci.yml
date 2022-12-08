@@ -77,20 +77,13 @@ gemnasium-python-dependency_scanning:
     SECURE_LOG_LEVEL: "debug"
     RUNNER_GENERATE_ARTIFACTS_METADATA: "true"
     DS_REMEDIATE: "false"
-    DS_DISABLE_DIND: "true"
   before_script:
     - apt update -y; apt upgrade -y
     - apt install gcc curl openssl libpq-dev -y
     - apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
     - curl -LsS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | bash
     - apt install libmariadb3 libmariadb-dev mariadb-client sqlite3 libsqlite3-dev -y
-    - pip3 install --upgrade setuptools pip; pip3 install packaging
-  artifacts:
-    paths:
-      - "**/gl-sbom-*.cdx.json"
-      - gl-dependency-scanning-report.json
-    reports:
-      cyclonedx: "**/gl-sbom-*.cdx.json"
+    - pip3 install --user --upgrade setuptools pip packaging;
 
 container_scanning:
   variables:
