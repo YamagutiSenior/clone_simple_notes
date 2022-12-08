@@ -6,7 +6,7 @@
     "description": "Testing adding notes via simply simple notes"
   },
   "host": "HOST",
-  "basePath": "/notes",
+  "basePath": "/notes-staging",
   "schemes": [
     "http"
   ],

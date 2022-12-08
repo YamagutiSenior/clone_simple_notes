@@ -6,14 +6,13 @@ from flask_bootstrap import Bootstrap
 from flask_httpauth import HTTPBasicAuth
 from werkzeug.security import generate_password_hash
 
+db_backend = os.environ.get("NOTES_DB_BACKEND", "local")
 note = Flask(__name__)
 note.config.from_object(Config)
 bootstrap = Bootstrap(note)
 auth = HTTPBasicAuth()
-
-app = Flask(__name__)
 images = os.path.join('notes/static', 'images')
-app.config['IMAGE_FOLDER'] = images
+note.config['IMAGE_FOLDER'] = images
 
 users = {
     "admin": generate_password_hash("yeet")
@@ -21,7 +20,6 @@ users = {
 
 from notes import db, routes
 
-db_backend = os.environ.get("NOTES_DB_BACKEND", "local")
 sql_create_notes_table = """CREATE TABLE IF NOT EXISTS notes (
                             id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
                             data TEXT,
