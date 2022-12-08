@@ -51,8 +51,3 @@ spec:
             name: echo
             port:
               number: 8080
-
-    name: echo-production
-    port: 8080
-    targetPort: 8080
-    replicas: 1

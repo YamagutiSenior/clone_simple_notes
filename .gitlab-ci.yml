@@ -121,12 +121,12 @@ deploy-staging:
     - kubectl config use-context $CI_PROJECT_PATH:simplenotes
     - sh scripts/install_ingress.sh
     - sh scripts/install_mariadb.sh
+    - kubectl apply -f scripts/yamls/echo.yaml
   script:
     - kubectl config use-context $CI_PROJECT_PATH:simplenotes
     - if [ $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH ]; then IMAGE=$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest; fi
     - helm upgrade --install notes-staging helm -f helm/values.yaml --set image=$IMAGE --set notes.name=notes-staging --set notes.path=notes-staging --set notes.dbName=staging --set restrictednginx.name=restricted-nginx-staging
     - kubectl rollout restart deployment notes-staging -n default
-    - kubectl apply -f scripts/yamls/echo.yaml
   after_script:
     - kubectl config use-context $CI_PROJECT_PATH:simplenotes
     - echo "DAST_WEBSITE=http://$(kubectl get svc -n ingress-nginx | grep LoadBalancer | awk '{print $4}')/notes-staging" >> deploy.env
