@@ -121,7 +121,7 @@ deploy-staging:
     - kubectl config use-context $CI_PROJECT_PATH:simplenotes
     - sh scripts/install_ingress.sh
     - sh scripts/install_mariadb.sh
-    - kubectl apply -f scripts/yamls/echo.yaml
+    - sh scripts/install_echo.sh
   script:
     - kubectl config use-context $CI_PROJECT_PATH:simplenotes
     - if [ $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH ]; then IMAGE=$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest; fi
@@ -178,7 +178,7 @@ cleanup-staging-db:
   script:
     - kubectl config use-context $CI_PROJECT_PATH:simplenotes
     - kubectl exec -i deploy/notes -- sh scripts/reset_notes_table.sh
-    - kubectl delete -f scripts/yamls/echo.yaml
+    - sh scripts/delete_echo.sh
   dependencies:
     - dast
     - apifuzzer_fuzz
