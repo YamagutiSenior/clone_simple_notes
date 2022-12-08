@@ -1,32 +1,34 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: notes
+  name: {{ .Values.notes.name }}
 spec:
   replicas: {{ .Values.notes.replicas }}
   selector:
     matchLabels:
-      app: notes
+      app: {{ .Values.notes.name }}
   template:
     metadata:
       labels:
-        app: notes
+        app: {{ .Values.notes.name }}
     spec:
       containers:
-      - name: notes
+      - name: {{ .Values.notes.name }}
         image: {{ .Values.image }}
         env:
           - name: DB_ROOT_PWD
             value: "{{ .Values.notes.dbrootpwd }}"
           - name: NOTES_DB_BACKEND
             value: "{{ .Values.notes.dbBackend }}"
+          - name: NOTES_DB_DATABASE
+            value: "{{ .Values.notes.dbName }}"
         ports:
         - containerPort: {{ .Values.notes.targetPort }}
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: notes-svc
+  name: {{ .Values.notes.name }}
 spec:
   ports:
   - port: {{ .Values.notes.port }}
@@ -39,7 +41,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: notes-ingress
+  name: {{ .Values.notes.name }}
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/rewrite-target: /$2
@@ -54,6 +56,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: notes-svc
+            name: {{ .Values.notes.name }}
             port:
               number: {{ .Values.notes.port }}

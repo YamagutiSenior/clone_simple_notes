@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: echo
+  name:  {{ .Values.echo.name }}
 spec:
   replicas: {{ .Values.echo.replicas }}
   selector:
     matchLabels:
-      app: echo
+      app: {{ .Values.echo.name }}
   template:
     metadata:
       labels:
-        app: echo
+        app: {{ .Values.echo.name }}
     spec:
       containers:
-      - name: echo
+      - name: {{ .Values.echo.name }}
         image: gcr.io/kubernetes-e2e-test-images/echoserver:2.1
         ports:
         - containerPort: {{ .Values.echo.port }}
@@ -21,7 +21,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: echo-svc
+  name: {{ .Values.echo.name }}
 spec:
   ports:
   - port: {{ .Values.echo.port }}
@@ -34,7 +34,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: echo-ingress
+  name: {{ .Values.echo.name }}
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/proxy-connect-timeout: "30"
@@ -48,6 +48,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: echo-svc
+            name: {{ .Values.echo.name }}
             port:
               number: {{ .Values.echo.port }}

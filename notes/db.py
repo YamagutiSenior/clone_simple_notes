@@ -6,18 +6,32 @@ import socket
 from notes import note, db_backend
 
 
-def create_connection(name='my_database'):
+def create_connection():
     conn = None
-
+    db_name = os.environ.get("NOTES_DB_DATABASE")
+    
+    if db_name is None:
+        note.logger.error("No Database Name set, defaulting to 'my_database'")
+        db_name = "my_database"
+    
     if db_backend == 'mariadb':
         try:
             conn = mariadb.connect(
                 user="root",
                 password=os.environ.get("DB_ROOT_PWD"),
                 host="mariadb",
-                port=3306,
-                database=name
+                port=3306
             )
+
+            try:
+                query = "CREATE DATABASE IF NOT EXISTS %s" % db_name
+                c = conn.cursor()
+                c.execute(query)
+            except Exception as e:
+                note.logger.error("Error (MariaDB): cannot connect to db - %s" % e)
+                return
+
+            conn.database = db_name
             conn.auto_reconnect = True
         except Exception as e:
             note.logger.error("Error (MariaDB): cannot connect to db - %s" % e)
@@ -25,7 +39,7 @@ def create_connection(name='my_database'):
 
     elif db_backend == 'local':
         try:
-            conn = sqlite3.connect(name + ".db")
+            conn = sqlite3.connect(db_name + ".db")
         except Exception as e:
             note.logger.error("Error (SQLite): cannot connect to db - %s" % e)
             return

@@ -9,7 +9,7 @@ class TestDB(unittest.TestCase):
 
     def setUp(self):
         self.db_name = "my_database"
-        self.conn = db.create_connection(name=self.db_name)
+        self.conn = db.create_connection()
 
     def tearDown(self):
         pass
@@ -17,7 +17,7 @@ class TestDB(unittest.TestCase):
     def test_create_table(self):
         db.create_table(self.conn, notes.sql_create_notes_table)
 
-        conn = db.create_connection(name=self.db_name)
+        conn = db.create_connection()
         res = conn.execute("SELECT name FROM sqlite_schema WHERE type='table';")
         nameExists = False
         for name in res:

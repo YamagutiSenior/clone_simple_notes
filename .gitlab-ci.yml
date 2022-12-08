@@ -78,7 +78,7 @@ gemnasium-python-dependency_scanning:
     RUNNER_GENERATE_ARTIFACTS_METADATA: "true"
     DS_REMEDIATE: "false"
   before_script:
-    - apt update -y; apt upgrade -y
+    - apt update -y
     - apt install gcc curl openssl libpq-dev -y
     - apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
     - curl -LsS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | bash
@@ -125,7 +125,7 @@ deploy-staging:
   script:
     - kubectl config use-context $CI_PROJECT_PATH:simplenotes
     - if [ $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH ]; then IMAGE=$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest; fi
-    - helm upgrade --install notes-staging helm -f helm/values.yaml --set image=$IMAGE --set notes.path=notes-staging
+    - helm upgrade --install notes-staging helm -f helm/values.yaml --set image=$IMAGE --set notes.name=notes-staging --set notes.path=notes-staging --set notes.dbName=staging --set echo.name=echo-staging --set restrictednginx.name=restricted-nginx-staging
     - kubectl rollout restart deployment notes-staging -n default
   after_script:
     - kubectl config use-context $CI_PROJECT_PATH:simplenotes
@@ -172,7 +172,7 @@ apifuzzer_fuzz:
   dependencies:
     - deploy-staging
 
-reset-notes-table:
+cleanup-staging-db:
   image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image:helm-3.10.0-kube-1.24.6-alpine-3.15
   stage: cleanup
   script:
