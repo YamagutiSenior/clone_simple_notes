@@ -3,11 +3,14 @@
 ECHO=echo
 NAMESPACE=default
 
+# TODO: JUST A TEST REMOVE IT
+pwd
+
 kubectl get deploy $ECHO -n $NAMESPACE
 retVal=$?
 if [ $retVal -ne 0 ]; then
     echo "Error: Could not find deployment $ECHO in namespace $NAMESPACE, will try to install"
-    kubectl apply -f yamls/echo/deploy.yaml
+    kubectl apply -f scripts/yamls/echo/deploy.yaml
     retVal=$?
     if [ $retVal -ne 0 ]; then
         echo "Error: Could not install deployment $ECHO in namespace $NAMESPACE, Checking Logs:\n"
@@ -20,7 +23,7 @@ kubectl get service $ECHO -n $NAMESPACE
 retVal=$?
 if [ $retVal -ne 0 ]; then
     echo "Error: Could not find service $ECHO in namespace $NAMESPACE, will try to install"
-    kubectl apply -f yamls/echo/service.yaml
+    kubectl apply -f scripts/yamls/echo/service.yaml
     retVal=$?
     if [ $retVal -ne 0 ]; then
         echo "Error: Could not install service $ECHO in namespace $NAMESPACE"
@@ -32,7 +35,7 @@ kubectl get ingress $ECHO -n $NAMESPACE
 retVal=$?
 if [ $retVal -ne 0 ]; then
     echo "Error: Could not find ingress $ECHO in namespace $NAMESPACE, will try to install"
-    kubectl apply -f yamls/echo/ingress.yaml
+    kubectl apply -f scripts/yamls/echo/ingress.yaml
     retVal=$?
     if [ $retVal -ne 0 ]; then
         echo "Error: Could not install ingress $ECHO in namespace $NAMESPACE"
