@@ -6,4 +6,3 @@ mariadb
 pysqlite3
 Werkzeug
 flask_httpauth
-packaging

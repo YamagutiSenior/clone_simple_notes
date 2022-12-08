@@ -1,7 +1,7 @@
-image: docker:20.10.17
+image: docker:latest
 
 services:
-  - docker:20.10.17-dind
+  - docker:dind
 
 stages:
   - build
@@ -75,17 +75,20 @@ gemnasium-python-dependency_scanning:
   variables:
     SECURE_LOG_LEVEL: "debug"
     RUNNER_GENERATE_ARTIFACTS_METADATA: "true"
+    DS_REMEDIATE: "false"
   before_script:
     - apt update -y; apt upgrade -y
     - apt install gcc curl openssl -y
     - apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
     - curl -LsS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | bash
     - apt install libmariadb3 libmariadb-dev mariadb-client sqlite3 libsqlite3-dev -y
-    - pip3 install --upgrade pip; pip3 install packaging
+    - pip3 install --upgrade setuptools pip; pip3 install packaging
   artifacts:
     paths:
-      - gl-sbom-*.cdx.json
+      - "**/gl-sbom-*.cdx.json"
       - gl-dependency-scanning-report.json
+    reports:
+      cyclonedx: "**/gl-sbom-*.cdx.json"
 
 container_scanning:
   variables:

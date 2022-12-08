@@ -10,10 +10,9 @@ note = Flask(__name__)
 note.config.from_object(Config)
 bootstrap = Bootstrap(note)
 auth = HTTPBasicAuth()
-db_backend = os.environ.get("NOTES_DB_BACKEND", "local")
-images = os.path.join('notes/static', 'images')
 
 app = Flask(__name__)
+images = os.path.join('notes/static', 'images')
 app.config['IMAGE_FOLDER'] = images
 
 users = {
@@ -22,14 +21,19 @@ users = {
 
 from notes import db, routes
 
+db_backend = os.environ.get("NOTES_DB_BACKEND", "local")
 sql_create_notes_table = """CREATE TABLE IF NOT EXISTS notes (
                             id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-                            data TEXT);"""
+                            data TEXT,
+                            ipaddress TEXT,
+                            hostname TEXT);"""
 
 if db_backend == 'mariadb':
     sql_create_notes_table = """CREATE TABLE IF NOT EXISTS notes (
                                 id INTEGER NOT NULL AUTO_INCREMENT,
                                 data TEXT,
+                                ipaddress TEXT,
+                                hostname TEXT,
                                 PRIMARY KEY (id));"""
 
 conn = db.create_connection()

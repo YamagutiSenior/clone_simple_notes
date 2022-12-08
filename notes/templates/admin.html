@@ -10,6 +10,16 @@
         <center>
             <h1>Simple Notes - Admin Mode</h1>
 
+            <h3><b>Notes full view</b></h3>
+
+            <hr>
+
+            {% for note in notes %}
+            <div><p><b>{{ note }}</b></p></div>
+            {% endfor %}
+
+            <hr>
+
             <h3>Reset Database Table</h3>
             <form class="form-inline" action="" method="post" novalidate>
                 {{ reset_form.hidden_tag() }}

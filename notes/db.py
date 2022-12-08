@@ -1,6 +1,8 @@
 import os
 import mariadb
 import sqlite3
+import socket
+
 from notes import note, db_backend
 
 
@@ -49,12 +51,14 @@ def drop_table(conn, drop_table_sql):
     conn.close()
 
 def create_note(conn, notes):
-    query = "INSERT INTO notes(data) VALUES(?)"
+    query = "INSERT INTO notes(data, ipaddress, hostname) VALUES(?, ?, ?)"
     cur = conn.cursor()
 
+    note.logger.info("Adding Note %s", notes)
     try:
-        note.logger.info("Adding Note %s", notes)
-        cur.execute(query, notes)
+        hostname = socket.gethostname()
+        ip_address = socket.gethostbyname(hostname)
+        cur.execute(query, notes, ip_address, hostname)
     except Exception as e:
         note.logger.error("Error: cannot create note - %s" % e)
 
@@ -64,13 +68,12 @@ def create_note(conn, notes):
     
     return lastRowId
 
-
 def delete_note(conn, id):
     query = 'DELETE FROM notes WHERE id=?'
     cur = conn.cursor()
     
     try:
-        note.logger.info("Deleteing Note #%s", id)
+        note.logger.info("Deleting Note #%s", id)
         cur.execute(query, (id,))
     except Exception as e:
         note.logger.error("Error: cannot delete note - %s" % e)
@@ -79,7 +82,7 @@ def delete_note(conn, id):
     conn.close()
 
 def select_note_by_id(conn, id=None):
-    query = "SELECT * FROM notes"
+    query = "SELECT (id, data) FROM notes"
     cur = conn.cursor()
 
     if id:

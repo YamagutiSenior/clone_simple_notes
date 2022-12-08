@@ -12,11 +12,11 @@ def index():
     logo = os.path.join(app.config['IMAGE_FOLDER'], 'gitlab-logo-100.png')
     items = []
 
-    id = request.args.get('id')
+    #id = request.args.get('id')
     conn = db.create_connection()
 
     try:
-        items = db.select_note_by_id(conn, id)
+        items = db.select_note_by_id(conn, None)
     except Exception as e:
         note.logger.error("Error Creating UI: %s" % e)
 
@@ -66,6 +66,28 @@ def index():
 @note.route('/admin', methods=['GET', 'POST'])
 @auth.login_required
 def admin():
+    conn = db.create_connection() 
+
+    items = []
+    try:
+        items = db.select_note_by_id(conn, None)
+    except Exception as e:
+        note.logger.error("Error Creating UI: %s" % e)
+
+    arr = []
+    if len(items) > 0:
+        for item in items:
+            try:
+                _id = item[0]
+                _note = item[1]
+                _ip_address = item[2]
+                _hostname = item[3]
+
+                note_str = '%s. "%s" - access info: %s - %s' % (_id, _note, _ip_address, _hostname)
+                arr.append(note_str)
+            except Exception as e:
+                note.logger.error(e)
+
     reset_form = ResetForm()
     if reset_form.validate_on_submit():
         try:
@@ -76,7 +98,7 @@ def admin():
         except Exception as e:
             note.logger.error(e)
     
-    return render_template('admin.html', reset_form=reset_form)
+    return render_template('admin.html', notes=arr, reset_form=reset_form)
 
 
 @auth.verify_password
@@ -99,14 +121,14 @@ def add_note(msg=""):
         return jsonify({"Error": "Message tooooo long!"}), 400
 
     if (msg == "\""):
-        response = jsonify({"Success": "Maybe a Security Issue!"})
+        response = jsonify({"Success": "Maybe a Security Issue!"}), 200
         response.headers.set('Content-Type', 'text/html')
-        return response, 200
+        return response
 
     conn = db.create_connection()
     try:
         db.create_note(conn, (str(msg),))
-        return jsonify({"Sucess": "Note added!"})
+        return jsonify({"Success": "Note added!"}), 200
     except Exception as e:
         err = "%s" % e
         return jsonify({"Error": err}), 500
@@ -117,10 +139,11 @@ def get_note():
     conn = db.create_connection()
 
     try:
-        return str(db.select_note_by_id(conn, id))
+        result = str(db.select_note_by_id(conn, id))
+        return jsonify({"Note": result}), 200
     except Exception as e:
         note.logger.error("Error Getting Notes: %s" % e)
-        return str([])
+        return jsonify({"Error": e}), 500
 
 @note.route('/delete', methods=['GET', 'DELETE'])
 def delete_note(id=None):
@@ -128,14 +151,14 @@ def delete_note(id=None):
         id = request.args.get('id')
 
     if not id:
-        return "No Id sent in request."
+        return jsonify({"Error": "No id sent in request!"}), 400
 
     conn = db.create_connection()
     try:
         db.delete_note(conn, id)
-        return "Note deleted successfully!"
+        return jsonify({"Success": "Note Deleted!"}), 204
     except Exception as e:
-        return "Failed to delete Note: %s" % e
+        return jsonify({"Error": e}), 500
 
 def reset():
     conn = db.create_connection()
@@ -146,12 +169,7 @@ def reset():
         note.logger.error("Failed to reset database table 'notes': %s" % e)
 
     conn = db.create_connection()
-    sql_create_notes_table = """ CREATE TABLE IF NOT EXISTS notes (
-                                        id integer NOT NULL AUTO_INCREMENT,
-                                        data text,
-                                        PRIMARY KEY (id)
-                                    ); """
     try:
-        db.create_table(conn, sql_create_notes_table)
+        db.create_table(conn, note.sql_create_notes_table)
     except Exception as e:
         note.logger.error("Failed to re-create database table 'notes': %s" % e)
