@@ -6,6 +6,30 @@
     {% block title %}Simple Notes - Admin Mode{% endblock %}
 
     {% block content %}
+    <head>
+        <style>
+            footer {
+                text-align: center;
+                padding: 3px;
+                background-color: #7759C2;
+                color: white;
+            }
+            a:link {
+                color: white;
+                text-decoration: underline;
+            }
+            a:visited {
+                color: white;
+            }
+            a:hover {
+                color: white;
+            }
+            a:active {
+                color: white;
+            }
+        </style>
+    </head>
+
     <body>
         <center>
             <h1>Simple Notes - Admin Mode</h1>
@@ -29,6 +53,10 @@
             </form>
         </center>
     </body>
+
+    <footer>
+        <p>Created by GitLab's <a href="https://about.gitlab.com/handbook/marketing/strategic-marketing/technical-marketing/#which-technical-marketing-manager">Technical Marketing Team</a></p>
+    </footer>
     {% endblock %}
 
 </html>
