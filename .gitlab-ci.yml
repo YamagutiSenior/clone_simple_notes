@@ -83,7 +83,7 @@ gemnasium-python-dependency_scanning:
     - apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
     - curl -LsS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | bash
     - apt install libmariadb3 libmariadb-dev mariadb-client sqlite3 libsqlite3-dev -y
-    - pip3 install --user --upgrade setuptools pip packaging;
+    - pip3 install --user setuptools packaging
 
 container_scanning:
   variables:
