@@ -28,7 +28,7 @@ def create_connection():
                 c = conn.cursor()
                 c.execute(query)
             except Exception as e:
-                note.logger.error("Error (MariaDB): cannot connect to db - %s" % e)
+                note.logger.error("Error (MariaDB): cannot create database %s - %s" % (db_name, e))
                 return
 
             conn.database = db_name
