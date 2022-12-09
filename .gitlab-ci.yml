@@ -178,7 +178,7 @@ cleanup-staging-db:
   stage: cleanup
   script:
     - kubectl config use-context $CI_PROJECT_PATH:simplenotes
-    - kubectl exec -i deploy/notes -- sh scripts/reset_notes_table.sh
+    - kubectl exec -i deploy/notes-staging -- sh scripts/reset_notes_table.sh
     - sh scripts/delete_echo.sh
   dependencies:
     - dast
