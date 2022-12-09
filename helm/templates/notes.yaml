@@ -22,6 +22,8 @@ spec:
             value: "{{ .Values.notes.dbBackend }}"
           - name: NOTES_DB_DATABASE
             value: "{{ .Values.notes.dbName }}"
+          - name: NOTES_ING_PATH
+            value: "{{ .Values.notes.path }}"
         ports:
         - containerPort: {{ .Values.notes.targetPort }}
 ---

@@ -65,14 +65,15 @@ def drop_table(conn, drop_table_sql):
     conn.close()
 
 def create_note(conn, notes):
-    query = "INSERT INTO notes(data, ipaddress, hostname) VALUES(?, ?, ?)"
+    hostname = socket.gethostname()
+    ip_address = socket.gethostbyname(hostname)
+
+    query = "INSERT INTO notes(data, ipaddress, hostname) VALUES(%s, %s, %s)" % (notes, ip_address, hostname)
     cur = conn.cursor()
 
     note.logger.info("Adding Note %s", notes)
     try:
-        hostname = socket.gethostname()
-        ip_address = socket.gethostbyname(hostname)
-        cur.execute(query, notes, ip_address, hostname)
+        cur.execute(query)
     except Exception as e:
         note.logger.error("Error: cannot create note - %s" % e)
 
@@ -96,7 +97,7 @@ def delete_note(conn, id):
     conn.close()
 
 def select_note_by_id(conn, id=None):
-    query = "SELECT (id, data) FROM notes"
+    query = "SELECT id, data FROM notes"
     cur = conn.cursor()
 
     if id:

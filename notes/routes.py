@@ -12,8 +12,8 @@ def index():
     logo = os.path.join(note.config['IMAGE_FOLDER'], 'gitlab-logo-100.png')
     items = []
 
-    #id = request.args.get('id')
     conn = db.create_connection()
+    ing_path = "/" + os.environ.get("NOTES_ING_PATH")
 
     try:
         items = db.select_note_by_id(conn, None)
@@ -44,7 +44,7 @@ def index():
             flash('Failed to add Note "{}": %s'.format(
             add_form.note_field.data, e))
 
-        return redirect('/notes')
+        return redirect(ing_path)
 
     if delete_form.validate_on_submit():
         try:
@@ -55,10 +55,10 @@ def index():
             flash('Failed to delete Note "{}": %s'.format(
             delete_form.id_field.data, e))
 
-        return redirect('/notes')
+        return redirect(ing_path)
 
     if admin_form.validate_on_submit():
-        return redirect('/notes/admin')
+        return redirect(ing_path + '/admin')
     
     return render_template('index.html', notes=arr, add_form=add_form, delete_form=delete_form, admin_form=admin_form, gitlab_logo=logo)
 
