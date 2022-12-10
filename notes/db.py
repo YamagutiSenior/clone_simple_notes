@@ -66,7 +66,7 @@ def drop_table(conn, drop_table_sql):
 
 def create_note(conn, notes):
     hostname = socket.gethostname()
-    ip_address = socket.gethostbyname(hostname)
+    ip_address = str(socket.gethostbyname(hostname))
 
     query = "INSERT INTO notes(data, ipaddress, hostname) VALUES(%s, %s, %s)" % (notes, ip_address, hostname)
     cur = conn.cursor()
