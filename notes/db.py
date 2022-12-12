@@ -66,12 +66,12 @@ def drop_table(conn, drop_table_sql):
 
 def create_note(conn, notes):
     hostname = socket.gethostname()
-    ip_address = str(socket.gethostbyname(hostname))
+    ip_address = socket.gethostbyname(hostname)
 
-    query = "INSERT INTO notes(data, ipaddress, hostname) VALUES(%s, %s, %s)" % (notes, ip_address, hostname)
+    query = "INSERT INTO notes (data, ipaddress, hostname) VALUES ('{}', '{}', '{}');".format(notes, str(ip_address), str(hostname))
     cur = conn.cursor()
 
-    note.logger.info("Adding Note %s", notes)
+    note.logger.info("Adding Note '{}'",format(notes))
     try:
         cur.execute(query)
     except Exception as e:
