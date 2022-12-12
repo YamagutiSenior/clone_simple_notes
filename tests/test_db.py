@@ -20,6 +20,7 @@ class TestDB(unittest.TestCase):
         conn = db.create_connection()
         res = conn.execute("SELECT name FROM sqlite_schema WHERE type='table';")
         nameExists = False
+        
         for name in res:
             if "'notes'," in str(name):
                 nameExists = True

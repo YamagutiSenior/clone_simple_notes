@@ -1,4 +1,5 @@
 import os
+import logging
 
 from flask import Flask
 from config import Config
@@ -11,11 +12,11 @@ db_backend = os.environ.get("NOTES_DB_BACKEND", "local")
 app_path = os.environ.get("NOTES_ING_PATH", "notes")
 
 # Setup Application Configuration Items
+logging.basicConfig(level=logging.INFO)
 note = Flask(__name__)
 note.config.from_object(Config)
 images = os.path.join('{}/static'.format(app_path), 'images')
 note.config['IMAGE_FOLDER'] = images
-note.logger.setLevel(logging.INFO)
 
 # Setup Application Plugins and Basic-Auth Credentials
 bootstrap = Bootstrap(note)
