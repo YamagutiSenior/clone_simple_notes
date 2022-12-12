@@ -68,7 +68,7 @@ def create_note(conn, notes, ip_address, hostname):
     query = "INSERT INTO notes (data, ipaddress, hostname) VALUES ('{}', '{}', '{}');".format(str(notes), str(ip_address), str(hostname))
     cur = conn.cursor()
 
-    note.logger.info("Adding Note '{}'",format(str(notes)))
+    note.logger.info("Adding Note '{}'".format(str(notes)))
     try:
         cur.execute(query)
     except Exception as e:
@@ -102,7 +102,7 @@ def select_note_by_id(conn, id=None):
         query = query + " WHERE id = '%s'" % id
 
     try:
-        note.logger.info("Getting all notes!")
+        note.logger.info("Getting all notes")
         cur.execute(query)
     except Exception as e:
         note.logger.error("Error: cannot select note by id - %s" % e)

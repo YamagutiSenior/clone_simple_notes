@@ -37,6 +37,7 @@ def index():
 
     if add_form.validate_on_submit():
         try:
+            # TODO: Don't flash message depending on the result
             add_note(add_form.note_field.data)
             flash('Note "{}" has been added!'.format(
                 add_form.note_field.data))
