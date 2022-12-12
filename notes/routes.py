@@ -117,17 +117,23 @@ def add_note(msg=""):
     if not msg:
          return jsonify({"Error": "No message in Request"}), 400
 
-    if len(msg) > 1024:
-        return jsonify({"Error": "Message tooooo long!"}), 400
-
     if (msg == "\""):
         response = jsonify({"Success": "Maybe a Security Issue!"}), 200
         response.headers.set('Content-Type', 'text/html')
         return response
 
+    ip_address = "unknown"
+    hostname = "unknown"
+
+    try:
+        ip_address = request.remote_addr
+        hostname = request.host_url
+    except Exception as e:
+        note.logger.error("Error Getting Requester IP and Hostname: %s" % e)
+
     conn = db.create_connection()
     try:
-        db.create_note(conn, (str(msg),))
+        db.create_note(conn, msg, ip_address, hostname)
         return jsonify({"Success": "Note added!"}), 200
     except Exception as e:
         err = "%s" % e
@@ -162,7 +168,7 @@ def delete_note(id=None):
 
 def reset():
     conn = db.create_connection()
-    sql_drop_notes_table = """ DROP TABLE notes;"""
+    sql_drop_notes_table = """DROP TABLE notes;"""
     try:
         db.drop_table(conn, sql_drop_notes_table)
     except Exception as e:

@@ -1,7 +1,6 @@
 import os
 import mariadb
 import sqlite3
-import socket
 
 from notes import note, db_backend
 
@@ -11,7 +10,7 @@ def create_connection():
     db_name = os.environ.get("NOTES_DB_DATABASE")
     
     if db_name is None:
-        note.logger.error("No Database Name set, defaulting to 'my_database'")
+        note.logger.info("No Database Name set, defaulting to 'my_database'")
         db_name = "my_database"
     
     if db_backend == 'mariadb':
@@ -33,6 +32,7 @@ def create_connection():
 
             conn.database = db_name
             conn.auto_reconnect = True
+
         except Exception as e:
             note.logger.error("Error (MariaDB): cannot connect to db - %s" % e)
             return
@@ -64,14 +64,11 @@ def drop_table(conn, drop_table_sql):
 
     conn.close()
 
-def create_note(conn, notes):
-    hostname = socket.gethostname()
-    ip_address = socket.gethostbyname(hostname)
-
-    query = "INSERT INTO notes (data, ipaddress, hostname) VALUES ('{}', '{}', '{}');".format(notes, str(ip_address), str(hostname))
+def create_note(conn, notes, ip_address, hostname):
+    query = "INSERT INTO notes (data, ipaddress, hostname) VALUES ('{}', '{}', '{}');".format(str(notes), str(ip_address), str(hostname))
     cur = conn.cursor()
 
-    note.logger.info("Adding Note '{}'",format(notes))
+    note.logger.info("Adding Note '{}'",format(str(notes)))
     try:
         cur.execute(query)
     except Exception as e:
@@ -84,7 +81,8 @@ def create_note(conn, notes):
     return lastRowId
 
 def delete_note(conn, id):
-    query = 'DELETE FROM notes WHERE id=?'
+    # NOTE: Vulnerable to SQL injection
+    query = 'DELETE FROM notes WHERE id=%s' % id
     cur = conn.cursor()
     
     try:
