@@ -67,6 +67,7 @@ def index():
 @note.route('/admin', methods=['GET', 'POST'])
 @auth.login_required
 def admin():
+    logo = os.path.join(note.config['IMAGE_FOLDER'], 'gitlab-logo-100.png')
     conn = db.create_connection() 
 
     items = []
@@ -99,7 +100,7 @@ def admin():
         except Exception as e:
             note.logger.error(e)
     
-    return render_template('admin.html', notes=arr, reset_form=reset_form)
+    return render_template('admin.html', notes=arr, reset_form=reset_form, gitlab_logo=logo)
 
 
 @auth.verify_password
@@ -117,6 +118,9 @@ def add_note(msg=""):
 
     if not msg:
          return jsonify({"Error": "No message in Request"}), 400
+
+    if msg > 100:
+         return jsonify({"Error": "Message too long, keep under 101 chars"}), 400
 
     if (msg == "\""):
         response = jsonify({"Success": "Maybe a Security Issue!"}), 200
