@@ -71,7 +71,7 @@ def admin():
 
     items = []
     try:
-        items = db.select_note_by_id(conn, None)
+        items = db.select_note_by_id(conn, None, True)
     except Exception as e:
         note.logger.error("Error Creating UI: %s" % e)
 

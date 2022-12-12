@@ -94,9 +94,12 @@ def delete_note(conn, id):
     conn.commit()
     conn.close()
 
-def select_note_by_id(conn, id=None):
+def select_note_by_id(conn, id=None, admin=False):
     query = "SELECT id, data FROM notes"
     cur = conn.cursor()
+
+    if admin:
+        query = "SELECT id, data, ipaddress, hostname FROM notes"
 
     if id:
         query = query + " WHERE id = '%s'" % id
