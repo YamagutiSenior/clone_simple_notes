@@ -23,6 +23,13 @@
             a:active {
                 color: white;
             }
+            center {
+                text-align: center;
+            }
+            notelist {
+                text-align: left;
+                display: inline-block;
+            }
         </style>
     </head>
 
@@ -46,8 +53,13 @@
 
             <h3><b>My notes</b></h3>
 
+            <br>
+            
+            <h4>id | note</h4>
             {% for note in notes %}
-            <div><p><b>{{ note }}</b></p></div>
+            <notelist>
+                <div><p><b>{{ note }}</b></p></div>
+            </notelist>
             {% endfor %}
 
             <hr>

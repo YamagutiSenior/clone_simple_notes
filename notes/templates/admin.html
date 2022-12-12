@@ -27,6 +27,13 @@
             a:active {
                 color: white;
             }
+            center {
+                text-align: center;
+            }
+            notelist {
+                text-align: left;
+                display: inline-block;
+            }
         </style>
     </head>
 
@@ -36,10 +43,13 @@
 
             <h3><b>Notes full view</b></h3>
 
-            <hr>
+            <br>
 
+            <h4>id | note | ipaddress | hostname</h4>
             {% for note in notes %}
-            <div><p><b>{{ note }}</b></p></div>
+            <notelist>
+                <div><p><b>{{ note }}</b></p></div>
+            </notelist>
             {% endfor %}
 
             <hr>

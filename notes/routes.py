@@ -26,7 +26,7 @@ def index():
             try:
                 _id = item[0]
                 _note = item[1]
-                note_str = '%s. "%s"' % (_id, _note)
+                note_str = '%s | %s' % (_id, _note)
                 arr.append(note_str)
             except Exception as e:
                 note.logger.error(e)
@@ -84,7 +84,7 @@ def admin():
                 _ip_address = item[2]
                 _hostname = item[3]
 
-                note_str = '%s. "%s" - access info: %s - %s' % (_id, _note, _ip_address, _hostname)
+                note_str = '%s | %s | %s | %s' % (_id, _note, _ip_address, _hostname)
                 arr.append(note_str)
             except Exception as e:
                 note.logger.error(e)
