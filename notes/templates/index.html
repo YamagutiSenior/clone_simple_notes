@@ -28,7 +28,6 @@
             }
             notelist {
                 text-align: left;
-                display: inline-block;
             }
         </style>
     </head>
@@ -51,11 +50,10 @@
 
             <hr>
 
-            <h3><b>My notes</b></h3>
+            <h3><b>Notes</b></h3>
 
+            <h4>Key: id | note</h4>
             <br>
-            
-            <h4>id | note</h4>
             {% for note in notes %}
             <notelist>
                 <div><p><b>{{ note }}</b></p></div>

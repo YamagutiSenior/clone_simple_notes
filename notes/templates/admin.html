@@ -32,7 +32,6 @@
             }
             notelist {
                 text-align: left;
-                display: inline-block;
             }
         </style>
     </head>
@@ -41,11 +40,14 @@
         <center>
             <h1>Simple Notes - Admin Mode</h1>
 
-            <h3><b>Notes full view</b></h3>
+            <img src="{{ gitlab_logo }}" alt="GitLab Logo">
 
-            <br>
+            <hr>
+
+            <h3><b>Notes</b></h3>
 
             <h4>id | note | ipaddress | hostname</h4>
+            <br>
             {% for note in notes %}
             <notelist>
                 <div><p><b>{{ note }}</b></p></div>
