@@ -68,7 +68,9 @@ def index():
 @auth.login_required
 def admin():
     logo = os.path.join(note.config['IMAGE_FOLDER'], 'gitlab-logo-100.png')
+    
     conn = db.create_connection() 
+    ing_path = "/" + os.environ.get("NOTES_ING_PATH")
 
     items = []
     try:
@@ -96,7 +98,7 @@ def admin():
             reset()
             flash('Database Table "{}" has been reset!'.format(
             "notes"))
-            return redirect('/notes')
+            return redirect(ing_path)
         except Exception as e:
             note.logger.error(e)
     
