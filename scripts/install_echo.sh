@@ -3,9 +3,6 @@
 ECHO=echo
 NAMESPACE=default
 
-# TODO: JUST A TEST REMOVE IT
-pwd
-
 kubectl get deploy $ECHO -n $NAMESPACE
 retVal=$?
 if [ $retVal -ne 0 ]; then

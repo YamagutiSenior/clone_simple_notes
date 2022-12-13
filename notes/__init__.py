@@ -15,8 +15,7 @@ app_path = os.environ.get("NOTES_ING_PATH", "notes")
 logging.basicConfig(level=logging.INFO)
 note = Flask(__name__)
 note.config.from_object(Config)
-#images = os.path.join('{}/static'.format(app_path), 'images')
-images = os.path.join('static', 'images')
+images = os.path.join('{}/static'.format(app_path), 'images')
 note.config['IMAGE_FOLDER'] = images
 
 # Setup Application Plugins and Basic-Auth Credentials
