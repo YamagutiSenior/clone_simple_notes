@@ -102,7 +102,8 @@ def select_note_by_id(conn, id=None, admin=False):
         query = "SELECT id, data, ipaddress, hostname FROM notes"
 
     if id:
-        query = query + " WHERE id = '%s'" % id
+        # NOTE: Vulnerable to SQL injection
+        query = query + " WHERE id = %s" % id
 
     try:
         note.logger.info("Getting all notes")

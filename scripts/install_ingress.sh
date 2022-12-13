@@ -2,13 +2,12 @@
 
 INGRESS=ingress-nginx
 NAMESPACE=ingress-nginx
-CONFIGMAP=ingress-nginx-controller
 
 helm get all $INGRESS -n $NAMESPACE
 retVal=$?
 if [ $retVal -ne 0 ]; then
     echo "Error: Could not find release $INGRESS in namespace $NAMESPACE, will try to install"
-    helm upgrade --install $INGRESS ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace --set controller.configAnnotations={"enable-real-ip": "true", "use-forwarded-headers": "true", "use-proxy-protocol": "true"}
+    helm upgrade --install $INGRESS ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --set controller.configAnnotations="{enable-real-ip: true, use-forwarded-headers: true, use-proxy-protocol: true}" --namespace ingress-nginx --create-namespace
     retVal=$?
     if [ $retVal -ne 0 ]; then
         echo "Error: Could not install $INGRESS in namespace $NAMESPACE, Checking Logs:\n"
