@@ -10,13 +10,16 @@ from werkzeug.security import check_password_hash
 @note.route('/index', methods=['GET', 'POST'])
 def index():
     logo = os.path.join(note.config['IMAGE_FOLDER'], 'gitlab-logo-100.png')
+    # TEST
+    note.logger.error("Logo Path: %s", logo)
+
     items = []
 
     conn = db.create_connection()
     ing_path = "/" + os.environ.get("NOTES_ING_PATH")
 
     try:
-        items = db.select_note_by_id(conn, None)
+        items = db.select_note_by_id(conn, None, False)
     except Exception as e:
         note.logger.error("Error Creating UI: %s" % e)
 
@@ -68,7 +71,7 @@ def index():
 def admin():
     logo = os.path.join(note.config['IMAGE_FOLDER'], 'gitlab-logo-100.png')
     # TEST
-    note.logger.error("Logo Path: %s", logo)
+    note.logger.error("Admin Logo Path: %s", logo)
     
     conn = db.create_connection() 
     ing_path = "/" + os.environ.get("NOTES_ING_PATH")
@@ -180,8 +183,23 @@ def reset():
     except Exception as e:
         note.logger.error("Failed to reset database table 'notes': %s" % e)
 
+    # TODO: Set globally in the config
+    db_backend = os.environ.get("NOTES_DB_BACKEND", "local")
+    sql_create_notes_table = """CREATE TABLE IF NOT EXISTS notes (
+                            id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                            data TEXT,
+                            ipaddress TEXT,
+                            hostname TEXT);"""
+    if db_backend == 'mariadb':
+        sql_create_notes_table = """CREATE TABLE IF NOT EXISTS notes (
+                                    id INTEGER NOT NULL AUTO_INCREMENT,
+                                    data TEXT,
+                                    ipaddress TEXT,
+                                    hostname TEXT,
+                                    PRIMARY KEY (id));"""
+
     conn = db.create_connection()
     try:
-        db.create_table(conn, note.sql_create_notes_table)
+        db.create_table(conn, sql_create_notes_table)
     except Exception as e:
         note.logger.error("Failed to re-create database table 'notes': %s" % e)

@@ -27,16 +27,6 @@
             center {
                 text-align: center;
             }
-            #wrap {
-                float: left;
-                position: relative;
-                left: 50%;
-            }
-            #content {
-                float: left;
-                position: relative;
-                left: -50%;
-            }
         </style>
     </head>
 
@@ -53,12 +43,8 @@
             <h4>id | note | ipaddress | hostname</h4>
             <br>
             {% for note in notes %}
-            <div id="wrap">
-                <div id="content">
-                    <p><b>{{ note }}</b></p>
-                    <br>
-                </div>
-            </div>
+                <p><b>{{ note }}</b></p>
+                <br>
             {% endfor %}
 
             <hr>
