@@ -1,5 +1,4 @@
 import os
-import socket
 
 from notes import db, note, auth, users
 from notes.forms import AddForm, AdminForm, ResetForm, DeleteForm
@@ -11,8 +10,6 @@ from werkzeug.security import check_password_hash
 @note.route('/index', methods=['GET', 'POST'])
 def index():
     logo = os.path.join(note.config['IMAGE_FOLDER'], 'gitlab-logo-100.png')
-    # TEST
-    note.logger.error("Logo Path: %s", logo)
 
     items = []
 
@@ -22,7 +19,8 @@ def index():
     try:
         items = db.select_note_by_id(conn, None, False)
     except Exception as e:
-        note.logger.error("Error Creating UI: %s" % e)
+        flash('Error generating notes: Check Logs')
+        note.logger.error("Error Generating Notes: %s" % e)
 
     arr = []
     if len(items) > 0:
@@ -41,24 +39,31 @@ def index():
 
     if add_form.validate_on_submit():
         try:
-            # TODO: Don't flash message depending on the result
-            add_note(add_form.note_field.data)
-            flash('Note "{}" has been added!'.format(
-                add_form.note_field.data))
+            result = add_note(add_form.note_field.data)
+            if result[1] != 200:
+                flash('Note "{}" has been added!'.format(
+                    add_form.note_field.data))
+            else:
+                flash('Failed to add Note "{}": {}'.format(
+                    add_form.note_field.data, "Check Logs"))
         except Exception as e:
-            flash('Failed to add Note "{}": %s'.format(
-            add_form.note_field.data, e))
+            flash('Failed to add Note "{}": {}'.format(
+                add_form.note_field.data, e))
 
         return redirect(ing_path)
 
     if delete_form.validate_on_submit():
         try:
-            delete_note(delete_form.id_field.data)
-            flash('Note "{}" has been Deleted!'.format(
-            delete_form.id_field.data))
+            result = delete_note(delete_form.id_field.data)
+            if result[1] != 204:
+                flash('Note "#{}" has been Deleted!'.format(
+                    delete_form.id_field.data))
+            else:
+                flash('Failed to delete Note "#{}": {}'.format(
+                    delete_form.id_field.data, "Check Logs"))
         except Exception as e:
-            flash('Failed to delete Note "{}": %s'.format(
-            delete_form.id_field.data, e))
+            flash('Failed to delete Note "#{}": {}'.format(
+                delete_form.id_field.data, e))
 
         return redirect(ing_path)
 
@@ -71,8 +76,6 @@ def index():
 @auth.login_required
 def admin():
     logo = os.path.join(note.config['IMAGE_FOLDER'], 'gitlab-logo-100.png')
-    # TEST
-    note.logger.error("Admin Logo Path: %s", logo)
     
     conn = db.create_connection() 
     ing_path = "/" + os.environ.get("NOTES_ING_PATH")
@@ -81,7 +84,8 @@ def admin():
     try:
         items = db.select_note_by_id(conn, None, True)
     except Exception as e:
-        note.logger.error("Error Creating UI: %s" % e)
+        flash('Error generating notes: Check Logs')
+        note.logger.error("Error generating notes: %s" % e)
 
     arr = []
     if len(items) > 0:
@@ -100,12 +104,14 @@ def admin():
     reset_form = ResetForm()
     if reset_form.validate_on_submit():
         try:
-            reset()
-            flash('Database Table "{}" has been reset!'.format(
-            "notes"))
-            return redirect(ing_path)
+            result = reset()
+            if result:
+                flash('Database Table "{}" has been reset!'.format("notes"))
+                return redirect(ing_path + '/admin')
+            else:
+                flash('Database Table "{}" Failed to reset: Check Logs'.format("notes"))
         except Exception as e:
-            note.logger.error(e)
+            flash('Database Table "{}" Failed to reset: {}}'.format("notes", e))
     
     return render_template('admin.html', notes=arr, reset_form=reset_form, gitlab_logo=logo)
 
@@ -134,6 +140,10 @@ def add_note(msg=""):
 
     ip_address = "unknown"
     hostname = "unknown"
+
+    # TEST
+    note.logger.error(request.__dict__)
+    note.logger.error(request.environ)
 
     try:
         ip_address = request.remote_addr
@@ -179,28 +189,19 @@ def delete_note(id=None):
 def reset():
     conn = db.create_connection()
     sql_drop_notes_table = """DROP TABLE notes;"""
+    
     try:
         db.drop_table(conn, sql_drop_notes_table)
     except Exception as e:
         note.logger.error("Failed to reset database table 'notes': %s" % e)
-
-    # TODO: Set globally in the config
-    db_backend = os.environ.get("NOTES_DB_BACKEND", "local")
-    sql_create_notes_table = """CREATE TABLE IF NOT EXISTS notes (
-                            id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-                            data TEXT,
-                            ipaddress TEXT,
-                            hostname TEXT);"""
-    if db_backend == 'mariadb':
-        sql_create_notes_table = """CREATE TABLE IF NOT EXISTS notes (
-                                    id INTEGER NOT NULL AUTO_INCREMENT,
-                                    data TEXT,
-                                    ipaddress TEXT,
-                                    hostname TEXT,
-                                    PRIMARY KEY (id));"""
+        return False
 
     conn = db.create_connection()
     try:
+        sql_create_notes_table = note.config['CREATE_TABLE_QUERY']
         db.create_table(conn, sql_create_notes_table)
     except Exception as e:
         note.logger.error("Failed to re-create database table 'notes': %s" % e)
+        return False
+
+    return True

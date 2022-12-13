@@ -15,7 +15,8 @@ app_path = os.environ.get("NOTES_ING_PATH", "notes")
 logging.basicConfig(level=logging.INFO)
 note = Flask(__name__)
 note.config.from_object(Config)
-images = os.path.join('{}/static'.format(app_path), 'images')
+#images = os.path.join('{}/static'.format(app_path), 'images')
+images = os.path.join('static', 'images')
 note.config['IMAGE_FOLDER'] = images
 
 # Setup Application Plugins and Basic-Auth Credentials
@@ -41,6 +42,7 @@ if db_backend == 'mariadb':
                                 hostname TEXT,
                                 PRIMARY KEY (id));"""
 
+note.config['CREATE_TABLE_QUERY'] = sql_create_notes_table
 conn = db.create_connection()
 
 if conn is not None:
