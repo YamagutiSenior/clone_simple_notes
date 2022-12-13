@@ -8,7 +8,7 @@ helm get all $INGRESS -n $NAMESPACE
 retVal=$?
 if [ $retVal -ne 0 ]; then
     echo "Error: Could not find release $INGRESS in namespace $NAMESPACE, will try to install"
-    helm upgrade --install $INGRESS ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace
+    helm upgrade --install $INGRESS ingress-nginx --repo https://kubernetes.github.io/ingress-nginx --namespace ingress-nginx --create-namespace --set controller.configAnnotations={"enable-real-ip": "true", "use-forwarded-headers": "true", "use-proxy-protocol": "true"}
     retVal=$?
     if [ $retVal -ne 0 ]; then
         echo "Error: Could not install $INGRESS in namespace $NAMESPACE, Checking Logs:\n"
@@ -19,14 +19,6 @@ if [ $retVal -ne 0 ]; then
         # It only get's here if the ingress-controller is not installed.
         sleep 60
     fi
-fi
-
-# Setup ConfigMap to setup realIP forwarding
-kubectl apply -f scripts/yamls/ingress/configmap.yaml -n $NAMESPACE
-retVal=$?
-if [ $retVal -ne 0 ]; then
-    echo "Error: Could not configure configmap $CONFIGMAP in namespace $NAMESPACE"
-    exit $retVal
 fi
 
 exit 0
