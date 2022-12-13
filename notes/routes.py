@@ -136,8 +136,8 @@ def add_note(msg=""):
     hostname = "unknown"
 
     try:
-        ip_address = str(request.environ.get('HTTP_X_FORWARDED_FOR', request.remote_addr))#request.remote_addr
-        hostname = socket.gethostbyaddr(ip_address) #request.host_url
+        ip_address = request.remote_addr
+        hostname = request.host_url
     except Exception as e:
         note.logger.error("Error Getting Requester IP and Hostname: %s" % e)
 
