@@ -63,11 +63,12 @@ def index():
     
     return render_template('index.html', notes=arr, add_form=add_form, delete_form=delete_form, admin_form=admin_form, gitlab_logo=logo)
 
-
 @note.route('/admin', methods=['GET', 'POST'])
 @auth.login_required
 def admin():
     logo = os.path.join(note.config['IMAGE_FOLDER'], 'gitlab-logo-100.png')
+    # TEST
+    note.logger.error("Logo Path: %s", logo)
     
     conn = db.create_connection() 
     ing_path = "/" + os.environ.get("NOTES_ING_PATH")
@@ -104,13 +105,11 @@ def admin():
     
     return render_template('admin.html', notes=arr, reset_form=reset_form, gitlab_logo=logo)
 
-
 @auth.verify_password
 def verify_password(username, password):
     if username in users and \
             check_password_hash(users.get(username), password):
         return username
-
 
 @note.route('/add', methods=['GET', 'POST'])
 def add_note(msg=""):
