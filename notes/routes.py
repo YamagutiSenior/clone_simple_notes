@@ -43,7 +43,7 @@ def index():
             result = add_note(add_form.note_field.data)
             
             # TEST
-            note.logger.error(result.__dict__)
+            note.logger.info(result)
 
             if result[1] != 200:
                 flash('Note "{}" has been added!'.format(

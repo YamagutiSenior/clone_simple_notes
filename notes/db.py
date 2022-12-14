@@ -82,7 +82,7 @@ def create_note(conn, notes, ip_address, hostname):
 
 def delete_note(conn, id):
     # NOTE: Vulnerable to SQL injection
-    query = 'DELETE FROM notes WHERE id=%s' % id
+    query = "DELETE FROM notes WHERE id=%s" % id
     cur = conn.cursor()
     
     try:
