@@ -41,11 +41,8 @@ def index():
     if add_form.validate_on_submit():
         try:
             result = add_note(add_form.note_field.data)
-            
-            # TEST
-            note.logger.info(result)
 
-            if result[1] != 200:
+            if result[1] == 200:
                 flash('Note "{}" has been added!'.format(
                     add_form.note_field.data))
             else:
@@ -60,7 +57,7 @@ def index():
     if delete_form.validate_on_submit():
         try:
             result = delete_note(delete_form.id_field.data)
-            if result[1] != 204:
+            if result[1] == 204:
                 flash('Note "#{}" has been Deleted!'.format(
                     delete_form.id_field.data))
             else:
@@ -149,13 +146,16 @@ def add_note(msg=""):
     try:
         if request.environ.get('HTTP_X_FORWARDED_FOR') is not None:
             ip_address = str(request.environ['HTTP_X_FORWARDED_FOR'])
-            hostname = str(socket.gethostbyaddr(ip_address))
+            hostname = str(socket.gethostbyaddr(ip_address)[0])
         
     except Exception as e:
         note.logger.error("Error Getting Requester IP and Hostname: %s" % e)
+        ip_address = "unknown"
+        hostname = "unknown"
 
     conn = db.create_connection()
     try:
+        note.logger.info("Attempting to add note with msg: {}, ipaddress: {}, hostname: {}".format(msg, ip_address, hostname))
         db.create_note(conn, msg, ip_address, hostname)
         return jsonify({"Success": "Note added!"}), 200
     except Exception as e:
