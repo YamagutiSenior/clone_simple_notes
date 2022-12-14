@@ -57,14 +57,15 @@ def index():
     if delete_form.validate_on_submit():
         try:
             result = delete_note(delete_form.id_field.data)
+
             if result[1] == 204:
                 flash('Note "#{}" has been Deleted!'.format(
                     delete_form.id_field.data))
             else:
-                flash('Failed to delete Note "#{}": {}'.format(
+                flash('Failed to delete Note with id "{}": {}'.format(
                     delete_form.id_field.data, "Check Logs"))
         except Exception as e:
-            flash('Failed to delete Note "#{}": {}'.format(
+            flash('Failed to delete Note with id "{}": {}'.format(
                 delete_form.id_field.data, e))
 
         return redirect(ing_path)
@@ -182,17 +183,16 @@ def get_note():
 
 @note.route('/delete', methods=['GET', 'DELETE'])
 def delete_note(id=None):
-    if not id:
+    if id is None:
         id = request.args.get('id')
-
-    if not id:
-        return jsonify({"Error": "No id sent in request!"}), 400
+        if id is None:
+            return jsonify({"Error": "No id sent in request!"}), 400
 
     conn = db.create_connection()
     try:
-        db.delete_note(conn, id)
+        db.delete_note(conn, str(id))
     except Exception as e:
-        return jsonify({"Error": e}), 500
+        return jsonify({"Error": str(e)}), 500
 
     return jsonify({"Success": "Note Deleted!"}), 204
 

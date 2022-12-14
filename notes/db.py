@@ -85,7 +85,7 @@ def delete_note(conn, id):
     query = "DELETE FROM notes WHERE id = " + id
     cur = conn.cursor()
 
-    note.logger.info("Deleting Note #%s", id)
+    note.logger.info("Deleting Note with id: %s", id)
     cur.execute(query, multi=True)
 
     conn.commit()
