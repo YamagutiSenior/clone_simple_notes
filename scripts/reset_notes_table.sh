@@ -6,7 +6,7 @@ DB_NAME='staging'
 USER=root
 EXISTS_CMD="SELECT * FROM information_schema.tables WHERE table_schema = '$DB_NAME' AND table_name = 'notes' LIMIT 1;"
 DROP_CMD="DROP TABLE notes;"
-CREATE_CMD="CREATE TABLE IF NOT EXISTS notes (id integer NOT NULL AUTO_INCREMENT, data text, ipaddress text, hostname text, PRIMARY KEY (id));"
+CREATE_CMD="CREATE TABLE IF NOT EXISTS notes (id integer NOT NULL AUTO_INCREMENT, data text, ipaddress text, hostname text, secret boolean, PRIMARY KEY (id));"
 
 # Check if table exists
 EXISTS=$($DB_CLIENT -u $USER --password=$DB_ROOT_PWD -h $DB_SERVER -e "$EXISTS_CMD")

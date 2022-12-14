@@ -35,9 +35,6 @@ def index():
                 note.logger.error(e)
 
     add_form = AddForm()
-    delete_form = DeleteForm()
-    admin_form = AdminForm()
-
     if add_form.validate_on_submit():
         try:
             result = add_note(add_form.note_field.data)
@@ -54,6 +51,7 @@ def index():
 
         return redirect(ing_path)
 
+    delete_form = DeleteForm()
     if delete_form.validate_on_submit():
         try:
             result = delete_note(delete_form.id_field.data)
@@ -70,6 +68,7 @@ def index():
 
         return redirect(ing_path)
 
+    admin_form = AdminForm()
     if admin_form.validate_on_submit():
         return redirect(ing_path + '/admin')
     
@@ -107,6 +106,21 @@ def admin():
             except Exception as e:
                 note.logger.error(e)
 
+    add_form = AddForm()
+    if add_form.validate_on_submit():
+        try:
+            result = add_note(add_form.note_field.data, True)
+
+            if result[1] == 200:
+                flash('Note "{}" has been added!'.format(
+                    add_form.note_field.data))
+            else:
+                flash('Failed to add Note "{}": {}'.format(
+                    add_form.note_field.data, "Check Logs"))
+        except Exception as e:
+            flash('Failed to add Note "{}": {}'.format(
+                add_form.note_field.data, e))
+
     reset_form = ResetForm()
     if reset_form.validate_on_submit():
         try:
@@ -131,7 +145,7 @@ def verify_password(username, password):
         return username
 
 @note.route('/add', methods=['GET', 'POST'])
-def add_note(msg=""):
+def add_note(msg="", admin=False):
     if not msg:
         data = request.get_json(force=True)
         msg = data.get('message')
@@ -163,7 +177,7 @@ def add_note(msg=""):
     conn = db.create_connection()
     try:
         note.logger.info("Attempting to add note with msg: {}, ipaddress: {}, hostname: {}".format(msg, ip_address, hostname))
-        db.create_note(conn, msg, ip_address, hostname)
+        db.create_note(conn, msg, ip_address, hostname, admin)
         return jsonify({"Success": "Note added!"}), 200
     except Exception as e:
         err = "%s" % e

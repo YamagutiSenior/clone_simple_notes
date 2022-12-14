@@ -64,8 +64,8 @@ def drop_table(conn, drop_table_sql):
 
     conn.close()
 
-def create_note(conn, notes, ip_address, hostname):
-    query = "INSERT INTO notes (data, ipaddress, hostname) VALUES ('{}', '{}', '{}');".format(str(notes), str(ip_address), str(hostname))
+def create_note(conn, notes, ip_address, hostname, admin=False):
+    query = "INSERT INTO notes (data, ipaddress, hostname, secret) VALUES ('{}', '{}', '{}', {});".format(str(notes), str(ip_address), str(hostname), str(admin))
     cur = conn.cursor()
 
     note.logger.info("Adding Note '{}'".format(str(notes)))
@@ -81,25 +81,31 @@ def create_note(conn, notes, ip_address, hostname):
     return lastRowId
 
 def delete_note(conn, id):
-    # NOTE: Vulnerable to SQL injection
     query = "DELETE FROM notes WHERE id = " + id
     cur = conn.cursor()
 
     note.logger.info("Deleting Note with id: %s", id)
-    cur.execute(query, multi=True)
 
+    try:
+        cur.execute(query)
+    except Exception as e:
+        note.logger.error("Error deleting note: %s" % e)
+    
     conn.commit()
     conn.close()
 
 def select_note_by_id(conn, id=None, admin=False):
-    query = "SELECT id, data FROM notes"
+    query = "SELECT id, data FROM notes WHERE secret IS FALSE"
     cur = conn.cursor()
 
+    if id:
+        # NOTE: Vulnerable to SQL injection
+        query = query + " AND WHERE id = %s" % id
+
+    # Admin doesn't have search by id function,
+    # since only used in the UI
     if admin:
         query = "SELECT id, data, ipaddress, hostname FROM notes"
-
-    if id:
-        query = query + " WHERE id = %s" % id
 
     try:
         cur.execute(query)

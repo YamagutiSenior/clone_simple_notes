@@ -60,6 +60,18 @@
             {% endfor %}
 
             <hr>
+            
+            <h3>Add a secret note</h3>
+            <form class="form-inline" action="" method="post" novalidate>
+                {{ add_form.hidden_tag() }}
+                <p>
+                    {{ add_form.note_field.label }}
+                    {{ add_form.note_field(size=32) }}
+                    {{ add_form.add() }}
+                </p>
+            </form>
+
+            <hr>
 
             <h3>Reset Database Table</h3>
             <form class="form-inline" action="" method="post" novalidate>
