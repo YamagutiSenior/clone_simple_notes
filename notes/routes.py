@@ -72,13 +72,16 @@ def index():
     if admin_form.validate_on_submit():
         return redirect(ing_path + '/admin')
     
-    return render_template('index.html', notes=arr, add_form=add_form, delete_form=delete_form, admin_form=admin_form, gitlab_logo=logo)
+    return render_template('index.html',
+                            notes=arr,
+                            add_form=add_form,
+                            delete_form=delete_form,
+                            admin_form=admin_form,
+                            gitlab_logo=logo)
 
 @note.route('/admin', methods=['GET', 'POST'])
 @auth.login_required
-def admin():
-    logo = os.path.join(note.config['IMAGE_FOLDER'], 'gitlab-logo-100.png')
-    
+def admin(): 
     conn = db.create_connection() 
     ing_path = "/" + os.environ.get("NOTES_ING_PATH")
 
@@ -109,13 +112,16 @@ def admin():
             result = reset()
             if result:
                 flash('Database Table "{}" has been reset!'.format("notes"))
-                return redirect(ing_path + '/admin')
             else:
                 flash('Database Table "{}" Failed to reset: Check Logs'.format("notes"))
         except Exception as e:
             flash('Database Table "{}" Failed to reset: {}}'.format("notes", e))
+        
+        return redirect(ing_path + '/admin')
     
-    return render_template('admin.html', notes=arr, reset_form=reset_form, gitlab_logo=logo)
+    return render_template('admin.html',
+                            notes=arr,
+                            reset_form=reset_form)
 
 @auth.verify_password
 def verify_password(username, password):
@@ -185,9 +191,10 @@ def delete_note(id=None):
     conn = db.create_connection()
     try:
         db.delete_note(conn, id)
-        return jsonify({"Success": "Note Deleted!"}), 204
     except Exception as e:
         return jsonify({"Error": e}), 500
+
+    return jsonify({"Success": "Note Deleted!"}), 204
 
 def reset():
     conn = db.create_connection()

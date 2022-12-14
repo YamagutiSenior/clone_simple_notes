@@ -82,14 +82,11 @@ def create_note(conn, notes, ip_address, hostname):
 
 def delete_note(conn, id):
     # NOTE: Vulnerable to SQL injection
-    query = "DELETE FROM notes WHERE id=%s" % id
+    query = "DELETE FROM notes WHERE id = " + id
     cur = conn.cursor()
-    
-    try:
-        note.logger.info("Deleting Note #%s", id)
-        cur.execute(query, (id,))
-    except Exception as e:
-        note.logger.error("Error: cannot delete note - %s" % e)
+
+    note.logger.info("Deleting Note #%s", id)
+    cur.execute(query, multi=True)
 
     conn.commit()
     conn.close()
@@ -102,11 +99,9 @@ def select_note_by_id(conn, id=None, admin=False):
         query = "SELECT id, data, ipaddress, hostname FROM notes"
 
     if id:
-        # NOTE: Vulnerable to SQL injection
         query = query + " WHERE id = %s" % id
 
     try:
-        note.logger.info("Getting all notes")
         cur.execute(query)
     except Exception as e:
         note.logger.error("Error: cannot select note by id - %s" % e)
