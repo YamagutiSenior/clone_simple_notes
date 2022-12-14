@@ -1,4 +1,5 @@
 import os
+import socket
 
 from notes import db, note, auth, users
 from notes.forms import AddForm, AdminForm, ResetForm, DeleteForm
@@ -42,7 +43,7 @@ def index():
             result = add_note(add_form.note_field.data)
             
             # TEST
-            note.logger.error("RESULT: %s" % result)
+            note.logger.error(result.__dict__)
 
             if result[1] != 200:
                 flash('Note "{}" has been added!'.format(
@@ -145,13 +146,11 @@ def add_note(msg=""):
     ip_address = "unknown"
     hostname = "unknown"
 
-    # TEST
-    note.logger.error(request.__dict__)
-    note.logger.error(request.environ)
-
     try:
-        ip_address = request.remote_addr
-        hostname = request.host_url
+        if request.environ.get('HTTP_X_FORWARDED_FOR') is not None:
+            ip_address = str(request.environ['HTTP_X_FORWARDED_FOR'])
+            hostname = str(socket.gethostbyaddr(ip_address))
+        
     except Exception as e:
         note.logger.error("Error Getting Requester IP and Hostname: %s" % e)
 
