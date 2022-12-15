@@ -1,5 +1,6 @@
 {% extends 'bootstrap/base.html' %}
-{% block title %}Simple Notes{% endblock %}
+{% block title %}Simple Notes - Basic Mode{% endblock %}
+
 <html>
     {% block content %}
     <head>
@@ -26,14 +27,22 @@
             center {
                 text-align: center;
             }
+            .notekey p {
+                font: small-caps bold 1.5rem sans-serif;
+                margin: 10px 0;
+                padding: 5px;
+                border: 1px solid #999;
+            }
         </style>
     </head>
 
     <body>
         <center>
-            <h1>Simple Notes</h1>
+            <h1>Simple Notes - Basic Mode</h1>
 
-            <img src="{{ gitlab_logo }}" alt="GitLab Logo">
+            <p>
+                Your access is basic, no secrets or nada. Don't throw bricks (🧱)
+            </p>
             
             {% with messages = get_flashed_messages() %}
             {% if messages %}
@@ -49,11 +58,17 @@
 
             <h3><b>Notes</b></h3>
 
-            <h4>id | note</h4>
+            <div class="notekey">
+                <p>
+                    <b>key</b>
+                    <br>
+                    | id | note |
+                </p>
+            </div>
+
             <br>
             {% for note in notes %}
                 <div><p><b>{{ note }}</b></p></div>
-                <br>
             {% endfor %}
 
             <hr>
@@ -70,7 +85,7 @@
 
             <hr>
 
-            <h3>Delete an old note</h3>
+            <h3>Delete a note</h3>
             <form class="form-inline" action="" method="post" novalidate>
                 {{ delete_form.hidden_tag() }}
                 <p>
@@ -82,7 +97,7 @@
 
             <hr>
 
-            <h3>Admin?</h3>
+            <h3>You an 'Admin' Bro?</h3>
             <form class="form-inline" action="" method="post" novalidate>
                 {{ admin_form.hidden_tag() }}
                 <p>

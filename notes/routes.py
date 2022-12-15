@@ -100,8 +100,9 @@ def admin():
                 _note = item[1]
                 _ip_address = item[2]
                 _hostname = item[3]
+                _secret = str(item[4])
 
-                note_str = '%s | %s | %s | %s' % (_id, _note, _ip_address, _hostname)
+                note_str = '| %s | %s | %s | %s | %s |' % (_id, _note, _ip_address, _hostname, _secret)
                 arr.append(note_str)
             except Exception as e:
                 note.logger.error(e)
@@ -120,6 +121,25 @@ def admin():
         except Exception as e:
             flash('Failed to add Note "{}": {}'.format(
                 add_form.note_field.data, e))
+        
+        return redirect(ing_path + '/admin')
+
+    delete_form = DeleteForm()
+    if delete_form.validate_on_submit():
+        try:
+            result = delete_note(delete_form.id_field.data)
+
+            if result[1] == 204:
+                flash('Note "#{}" has been Deleted!'.format(
+                    delete_form.id_field.data))
+            else:
+                flash('Failed to delete Note with id "{}": {}'.format(
+                    delete_form.id_field.data, "Check Logs"))
+        except Exception as e:
+            flash('Failed to delete Note with id "{}": {}'.format(
+                delete_form.id_field.data, e))
+
+        return redirect(ing_path + '/admin')
 
     reset_form = ResetForm()
     if reset_form.validate_on_submit():
@@ -136,6 +156,8 @@ def admin():
     
     return render_template('admin.html',
                             notes=arr,
+                            add_form=add_form,
+                            delete_form=delete_form,
                             reset_form=reset_form)
 
 @auth.verify_password

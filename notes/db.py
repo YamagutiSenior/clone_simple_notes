@@ -81,6 +81,7 @@ def create_note(conn, notes, ip_address, hostname, admin=False):
     return lastRowId
 
 def delete_note(conn, id):
+    # NOTE: Vulnerable to SQL injection
     query = "DELETE FROM notes WHERE id = " + id
     cur = conn.cursor()
 
@@ -105,7 +106,7 @@ def select_note_by_id(conn, id=None, admin=False):
     # Admin doesn't have search by id function,
     # since only used in the UI
     if admin:
-        query = "SELECT id, data, ipaddress, hostname FROM notes"
+        query = "SELECT id, data, ipaddress, hostname, secret FROM notes"
 
     try:
         cur.execute(query)

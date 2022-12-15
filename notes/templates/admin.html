@@ -27,6 +27,12 @@
             center {
                 text-align: center;
             }
+            .notekey p {
+                font: small-caps bold 1.5rem sans-serif;
+                margin: 10px 0;
+                padding: 5px;
+                border: 1px solid #999;
+            }
         </style>
     </head>
 
@@ -35,7 +41,7 @@
             <h1>Simple Notes - Admin Mode</h1>
 
             <p>
-                You are now in control.
+                You are now in control. Feel the power 🔋.
             </p>
 
             {% with messages = get_flashed_messages() %}
@@ -52,11 +58,17 @@
 
             <h3><b>Notes</b></h3>
 
-            <h4>id | note | ipaddress | hostname</h4>
+            <div class="notekey">
+                <p>
+                    <b>key</b>
+                    <br>
+                    | id | note | ipaddress | hostname | *secret |
+                </p>
+            </div>
+
             <br>
             {% for note in notes %}
                 <div><p><b>{{ note }}</b></p></div>
-                <br>
             {% endfor %}
 
             <hr>
@@ -68,6 +80,18 @@
                     {{ add_form.note_field.label }}
                     {{ add_form.note_field(size=32) }}
                     {{ add_form.add() }}
+                </p>
+            </form>
+
+            <hr>
+
+            <h3>Delete a note</h3>
+            <form class="form-inline" action="" method="post" novalidate>
+                {{ delete_form.hidden_tag() }}
+                <p>
+                    {{ delete_form.id_field.label }}
+                    {{ delete_form.id_field(size=2) }}
+                    {{ delete_form.delete() }}
                 </p>
             </form>
 
