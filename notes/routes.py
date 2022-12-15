@@ -130,7 +130,7 @@ def admin():
             result = delete_note(delete_form.id_field.data, True)
 
             if result[1] == 204:
-                flash('Note "#{}" has been Deleted!'.format(
+                flash('Note with id "{}" has been Deleted!'.format(
                     delete_form.id_field.data))
             else:
                 flash('Failed to delete Note with id "{}": {}'.format(
@@ -226,9 +226,9 @@ def delete_note(id=None, admin=False):
 
     conn = db.create_connection()
     try:
-        rows_affected = db.delete_note(conn, str(id), admin)
-        if rows_affected:
-            return jsonify({"Error": "No rows were affected, Check Logs,"}), 400
+        deleted = db.delete_note(conn, str(id), admin)
+        if not deleted:
+            return jsonify({"Error": "No rows were affected, Check Logs,"}), 500
     except Exception as e:
         return jsonify({"Error": str(e)}), 500
 
