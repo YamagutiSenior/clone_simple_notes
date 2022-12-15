@@ -91,24 +91,13 @@ def delete_note(conn, id, admin=False):
 
     note.logger.info("Deleting Note with id: %s", id)
 
-    # Start deleting the note
     try:
         cur.execute(query)
-        conn.commit()
     except Exception as e:
         note.logger.error("Failed to delete note with id '': %s" % e)
-        return None
-
-    # See if note was deleted
-    try:
-        cur.execute("SELECT id, data FROM notes WHERE id = %s", id)
-    except Exception as e:
-        note.logger.error("Failed to delete note with id '': %s" % e)
-        return None
     
-    allItems = cur.fetchall()
+    conn.commit()
     conn.close()
-    return allItems
 
 def select_note_by_id(conn, id=None, admin=False):
     query = "SELECT id, data FROM notes WHERE secret IS FALSE"

@@ -224,16 +224,34 @@ def delete_note(id=None, admin=False):
         if id is None:
             return jsonify({"Error": "No id sent in request!"}), 400
 
-    items = []
+    # Check if item exists
     conn = db.create_connection()
-
+    items = []
     try:
-        items = str(db.delete_note(conn, str(id), admin))
+        items = db.select_note_by_id(conn, id, True)
     except Exception as e:
         return jsonify({"Error": str(e)}), 500
 
-    if len(items) == 0:
-        return jsonify({"Error": "no items detected"}), 500
+    # Delete the note
+    if len(items) > 0:
+        conn2 = db.create_connection()
+        try:
+            db.delete_note(conn2, str(id), admin)
+        except Exception as e:
+            return jsonify({"Error": str(e)}), 500
+    else:
+        return jsonify({"Error": "No note detected, Check Logs"}), 500
+
+    # Verify if item was deleted
+    conn3 = db.create_connection()
+    items = []
+    try:
+        items = db.select_note_by_id(conn3, id, True)
+    except Exception as e:
+        return jsonify({"Error": str(e)}), 500
+
+    if len(items) != 0:
+        return jsonify({"Error": "Note still exists"}), 500
 
     return jsonify({"Success": "Note Deleted!"}), 204
 
