@@ -85,6 +85,7 @@ def delete_note(conn, id, admin=False):
     # by passing id as '1) OR id=1'
     query = "DELETE FROM notes WHERE (SECRET is FALSE AND id = " + id + ");"
     cur = conn.cursor()
+    rows_affected = 0
 
     if admin:
         query = "DELETE FROM notes WHERE id = " + id
@@ -93,6 +94,8 @@ def delete_note(conn, id, admin=False):
 
     try:
         cur.execute(query)
+        cur.fetchall()
+        rows_affected = cur.rowcount
         # TODO: Return if anything was actually edited
         # SO we can have the correct message
     except Exception as e:
@@ -102,7 +105,7 @@ def delete_note(conn, id, admin=False):
     conn.close()
 
     # Return if any rows were actually affected
-    return cur.rowcount
+    return rows_affected
 
 def select_note_by_id(conn, id=None, admin=False):
     query = "SELECT id, data FROM notes WHERE secret IS FALSE"
