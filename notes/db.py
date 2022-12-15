@@ -93,11 +93,16 @@ def delete_note(conn, id, admin=False):
 
     try:
         cur.execute(query)
+        # TODO: Return if anything was actually edited
+        # SO we can have the correct message
     except Exception as e:
         note.logger.error("Error deleting note: %s" % e)
     
     conn.commit()
     conn.close()
+
+    # Return if any rows were actually affected
+    return cur.rowcount
 
 def select_note_by_id(conn, id=None, admin=False):
     query = "SELECT id, data FROM notes WHERE secret IS FALSE"
