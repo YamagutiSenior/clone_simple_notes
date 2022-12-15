@@ -91,46 +91,24 @@ def delete_note(conn, id, admin=False):
 
     note.logger.info("Deleting Note with id: %s", id)
 
-    # See if note even exists
-    try:
-        cur.execute("SELECT * FROM notes WHERE id = " + id)
-
-        #TEST
-        note.logger.info("1: %s", cur.__dict__)
-
-        if cur.fetchone() is None:
-            note.logger.error("Note with id '%s' does not exist", id)
-            return False
-    except Exception as e:
-        note.logger.error("Failed to delete note with id '': %s" % e)
-        return False
-
     # Start deleting the note
     try:
         cur.execute(query)
         conn.commit()
     except Exception as e:
         note.logger.error("Failed to delete note with id '': %s" % e)
-        return False
+        return None
 
     # See if note was deleted
     try:
         cur.execute("SELECT id, data FROM notes WHERE id = %s", id)
-        allItems = cur.fetchall()
-        
-        #TEST
-        note.logger.info("2: %s", cur.__dict__)
-        note.logger.info("3: %s", str(allItems))
-
-        if allItems is not None:
-            note.logger.error("Note with id '%s' still exists", id)
-            return False
     except Exception as e:
         note.logger.error("Failed to delete note with id '': %s" % e)
-        return False
+        return None
     
+    allItems = cur.fetchall()
     conn.close()
-    return True
+    return allItems
 
 def select_note_by_id(conn, id=None, admin=False):
     query = "SELECT id, data FROM notes WHERE secret IS FALSE"
