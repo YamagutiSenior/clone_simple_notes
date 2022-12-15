@@ -33,6 +33,13 @@
                 padding: 5px;
                 border: 1px solid #999;
             }
+            .messages {
+                border: 10px ridge #f00;
+                background-color: #ff0;
+                padding: .5rem;
+                display: flex;
+                flex-direction: column;
+            }
         </style>
     </head>
 
@@ -44,15 +51,15 @@
                 Your access is basic, no secrets or nada. Don't throw bricks (🧱)
             </p>
             
-            {% with messages = get_flashed_messages() %}
-            {% if messages %}
-            <ul>
-                {% for message in messages %}
-                <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-            {% endwith %}
+            <div class="messages">
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        {% for message in messages %}
+                            {{ message }}
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>
 
             <hr>
 

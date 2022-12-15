@@ -80,10 +80,14 @@ def create_note(conn, notes, ip_address, hostname, admin=False):
     
     return lastRowId
 
-def delete_note(conn, id):
-    # NOTE: Vulnerable to SQL injection
-    query = "DELETE FROM notes WHERE id = " + id
+def delete_note(conn, id, admin=False):
+    # NOTE: Vulnerable to SQL injection, can delete secret notes 
+    # by passing id as '1) OR id=1'
+    query = "DELETE FROM notes WHERE (SECRET is FALSE AND id = " + id + ");"
     cur = conn.cursor()
+
+    if admin:
+        query = "DELETE FROM notes WHERE id = " + id
 
     note.logger.info("Deleting Note with id: %s", id)
 
@@ -100,7 +104,8 @@ def select_note_by_id(conn, id=None, admin=False):
     cur = conn.cursor()
 
     if id:
-        # NOTE: Vulnerable to SQL injection
+        # NOTE: Vulnerable to SQL injection, can get secret notes
+        # by adding 'OR 1=1'
         query = query + " AND WHERE id = %s" % id
 
     # Admin doesn't have search by id function,

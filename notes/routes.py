@@ -127,7 +127,7 @@ def admin():
     delete_form = DeleteForm()
     if delete_form.validate_on_submit():
         try:
-            result = delete_note(delete_form.id_field.data)
+            result = delete_note(delete_form.id_field.data, True)
 
             if result[1] == 204:
                 flash('Note "#{}" has been Deleted!'.format(
@@ -218,7 +218,7 @@ def get_note():
         return jsonify({"Error": e}), 500
 
 @note.route('/delete', methods=['GET', 'DELETE'])
-def delete_note(id=None):
+def delete_note(id=None, admin=False):
     if id is None:
         id = request.args.get('id')
         if id is None:
@@ -226,7 +226,7 @@ def delete_note(id=None):
 
     conn = db.create_connection()
     try:
-        db.delete_note(conn, str(id))
+        db.delete_note(conn, str(id), admin)
     except Exception as e:
         return jsonify({"Error": str(e)}), 500
 
