@@ -94,7 +94,11 @@ def delete_note(conn, id, admin=False):
     # See if note even exists
     try:
         cur.execute("SELECT * from notes WHERE id = " + id)
-        if not cur.fetchone():
+
+        #TEST
+        note.logger.info("1: %s", cur.__dict__)
+
+        if cur.fetchone() is None:
             note.logger.error("Note with id '%s' does not exist", id)
             return False
     except Exception as e:
@@ -103,21 +107,24 @@ def delete_note(conn, id, admin=False):
     # Start deleting the note
     try:
         cur.execute(query)
+        conn.commit()
     except Exception as e:
         note.logger.error("Error deleting note: %s" % e)
 
     # See if note was deleted
     try:
         cur.execute("SELECT * from notes WHERE id = " + id)
-        if cur.fetchone():
+        
+        #TEST
+        note.logger.info("2: %s", cur.__dict__)
+
+        if cur.fetchone() is not None:
             note.logger.error("Note with id '%s' still exists", id)
             return False
     except Exception as e:
         note.logger.error("Error deleting note: %s" % e)
     
-    conn.commit()
     conn.close()
-
     return True
 
 def select_note_by_id(conn, id=None, admin=False):
