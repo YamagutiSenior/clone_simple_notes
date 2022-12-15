@@ -85,26 +85,40 @@ def delete_note(conn, id, admin=False):
     # by passing id as '1) OR id=1'
     query = "DELETE FROM notes WHERE (SECRET is FALSE AND id = " + id + ");"
     cur = conn.cursor()
-    rows_affected = 0
 
     if admin:
         query = "DELETE FROM notes WHERE id = " + id
 
     note.logger.info("Deleting Note with id: %s", id)
 
+    # See if note even exists
     try:
-        rows_affected = cur.execute(query).rowcount
-        note.logger.info("ROWS AFFECTED: %s", rows_affected)
-        note.logger.info(cur.__dict__)
-        
+        cur.execute("SELECT * from notes WHERE id = " + id)
+        if not cur.fetchone():
+            note.logger.error("Note with id '%s' does not exist", id)
+            return False
+    except Exception as e:
+        note.logger.error("Error deleting note: %s" % e)
+
+    # Start deleting the note
+    try:
+        cur.execute(query)
+    except Exception as e:
+        note.logger.error("Error deleting note: %s" % e)
+
+    # See if note was deleted
+    try:
+        cur.execute("SELECT * from notes WHERE id = " + id)
+        if cur.fetchone():
+            note.logger.error("Note with id '%s' still exists", id)
+            return False
     except Exception as e:
         note.logger.error("Error deleting note: %s" % e)
     
     conn.commit()
     conn.close()
 
-    # Return if any rows were actually affected
-    return rows_affected
+    return True
 
 def select_note_by_id(conn, id=None, admin=False):
     query = "SELECT id, data FROM notes WHERE secret IS FALSE"

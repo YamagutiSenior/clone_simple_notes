@@ -227,8 +227,8 @@ def delete_note(id=None, admin=False):
     conn = db.create_connection()
     try:
         rows_affected = db.delete_note(conn, str(id), admin)
-        if rows_affected <= 0:
-            return jsonify({"Error": "No rows were affected, maybe 'id' is incorrect"}), 400
+        if rows_affected:
+            return jsonify({"Error": "No rows were affected, Check Logs,"}), 400
     except Exception as e:
         return jsonify({"Error": str(e)}), 500
 
