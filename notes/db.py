@@ -106,7 +106,7 @@ def select_note_by_id(conn, id=None, admin=False):
     if id:
         # NOTE: Vulnerable to SQL injection, can get secret notes
         # by adding 'OR 1=1'
-        query = query + " AND WHERE id = %s" % id
+        query = query + " AND id = %s" % id
 
     # Admin doesn't have search by id function,
     # since only used in the UI
