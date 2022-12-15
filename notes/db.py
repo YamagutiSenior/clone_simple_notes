@@ -93,11 +93,10 @@ def delete_note(conn, id, admin=False):
     note.logger.info("Deleting Note with id: %s", id)
 
     try:
-        cur.execute(query)
-        cur.fetchall()
-        rows_affected = cur.rowcount
-        # TODO: Return if anything was actually edited
-        # SO we can have the correct message
+        rows_affected = cur.execute(query).rowcount
+        note.logger.info("ROWS AFFECTED: %s", rows_affected)
+        note.logger.info(cur.__dict__)
+        
     except Exception as e:
         note.logger.error("Error deleting note: %s" % e)
     
