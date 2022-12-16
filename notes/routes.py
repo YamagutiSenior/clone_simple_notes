@@ -250,11 +250,12 @@ def delete_note(id=None, admin=False):
     except Exception as e:
         return jsonify({"Error": str(e)}), 500
 
+    # TEST
     note.logger.info("ITEMS: {}".format(items))
     note.logger.info("ITEMS-LEN: {}".format(len(items)))
     note.logger.info("ITEMS-DICT: {}".format(items.__dict__))
 
-    if len(items) < 1:
+    if len(items) > 1:
         return jsonify({"Error": "Note still exists"}), 500
 
     return jsonify({"Success": "Note Deleted!"}), 204
