@@ -14,11 +14,11 @@ def index():
 
     items = []
 
-    conn = db.create_connection()
+    #conn = db.create_connection()
     ing_path = "/" + os.environ.get("NOTES_ING_PATH")
 
     try:
-        items = db.select_note_by_id(conn, None, False)
+        items = get_note() #db.select_note_by_id(conn, None, False)
     except Exception as e:
         flash('Error generating notes: Check Logs')
         note.logger.error("Error Generating Notes: %s" % e)
@@ -82,12 +82,12 @@ def index():
 @note.route('/admin', methods=['GET', 'POST'])
 @auth.login_required
 def admin(): 
-    conn = db.create_connection() 
+    #conn = db.create_connection() 
     ing_path = "/" + os.environ.get("NOTES_ING_PATH")
 
     items = []
     try:
-        items = db.select_note_by_id(conn, None, True)
+        items = get_note_admin() #db.select_note_by_id(conn, None, True)
     except Exception as e:
         flash('Error generating notes: Check Logs')
         note.logger.error("Error generating notes: %s" % e)
@@ -110,7 +110,7 @@ def admin():
     add_form = AddForm()
     if add_form.validate_on_submit():
         try:
-            result = add_note(add_form.note_field.data, True)
+            result = add_note_admin(add_form.note_field.data) #add_note(add_form.note_field.data, True)
 
             if result[1] == 200:
                 flash('Note "{}" has been added!'.format(
@@ -127,7 +127,7 @@ def admin():
     delete_form = DeleteForm()
     if delete_form.validate_on_submit():
         try:
-            result = delete_note(delete_form.id_field.data, True)
+            result = delete_note_admin(delete_form.id_field.data)#delete_note(delete_form.id_field.data, True)
 
             if result[1] == 204:
                 flash('Note with id "{}" has been Deleted!'.format(
@@ -166,7 +166,7 @@ def verify_password(username, password):
             check_password_hash(users.get(username), password):
         return username
 
-@note.route('/add', methods=['GET', 'POST'])
+@note.route('/api', methods=['POST'])
 def add_note(msg="", admin=False):
     if not msg:
         data = request.get_json(force=True)
@@ -205,19 +205,29 @@ def add_note(msg="", admin=False):
         err = "%s" % e
         return jsonify({"Error": err}), 500
 
-@note.route('/get', methods=['GET'])
-def get_note():
+@note.route('/api/admin', methods=['POST'])
+@auth.login_required
+def add_note_admin(msg=""):
+    return add_note(msg=msg, admin=True)
+
+@note.route('/api', methods=['GET'])
+def get_note(admin=False):
     id = request.args.get('id')
     conn = db.create_connection()
 
     try:
-        result = str(db.select_note_by_id(conn, id))
+        result = str(db.select_note_by_id(conn, id, admin))
         return jsonify({"Note": result}), 200
     except Exception as e:
         note.logger.error("Error Getting Notes: %s" % e)
         return jsonify({"Error": e}), 500
 
-@note.route('/delete', methods=['GET', 'DELETE'])
+@note.route('/api/admin', methods=['GET'])
+@auth.login_required
+def get_note_admin():
+    return get_note(admin=True)
+
+@note.route('/delete', methods=['DELETE'])
 def delete_note(id=None, admin=False):
     if id is None:
         id = request.args.get('id')
@@ -254,6 +264,11 @@ def delete_note(id=None, admin=False):
         return jsonify({"Error": "Note still exists"}), 500
 
     return jsonify({"Success": "Note Deleted!"}), 204
+
+@note.route('/api/admin', methods=['DELETE'])
+@auth.login_required
+def delete_note_admin(id=None):
+    return delete_note(id, admin=True)
 
 def reset():
     conn = db.create_connection()

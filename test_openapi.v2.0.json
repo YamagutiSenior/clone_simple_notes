@@ -17,7 +17,7 @@
     "application/json"
   ],
   "paths": {
-    "/add": {
+    "/api": {
       "post": {
         "description": "User provides a note to add to the database",
         "summary": "POST api to create a note",
