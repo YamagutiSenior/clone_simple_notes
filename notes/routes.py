@@ -209,7 +209,7 @@ def add_note_admin(msg=""):
     return add_note(msg=msg, admin=True)
 
 @note.route('/api', methods=['GET'])
-def get_note(admin=False):
+def get_note(id=None, admin=False):
     id = request.args.get('id')
     conn = db.create_connection()
 
@@ -222,8 +222,9 @@ def get_note(admin=False):
 
 @note.route('/api/admin', methods=['GET'])
 @auth.login_required
-def get_note_admin():
-    return get_note(admin=True)
+def get_note_admin(id=None):
+    id = request.args.get('id')
+    return get_note(id, admin=True)
 
 @note.route('/api', methods=['DELETE'])
 def delete_note(id=None, admin=False):
@@ -258,7 +259,7 @@ def delete_note(id=None, admin=False):
     except Exception as e:
         return jsonify({"Error": str(e)}), 500
 
-    if len(items) > 1:
+    if len(items) > 0:
         return jsonify({"Error": "Note still exists"}), 500
 
     return jsonify({"Success": "Note Deleted!"}), 204

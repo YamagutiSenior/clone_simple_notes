@@ -33,6 +33,7 @@ build:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY 
   script:
     - if [ $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH ]; then sh scripts/delete_latest.sh; IMAGE=$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest; fi
+    - if [ $CI_COMMIT_REF_NAME == staging ]; then sh scripts/delete_latest.sh; IMAGE=$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:staging; fi
     - docker build -t $IMAGE .
     - docker push "$IMAGE"
 
@@ -91,6 +92,7 @@ container_scanning:
     RUNNER_GENERATE_ARTIFACTS_METADATA: "true" 
   before_script:
     - if [ $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH ]; then CS_IMAGE=$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest; fi
+    - if [ $CI_COMMIT_REF_NAME == staging ]; then CS_IMAGE=$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:staging; fi
 
 license_scanning:
   variables:
@@ -116,7 +118,7 @@ deploy-staging:
   stage: staging
   variables:
     HELM_HOST: "localhost:44134"
-    IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
+    IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:staging
   before_script:
     - kubectl config use-context $CI_PROJECT_PATH:simplenotes
     - sh scripts/install_ingress.sh
@@ -124,7 +126,6 @@ deploy-staging:
     - sh scripts/install_echo.sh
   script:
     - kubectl config use-context $CI_PROJECT_PATH:simplenotes
-    - if [ $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH ]; then IMAGE=$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest; fi
     - helm upgrade --install notes-staging helm -f helm/values.yaml --set image=$IMAGE --set notes.name=notes-staging --set notes.path=notes-staging --set notes.dbName=staging --set restrictednginx.name=restricted-nginx-staging
     - kubectl rollout restart deployment notes-staging -n default
   after_script:
@@ -142,6 +143,8 @@ deploy-staging:
       dotenv: deploy.env
   dependencies:
     - build
+  rules:
+    - if: $CI_COMMIT_REF_NAME == staging
 
 dast:
   stage: dast
@@ -188,14 +191,13 @@ deploy-production:
   stage: production
   variables:
     HELM_HOST: "localhost:44134"
-    IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
+    IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest
   before_script:
     - kubectl config use-context $CI_PROJECT_PATH:simplenotes
     - sh scripts/install_ingress.sh
     - sh scripts/install_mariadb.sh
   script:
     - kubectl config use-context $CI_PROJECT_PATH:simplenotes
-    - if [ $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH ]; then IMAGE=$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest; fi
     - helm upgrade --install notes-production helm -f helm/values.yaml --set image=$IMAGE
     - kubectl rollout restart deployment notes-production -n default
   after_script:
