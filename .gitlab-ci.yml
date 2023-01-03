@@ -6,6 +6,7 @@ services:
 stages:
   - build
   - test
+  - feature
   - staging
   - dast
   - apifuzz
@@ -28,12 +29,12 @@ include:
 build:
   stage: build
   variables:
-    IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA 
+    IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_REF_NAME
   before_script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY 
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
     - if [ $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH ]; then sh scripts/delete_latest.sh; IMAGE=$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest; fi
-    - if [ $CI_COMMIT_REF_NAME == staging ]; then sh scripts/delete_latest.sh; IMAGE=$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:staging; fi
+    - if [ $CI_COMMIT_REF_NAME == 'staging' ]; then sh scripts/delete_latest.sh; IMAGE=$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:staging; fi
     - docker build -t $IMAGE .
     - docker push "$IMAGE"
 
@@ -113,6 +114,40 @@ coverage-guided-fuzzing:
     - pip install --extra-index-url https://gitlab.com/api/v4/projects/19904939/packages/pypi/simple pythonfuzz
     - ./gitlab-cov-fuzz run --engine pythonfuzz -- fuzz.py
 
+deploy-feature:
+  image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image:helm-3.10.0-kube-1.24.6-alpine-3.15
+  stage: feature
+  variables:
+    HELM_HOST: "localhost:44134"
+    IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_REF_NAME
+  before_script:
+    - kubectl config use-context $CI_PROJECT_PATH:simplenotes
+    - sh scripts/install_ingress.sh
+    - sh scripts/install_mariadb.sh
+    - sh scripts/install_echo.sh
+  script:
+    - kubectl config use-context $CI_PROJECT_PATH:simplenotes
+    - helm upgrade --install notes-staging helm -f helm/values.yaml --set image=$IMAGE --set notes.name=notes-$CI_COMMIT_REF_NAME --set notes.path=notes-$CI_COMMIT_REF_NAME --set notes.dbName=$CI_COMMIT_REF_NAME --set restrictednginx.name=restricted-nginx-$CI_COMMIT_REF_NAME
+    - kubectl rollout restart deployment notes-$CI_COMMIT_REF_NAME -n default
+  after_script:
+    - kubectl config use-context $CI_PROJECT_PATH:simplenotes
+    - echo "DAST_WEBSITE=http://$(kubectl get svc -n ingress-nginx | grep LoadBalancer | awk '{print $4}')/notes-staging" >> deploy.env
+    - echo "DAST_API_TARGET_URL=http://$(kubectl get svc -n ingress-nginx | grep LoadBalancer | awk '{print $4}')/notes-staging" >> deploy.env
+    - export INGRESS_LB_IP=$(kubectl get svc -n ingress-nginx | grep LoadBalancer | awk '{print $4}')
+    - echo "INGRESS_LB_IP=$INGRESS_LB_IP" >> deploy.env
+    - echo "Access your application at http://$INGRESS_LB_IP/notes-$CI_COMMIT_REF_NAME"
+  environment:
+    name: feature-$CI_COMMIT_REF_NAME
+    url: http://$INGRESS_LB_IP/notes-$CI_COMMIT_REF_NAME
+  artifacts:
+    reports:
+      dotenv: deploy.env
+  dependencies:
+    - build
+  rules:
+    - if: $CI_COMMIT_REF_NAME != "staging"
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+
 deploy-staging:
   image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image:helm-3.10.0-kube-1.24.6-alpine-3.15
   stage: staging
@@ -152,7 +187,7 @@ dast:
      DAST_BROWSER_SCAN: "true"
      DAST_FULL_SCAN_ENABLED: "true"
   rules:
-    - if: $CI_COMMIT_REF_NAME == "staging"
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
 dast_api:
   stage: dast
@@ -162,7 +197,7 @@ dast_api:
      DAST_API_PROFILE: Quick
      DAST_API_OPENAPI: test_openapi.v2.0.json
   rules:
-    - if: $CI_COMMIT_REF_NAME == "staging"
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
 apifuzzer_fuzz:
   stage: apifuzz
@@ -173,7 +208,7 @@ apifuzzer_fuzz:
     FUZZAPI_PROFILE: Quick-10
     FUZZAPI_OPENAPI: test_openapi.v2.0.json
   rules:
-    - if: $CI_COMMIT_REF_NAME == "staging"
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
 cleanup-db:
   image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image:helm-3.10.0-kube-1.24.6-alpine-3.15
@@ -186,7 +221,7 @@ cleanup-db:
     - dast
     - apifuzzer_fuzz
   rules:
-    - if: $CI_COMMIT_REF_NAME == "staging"
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
 deploy-production:
   image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image:helm-3.10.0-kube-1.24.6-alpine-3.15
@@ -215,4 +250,5 @@ deploy-production:
   artifacts:
     reports:
       dotenv: deploy.env
-  when: manual
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH

@@ -7,7 +7,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # Only delete the image if it's the latest
-if [$CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH]; then
+if [$CI_COMMIT_REF_NAME == 'main'] || [$CI_COMMIT_REF_NAME == 'staging']; then
     docker image rm $IMAGE
     if [ $? -ne 0 ]; then
         echo "Error: Could not delete image."
