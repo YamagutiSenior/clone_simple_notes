@@ -141,9 +141,7 @@ deploy:
   dependencies:
     - build
   rules:
-    - if: CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-      when: never
-    - when: on_success
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
 dast:
   stage: dast
@@ -154,11 +152,9 @@ dast:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
       variables:
         DAST_FULL_SCAN_ENABLED: "false"
-      when: on_success
     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
       variables:
         DAST_FULL_SCAN_ENABLED: "true"
-      when: on_success
 
 dast_api:
   stage: dast
@@ -169,9 +165,7 @@ dast_api:
      DAST_API_PROFILE: Quick
      DAST_API_OPENAPI: test_openapi.v2.0.json
   rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-      when: never
-    - when: on_success
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
 apifuzzer_fuzz:
   stage: apifuzz
@@ -183,9 +177,7 @@ apifuzzer_fuzz:
     FUZZAPI_PROFILE: Quick-10
     FUZZAPI_OPENAPI: test_openapi.v2.0.json
   rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-      when: never
-    - when: on_success
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
 cleanup-db:
   image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image:helm-3.10.0-kube-1.24.6-alpine-3.15
@@ -199,9 +191,7 @@ cleanup-db:
     - dast
     - apifuzzer_fuzz
   rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-      when: never
-    - when: on_success
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
 deploy-production:
   image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image:helm-3.10.0-kube-1.24.6-alpine-3.15
@@ -232,4 +222,3 @@ deploy-production:
       dotenv: deploy.env
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-      when: on_success
