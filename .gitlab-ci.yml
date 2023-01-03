@@ -187,14 +187,17 @@ dast:
   stage: dast
   variables:
      DAST_BROWSER_SCAN: "true"
-     DAST_FULL_SCAN_ENABLED: "true"
+     DAST_FULL_SCAN_ENABLED: "false"
   rules:
     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+      variables:
+        DAST_FULL_SCAN_ENABLED: "true"
 
 dast_api:
   stage: dast
   before_script:
     - sed -i 's@HOST@'"${INGRESS_LB_IP}"'@' test_openapi.v2.0.json
+    - sed -i 's@PATH@'"notes-${CI_COMMIT_REF_NAME}"'@' test_openapi.v2.0.json
   variables:
      DAST_API_PROFILE: Quick
      DAST_API_OPENAPI: test_openapi.v2.0.json
@@ -205,6 +208,7 @@ apifuzzer_fuzz:
   stage: apifuzz
   before_script:
     - sed -i 's@HOST@'"${INGRESS_LB_IP}"'@' test_openapi.v2.0.json
+    - sed -i 's@PATH@'"notes-${CI_COMMIT_REF_NAME}"'@' test_openapi.v2.0.json
     - export FUZZAPI_TARGET_URL=http://${INGRESS_LB_IP}/
   variables:
     FUZZAPI_PROFILE: Quick-10
