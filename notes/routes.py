@@ -13,12 +13,10 @@ def index():
     logo = os.path.join(note.config['IMAGE_FOLDER'], 'gitlab-logo-100.png')
 
     items = []
-
-    #conn = db.create_connection()
     ing_path = "/" + os.environ.get("NOTES_ING_PATH")
 
     try:
-        items = get_note() #db.select_note_by_id(conn, None, False)
+        items = get_note()
     except Exception as e:
         flash('Error generating notes: Check Logs')
         note.logger.error("Error Generating Notes: %s" % e)
@@ -38,6 +36,8 @@ def index():
     if add_form.validate_on_submit():
         try:
             result = add_note(add_form.note_field.data)
+            # TODO
+            note.logger.info(str(result))
 
             if result[1] == 200:
                 flash('Note "{}" has been added!'.format(
@@ -227,7 +227,7 @@ def get_note(admin=False):
 def get_note_admin():
     return get_note(admin=True)
 
-@note.route('/delete', methods=['DELETE'])
+@note.route('/api', methods=['DELETE'])
 def delete_note(id=None, admin=False):
     if id is None:
         id = request.args.get('id')
