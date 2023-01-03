@@ -145,7 +145,10 @@ deploy-feature:
   dependencies:
     - build
   rules:
-    - if: $CI_COMMIT_REF_NAME != "staging" || $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_REF_NAME == "staging"
+      when: never
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+      when: never
 
 deploy-staging:
   image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image:helm-3.10.0-kube-1.24.6-alpine-3.15
@@ -160,7 +163,7 @@ deploy-staging:
     - sh scripts/install_echo.sh
   script:
     - kubectl config use-context $CI_PROJECT_PATH:simplenotes
-    - helm upgrade --install notes-staging helm -f helm/values.yaml --set image=$IMAGE --set notes.name=notes-staging --set notes.path=notes-staging --set notes.dbName=staging --set restrictednginx.name=restricted-nginx-staging
+    - helm upgrade --install notes-staging helm -f helm/values.yaml --set image=$IMAGE --set notes.name=notes-staging --set notes.path=notes-staging --set notes.dbName=$CI_COMMIT_REF_NAME --set restrictednginx.name=restricted-nginx-staging
     - kubectl rollout restart deployment notes-staging -n default
   after_script:
     - kubectl config use-context $CI_PROJECT_PATH:simplenotes
@@ -212,6 +215,8 @@ apifuzzer_fuzz:
 cleanup-db:
   image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image:helm-3.10.0-kube-1.24.6-alpine-3.15
   stage: cleanup
+  variables:
+    DB_NAME: $CI_COMMIT_REF_NAME
   script:
     - kubectl config use-context $CI_PROJECT_PATH:simplenotes
     - kubectl exec -i deploy/notes-staging -- sh scripts/reset_notes_table.sh
