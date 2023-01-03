@@ -147,7 +147,6 @@ dast:
   stage: dast
   variables:
      DAST_BROWSER_SCAN: "true"
-     DAST_FULL_SCAN_ENABLED: "true"
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
       variables:
