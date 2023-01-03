@@ -7,10 +7,10 @@ stages:
   - build
   - test
   - deploy
+  - production
   - dast
   - apifuzz
   - cleanup
-  - production
 
 include:
   - template: Security/Container-Scanning.gitlab-ci.yml
