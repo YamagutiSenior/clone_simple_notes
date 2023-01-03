@@ -144,7 +144,7 @@ deploy-staging:
   dependencies:
     - build
   rules:
-    - if: $CI_COMMIT_REF_NAME == staging
+    - if: $CI_COMMIT_REF_NAME == "staging"
 
 dast:
   stage: dast
