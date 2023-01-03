@@ -10,13 +10,12 @@ from werkzeug.security import check_password_hash
 @note.route('/', methods=['GET', 'POST'])
 @note.route('/index', methods=['GET', 'POST'])
 def index():
-    logo = os.path.join(note.config['IMAGE_FOLDER'], 'gitlab-logo-100.png')
-
-    items = []
+    conn = db.create_connection()
     ing_path = "/" + os.environ.get("NOTES_ING_PATH")
-
+    
+    items = []
     try:
-        items = get_note()
+        items = db.select_note_by_id(conn, None, False)
     except Exception as e:
         flash('Error generating notes: Check Logs')
         note.logger.error("Error Generating Notes: %s" % e)
@@ -76,18 +75,17 @@ def index():
                             notes=arr,
                             add_form=add_form,
                             delete_form=delete_form,
-                            admin_form=admin_form,
-                            gitlab_logo=logo)
+                            admin_form=admin_form)
 
 @note.route('/admin', methods=['GET', 'POST'])
 @auth.login_required
-def admin(): 
-    #conn = db.create_connection() 
+def admin():
+    conn = db.create_connection()
     ing_path = "/" + os.environ.get("NOTES_ING_PATH")
 
     items = []
     try:
-        items = get_note_admin() #db.select_note_by_id(conn, None, True)
+        items = db.select_note_by_id(conn, None, True)
     except Exception as e:
         flash('Error generating notes: Check Logs')
         note.logger.error("Error generating notes: %s" % e)
