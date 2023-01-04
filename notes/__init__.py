@@ -38,13 +38,9 @@ if db_backend == 'mariadb':
                                 data TEXT,
                                 ipaddress TEXT,
                                 hostname TEXT,
-                                secret  BOOLEAN,
+                                secret BOOLEAN,
                                 PRIMARY KEY (id));"""
 
 note.config['CREATE_TABLE_QUERY'] = sql_create_notes_table
 conn = db.create_connection()
-
-if conn is not None:
-    db.create_table(conn)
-else:
-    note.logger.error("Error: Cannot create the database connection.")
+db.create_table(conn)

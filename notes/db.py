@@ -74,7 +74,7 @@ def create_note(conn, notes, ip_address, hostname, admin=False):
 def delete_note(conn, id, admin=False):
     # NOTE: Vulnerable to SQL injection, can delete secret notes 
     # by passing id as '1) OR id=1'
-    query = "DELETE FROM notes WHERE (SECRET is FALSE AND id = " + id + ");"
+    query = "DELETE FROM notes WHERE (secret is FALSE AND id = " + id + ");"
     cur = conn.cursor()
 
     if admin:

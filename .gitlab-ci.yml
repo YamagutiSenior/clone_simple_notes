@@ -33,14 +33,19 @@ include:
 
 build:
   stage: build
-  variables:
-    IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA 
   before_script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY 
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - sh scripts/delete_latest.sh
   script:
-    - if [ $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH ]; then sh scripts/delete_latest.sh; IMAGE=$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest; fi
     - docker build -t $IMAGE .
-    - docker push "$IMAGE"
+    - docker push $IMAGE
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+      variables:
+        IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest 
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+      variables:
+        IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
 
 pages:
   image: registry.gitlab.com/pages/hugo/hugo_extended:latest
@@ -212,7 +217,7 @@ deploy-production:
     - sh scripts/install_mariadb.sh
   script:
     - kubectl config use-context $CI_PROJECT_PATH:simplenotes
-    - helm upgrade --install notes-production helm -f helm/values.yaml --set image=$IMAGE --set notes.dbName=production
+    - helm upgrade --install notes-production helm -f helm/values.yaml --set image=$IMAGE --set notes.name=notes-production --set notes.path=notes --set notes.dbName=production --set restrictednginx.name=restricted-nginx-production
     - kubectl rollout restart deployment notes-production -n default
   after_script:
     - kubectl config use-context $CI_PROJECT_PATH:simplenotes
