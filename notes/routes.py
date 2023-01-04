@@ -53,6 +53,9 @@ def index():
         try:
             result = delete_note(delete_form.id_field.data)
 
+            # TEST
+            note.logger.info(str(result))
+
             if result[1] == 204:
                 flash('Note "#{}" has been Deleted!'.format(
                     delete_form.id_field.data))
@@ -236,7 +239,9 @@ def delete_note(id=None, admin=False):
     items = []
     try:
         items = db.select_note_by_id(conn, str(id), admin)
+        note.logger.info(str(items))
     except Exception as e:
+        note.logger.error("Error Checking Note: %s" % e)
         return jsonify({"Error": str(e)}), 500
 
     if len(items) == 0:
@@ -247,6 +252,7 @@ def delete_note(id=None, admin=False):
     try:
         db.delete_note(conn2, str(id), admin)
     except Exception as e:
+        note.logger.error("Error Deleting Note: %s" % e)
         return jsonify({"Error": str(e)}), 500
 
     # Verify if item was deleted
@@ -254,10 +260,13 @@ def delete_note(id=None, admin=False):
     items = []
     try:
         items = db.select_note_by_id(conn3, id, admin)
+        note.logger.info(str(items))
     except Exception as e:
+        note.logger.error("Error Verifying note was deleted: %s" % e)
         return jsonify({"Error": str(e)}), 500
 
     if len(items) != 0:
+        note.logger.error("Error Note still exists")
         return jsonify({"Error": "Note still exists"}), 500
 
     return jsonify({"Success": "Note Deleted!"}), 204
