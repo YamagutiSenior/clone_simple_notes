@@ -35,8 +35,6 @@ def index():
     if add_form.validate_on_submit():
         try:
             result = add_note(add_form.note_field.data)
-            # TODO
-            note.logger.info(str(result))
 
             if result[1] == 200:
                 flash('Note "{}" has been added!'.format(
