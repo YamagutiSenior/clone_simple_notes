@@ -35,13 +35,7 @@ sql_create_notes_table = """CREATE TABLE IF NOT EXISTS notes (
                             secret BOOLEAN);"""
 
 if db_backend == 'mariadb':
-    sql_create_notes_table = """CREATE TABLE IF NOT EXISTS notes (
-                                id INTEGER NOT NULL AUTO_INCREMENT,
-                                data TEXT,
-                                ipaddress TEXT,
-                                hostname TEXT,
-                                secret BOOLEAN,
-                                PRIMARY KEY (id));"""
+    sql_create_notes_table = "CREATE TABLE IF NOT EXISTS notes (id integer NOT NULL AUTO_INCREMENT, data text, ipaddress text, hostname text, secret boolean, PRIMARY KEY (id));"
 
 note.config['CREATE_TABLE_QUERY'] = sql_create_notes_table
 conn = db.create_connection()
