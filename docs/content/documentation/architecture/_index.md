@@ -9,8 +9,7 @@ This application was developed in Python using the Flask Web Framework and then 
 for use with Kubernetes.
 
 {{< hint warning >}}
-**Disclaimer:** Best practices for application development are not necisarily used in the development of this application.
-It is meant primarily for demo purposes and to showcase how DevSecOps can be implemented with GitLab.
+**Disclaimer:** Best practices for application development are not necessarily used in the development of this application. It is meant primarily for demo purposes and to showcase how DevSecOps can be implemented with GitLab.
 {{< /hint >}}
 
 ## Deployment Architecture Diagram

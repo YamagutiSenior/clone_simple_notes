@@ -120,4 +120,8 @@ def select_note_by_id(conn, id=None, admin=False):
 
     allItems = cur.fetchall()
     conn.close()
+
+    if len(allItems) == 0:
+        return []
+
     return allItems

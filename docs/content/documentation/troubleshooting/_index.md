@@ -10,6 +10,7 @@ This troubleshooting guide goes over some of the common problems you may encount
 
 1. Look at the output of the failed job, and go from there
 2. Make sure the GitLab Kubernetes agent is installed and running properly
+3. Enable [Debug Logging](https://docs.gitlab.com/ee/ci/variables/#enable-debug-logging) and Re-Run Jobs
 
 ## Troubleshooting Failed Local Installation
 

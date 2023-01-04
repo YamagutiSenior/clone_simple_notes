@@ -237,7 +237,7 @@ def delete_note(id=None, admin=False):
     conn = db.create_connection()
     items = []
     try:
-        items = db.select_note_by_id(conn, id, True)
+        items = db.select_note_by_id(conn, id, admin)
     except Exception as e:
         return jsonify({"Error": str(e)}), 500
 

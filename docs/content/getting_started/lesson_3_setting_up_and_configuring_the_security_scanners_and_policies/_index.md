@@ -69,11 +69,12 @@ There's a bunch of CI/CD jobs that do a bunch of different things, I'll briefly 
 - **container_scanning**: overwrites the image being scanned depending on the branch
 - **license_scanning**: overwrites the pre_script of license scanning to install required system dependencies 
 - **coverage-guided-fuzzing**: runs fuzzing on a provided instrumented file
-- **deploy-staging**: installs ingress, mariadb, and notes application to Kubernetes cluster
+- **deploy**: installs ingress, mariadb, and notes application to Kubernetes cluster for any non-default branch.
 - **dast**: overwrites paths used for running dast
 - **dast_api**: overwrites paths used for running dast_api
 - **apifuzzer_fuzz**: overwrites paths used for running api-fuzzing
 - **reset-notes-table**: Resets notes which have been added via dynamic security scans
+- **deploy-production**: installs ingress, mariadb, and notes application to Kubernetes cluster for production.
 
 ## Step 3: Setting up Merge-Request Approvals (Vulnerabilities)
 

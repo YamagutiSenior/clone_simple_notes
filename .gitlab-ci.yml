@@ -209,7 +209,7 @@ deploy-production:
     - sh scripts/install_mariadb.sh
   script:
     - kubectl config use-context $CI_PROJECT_PATH:simplenotes
-    - helm upgrade --install notes-production helm -f helm/values.yaml --set image=$IMAGE
+    - helm upgrade --install notes-production helm -f helm/values.yaml --set image=$IMAGE --set notes.dbName=production
     - kubectl rollout restart deployment notes-production -n default
   after_script:
     - kubectl config use-context $CI_PROJECT_PATH:simplenotes

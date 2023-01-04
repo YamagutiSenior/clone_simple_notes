@@ -159,13 +159,11 @@ databases which can be used in the backend.
 ### MariaDB
 
 A full [MariaDB](https://mariadb.org/) database can be used with this application,
-allowing you to scale the notes. I know it's overkill for a
-demo application, but the point is to allow scaling.
+allowing you to scale the notes. I know it's overkill for a demo application, but
+the point is to allow scaling.
 
 MariaDB is included when using this application with GitLab.
 
 ### SQLite
 
-For local testing you can use [SQLite](https://www.sqlite.org/index.html). SQLite is an embedded database engine.
-With this database the application cannot be scaled since we are pointing at a single DB file. It is loaded by
-default when not deploying using helm.
+For local testing you can use [SQLite](https://www.sqlite.org/index.html). SQLite is an embedded database engine. With this database the application cannot be scaled since we are pointing at a single DB file. It is loaded by default when not deploying using helm.
