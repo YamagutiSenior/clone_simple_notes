@@ -106,7 +106,7 @@ def admin():
     add_form = AddForm()
     if add_form.validate_on_submit():
         try:
-            result = add_note_admin(add_form.note_field.data) #add_note(add_form.note_field.data, True)
+            result = add_note_admin(add_form.note_field.data)
 
             if result[1] == 200:
                 flash('Note "{}" has been added!'.format(
@@ -123,7 +123,7 @@ def admin():
     delete_form = DeleteForm()
     if delete_form.validate_on_submit():
         try:
-            result = delete_note_admin(delete_form.id_field.data)#delete_note(delete_form.id_field.data, True)
+            result = delete_note_admin(delete_form.id_field.data)
 
             if result[1] == 204:
                 flash('Note with id "{}" has been Deleted!'.format(
@@ -235,29 +235,29 @@ def delete_note(id=None, admin=False):
     conn = db.create_connection()
     items = []
     try:
-        items = db.select_note_by_id(conn, id, admin)
+        items = db.select_note_by_id(conn, str(id), admin)
     except Exception as e:
         return jsonify({"Error": str(e)}), 500
 
+    if len(items) == 0:
+        return jsonify({"Error": ("Note with id '%s' not found" % id) }), 400
+
     # Delete the note
-    if len(items) > 0:
-        conn2 = db.create_connection()
-        try:
-            db.delete_note(conn2, str(id), admin)
-        except Exception as e:
-            return jsonify({"Error": str(e)}), 500
-    else:
-        return jsonify({"Error": "No note detected, Check Logs"}), 500
+    conn2 = db.create_connection()
+    try:
+        db.delete_note(conn2, str(id), admin)
+    except Exception as e:
+        return jsonify({"Error": str(e)}), 500
 
     # Verify if item was deleted
     conn3 = db.create_connection()
     items = []
     try:
-        items = db.select_note_by_id(conn3, id, True)
+        items = db.select_note_by_id(conn3, id, admin)
     except Exception as e:
         return jsonify({"Error": str(e)}), 500
 
-    if len(items) > 0:
+    if len(items) != 0:
         return jsonify({"Error": "Note still exists"}), 500
 
     return jsonify({"Success": "Note Deleted!"}), 204
