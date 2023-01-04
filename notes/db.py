@@ -10,8 +10,8 @@ def create_connection():
     db_name = os.environ.get("NOTES_DB_DATABASE")
     
     if db_name is None:
-        note.logger.info("No Database Name set, defaulting to 'my_database'")
-        db_name = "my_database"
+        note.logger.info("No Database Name set, defaulting to 'default-db'")
+        db_name = "default-db"
     
     if db_backend == 'mariadb':
         try:
@@ -46,21 +46,12 @@ def create_connection():
 
     return conn
 
-def create_table(conn, create_table_sql):
+def create_table(conn):
     try:
         c = conn.cursor()
-        c.execute(create_table_sql)
+        c.execute(note.config['CREATE_TABLE_QUERY'])
     except Exception as e:
         note.logger.error("Error: cannot create table - %s" % e)
-
-    conn.close()
-
-def drop_table(conn, drop_table_sql):
-    try:
-        c = conn.cursor()
-        c.execute(drop_table_sql)
-    except Exception as e:
-        note.logger.error("Error: cannot drop table - %s" % e)
 
     conn.close()
 

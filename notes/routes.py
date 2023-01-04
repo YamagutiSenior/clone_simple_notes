@@ -269,18 +269,18 @@ def delete_note_admin(id=None):
 
 def reset():
     conn = db.create_connection()
-    sql_drop_notes_table = """DROP TABLE notes;"""
-    
+    query = """DROP TABLE notes;"""
+
     try:
-        db.drop_table(conn, sql_drop_notes_table)
+        c = conn.cursor()
+        c.execute(query)
     except Exception as e:
-        note.logger.error("Failed to reset database table 'notes': %s" % e)
+        note.logger.error("Failed to drop database table 'notes': %s" % e)
+        conn.close()
         return False
 
-    conn = db.create_connection()
     try:
-        sql_create_notes_table = note.config['CREATE_TABLE_QUERY']
-        db.create_table(conn, sql_create_notes_table)
+        db.create_table(conn)
     except Exception as e:
         note.logger.error("Failed to re-create database table 'notes': %s" % e)
         return False

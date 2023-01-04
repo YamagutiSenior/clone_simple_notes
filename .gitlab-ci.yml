@@ -37,7 +37,7 @@ build:
     IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker images
+    - docker image ls -a
     - docker rmi $IMAGE --force
   script:
     - docker build -t $IMAGE:latest .
@@ -66,6 +66,7 @@ unit:
   variables:
     NOTES_DB_BACKEND: "local"
     RUNNER_GENERATE_ARTIFACTS_METADATA: "true"
+    NOTES_DB_DATABASE: "unit-tests"
   before_script:
     - apt update -y; apt upgrade -y
     - apt install gcc curl openssl -y

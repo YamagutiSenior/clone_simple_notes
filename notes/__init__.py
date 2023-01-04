@@ -15,8 +15,6 @@ app_path = os.environ.get("NOTES_ING_PATH", "notes")
 logging.basicConfig(level=logging.INFO)
 note = Flask(__name__)
 note.config.from_object(Config)
-images = os.path.join('{}/static'.format(app_path), 'images')
-note.config['IMAGE_FOLDER'] = images
 
 # Setup Application Plugins and Basic-Auth Credentials
 bootstrap = Bootstrap(note)
@@ -35,12 +33,18 @@ sql_create_notes_table = """CREATE TABLE IF NOT EXISTS notes (
                             secret BOOLEAN);"""
 
 if db_backend == 'mariadb':
-    sql_create_notes_table = "CREATE TABLE IF NOT EXISTS notes (id integer NOT NULL AUTO_INCREMENT, data text, ipaddress text, hostname text, secret boolean, PRIMARY KEY (id));"
+    sql_create_notes_table = """CREATE TABLE IF NOT EXISTS notes (
+                                id INTEGER NOT NULL AUTO_INCREMENT,
+                                data TEXT,
+                                ipaddress TEXT,
+                                hostname TEXT,
+                                secret  BOOLEAN,
+                                PRIMARY KEY (id));"""
 
 note.config['CREATE_TABLE_QUERY'] = sql_create_notes_table
 conn = db.create_connection()
 
 if conn is not None:
-    db.create_table(conn, sql_create_notes_table)
+    db.create_table(conn)
 else:
     note.logger.error("Error: Cannot create the database connection.")
