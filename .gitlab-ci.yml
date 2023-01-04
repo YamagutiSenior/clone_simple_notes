@@ -37,10 +37,10 @@ build:
     IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - sh scripts/delete_latest.sh
+    - docker rmi $IMAGE --force
   script:
     - docker build -t $IMAGE .
-    - docker push "$IMAGE"
+    - docker push $IMAGE
 
 pages:
   image: registry.gitlab.com/pages/hugo/hugo_extended:latest
