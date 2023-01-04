@@ -34,14 +34,13 @@ include:
 build:
   stage: build
   variables:
-    IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG
+    IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA 
   before_script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker image ls -a
-    - docker rmi $IMAGE --force
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY 
   script:
-    - docker build -t $IMAGE:latest .
-    - docker image push $IMAGE --all-tags
+    - if [ $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH ]; then sh scripts/delete_latest.sh; IMAGE=$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest; fi
+    - docker build -t $IMAGE .
+    - docker push "$IMAGE"
 
 pages:
   image: registry.gitlab.com/pages/hugo/hugo_extended:latest
@@ -95,8 +94,10 @@ gemnasium-python-dependency_scanning:
 container_scanning:
   variables:
     CS_DISABLE_LANGUAGE_VULNERABILITY_SCAN: "false"
-    CS_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest
-    RUNNER_GENERATE_ARTIFACTS_METADATA: "true" 
+    CS_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA 
+    RUNNER_GENERATE_ARTIFACTS_METADATA: "true"
+  before_script:
+    - if [ $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH ]; then CS_IMAGE=$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest; fi
 
 license_scanning:
   variables:
@@ -122,7 +123,7 @@ deploy:
   stage: deploy
   variables:
     HELM_HOST: "localhost:44134"
-    IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest
+    IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
   before_script:
     - kubectl config use-context $CI_PROJECT_PATH:simplenotes
     - sh scripts/install_ingress.sh

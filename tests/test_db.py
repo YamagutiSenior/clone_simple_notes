@@ -9,9 +9,6 @@ class TestDB(unittest.TestCase):
 
     def tearDown(self):
         self.conn.close()
-        conn = db.create_connection()
-        conn.execute("DROP DATABASE unit-tests;")
-        conn.close()
 
     def test_create_table(self):
         db.create_table(self.conn)
