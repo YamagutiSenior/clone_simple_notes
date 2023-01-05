@@ -141,7 +141,7 @@ deploy:
     - echo "DAST_API_TARGET_URL=http://$(kubectl get svc -n ingress-nginx | grep LoadBalancer | awk '{print $4}')/notes-$CI_COMMIT_REF_NAME" >> deploy.env
     - export INGRESS_LB_IP=$(kubectl get svc -n ingress-nginx | grep LoadBalancer | awk '{print $4}')
     - echo "INGRESS_LB_IP=$INGRESS_LB_IP" >> deploy.env
-    - echo "Access your application at http://$INGRESS_LB_IP/notes-$CI_COMMIT_REF_NAME"
+    - echo "Access your application at http://$INGRESS_LB_IP/$ING_PATH"
   environment:
     name: $ENV_NAME
     url: http://$INGRESS_LB_IP/notes-$CI_COMMIT_REF_NAME

@@ -5,7 +5,7 @@ DB_SERVER=mariadb
 USER=root
 
 # Replace '-' with '' in DB_NAME
-DB_NAME=${echo "${CI_COMMIT_REF_NAME//-}"}
+DB_NAME=$(echo "$CI_COMMIT_REF_NAME" | sed 's/-//g')
 
 EXISTS_CMD="SELECT * FROM information_schema.tables WHERE table_schema = '$DB_NAME' AND table_name = 'notes' LIMIT 1;"
 DROP_CMD="DROP TABLE notes;"
