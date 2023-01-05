@@ -4,7 +4,7 @@ from notes import db
 
 class TestDB(unittest.TestCase):
     def setUp(self):
-        self.db_name = "unit-tests"
+        self.db_name = "unit"
         self.conn = db.create_connection()
 
     def tearDown(self):
@@ -22,4 +22,4 @@ class TestDB(unittest.TestCase):
                 nameExists = True
 
         conn.close()
-        self.assertTrue(nameExists, "Test failed, couldn't find database table 'test'")
+        self.assertTrue(nameExists, "Test failed, couldn't find database table 'unit'")

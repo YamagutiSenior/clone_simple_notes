@@ -8,10 +8,13 @@ from notes import note, db_backend
 def create_connection():
     conn = None
     db_name = os.environ.get("NOTES_DB_DATABASE")
+
+    # Remove unsupported '-' from database name
+    db_name.replace("-", "")
     
     if db_name is None:
-        note.logger.info("No Database Name set, defaulting to 'default-db'")
-        db_name = "default-db"
+        note.logger.info("No Database Name set, defaulting to 'default'")
+        db_name = "default"
     
     if db_backend == 'mariadb':
         try:

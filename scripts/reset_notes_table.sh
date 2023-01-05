@@ -2,8 +2,11 @@
 
 DB_CLIENT=mariadb
 DB_SERVER=mariadb
-DB_NAME=$CI_COMMIT_REF_NAME
 USER=root
+
+# Replace '-' with '' in DB_NAME
+DB_NAME=${echo "${CI_COMMIT_REF_NAME//-}"}
+
 EXISTS_CMD="SELECT * FROM information_schema.tables WHERE table_schema = '$DB_NAME' AND table_name = 'notes' LIMIT 1;"
 DROP_CMD="DROP TABLE notes;"
 CREATE_CMD="CREATE TABLE IF NOT EXISTS notes (id integer NOT NULL AUTO_INCREMENT, data text, ipaddress text, hostname text, secret boolean, PRIMARY KEY (id));"
