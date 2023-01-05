@@ -2,6 +2,7 @@
 
 DB_CLIENT=mariadb
 DB_SERVER=mariadb
+DB_NAME=$CI_COMMIT_REF_NAME
 USER=root
 EXISTS_CMD="SELECT * FROM information_schema.tables WHERE table_schema = '$DB_NAME' AND table_name = 'notes' LIMIT 1;"
 DROP_CMD="DROP TABLE notes;"
