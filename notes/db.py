@@ -10,7 +10,7 @@ def create_connection():
     db_name = os.environ.get("NOTES_DB_DATABASE")
 
     # Remove unsupported '-' from database name
-    db_name.replace("-", "")
+    db_name = db_name.replace("-", "")
     
     if db_name is None:
         note.logger.info("No Database Name set, defaulting to 'default'")
