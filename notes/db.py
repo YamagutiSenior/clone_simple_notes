@@ -67,6 +67,8 @@ def create_note(conn, notes, ip_address, hostname, admin=False):
         cur.execute(query)
     except Exception as e:
         note.logger.error("Error: cannot create note - %s" % e)
+        conn.close()
+        raise
 
     lastRowId = cur.lastrowid
     conn.commit()
