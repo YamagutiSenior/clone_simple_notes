@@ -130,12 +130,25 @@ Now let's wait for the pipeline to complete, this should take a few mins - so gr
 ![](/devsecops/initech/simple-notes/images/completed_pipeline.png)
 {{< /hint >}}
 
+2. Press the **play** button on the **deploy** job, the push to production
+
+{{< hint info >}}
+**Note:** The reason why this is manual is because a deployment from the
+`default` branch has been set to manual. All other branches will deploy
+automatically. We are treating the `default` branch like production.
+{{< /hint >}}
+
 ## Step 5: Accessing our Application
 
 Now let's use the ingress to access our application. With the default settings
 your application should be available at your Load-Balancers IP under the `/notes` path. These items can be configured via the [values.yaml](https://gitlab.com/tech-marketing/devsecops/initech/simple-notes/-/blob/main/helm/values.yaml) within the helm path.
 
-1. Click on the `deploy-staging` job and scroll to the bottom. You should see the URL which the application was deployed to.
+1. Click on the `deploy` job and scroll to the bottom. You should see the URL which the application was deployed to.
+
+{{< hint info >}}
+**Note:** You can also go to the `Deployment > Environments` tab and click the `Open`
+button under the **production** environment.
+{{< /hint >}}
 
 2. Point your browser to the provided link
 

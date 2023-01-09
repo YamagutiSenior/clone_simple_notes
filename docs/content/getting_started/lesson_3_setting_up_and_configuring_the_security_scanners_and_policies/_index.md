@@ -68,20 +68,19 @@ There's a bunch of CI/CD jobs that do a bunch of different things, I'll briefly 
 - **gemnasium-python-dependency_scanning**: overwrites the pre_script of dependency scanning to install required system dependencies
 - **container_scanning**: overwrites the image being scanned depending on the branch
 - **license_scanning**: overwrites the pre_script of license scanning to install required system dependencies 
+- **secret_detection**: overwrites the variable SECRET_DETECTION_HISTORIC_SCAN to allow historic secret detection
 - **coverage-guided-fuzzing**: runs fuzzing on a provided instrumented file
-- **deploy**: installs ingress, mariadb, and notes application to Kubernetes cluster for any non-default branch.
+- **deploy**: installs ingress, mariadb, and notes application to Kubernetes cluster.
 - **dast**: overwrites paths used for running dast
 - **dast_api**: overwrites paths used for running dast_api
 - **apifuzzer_fuzz**: overwrites paths used for running api-fuzzing
-- **reset-notes-table**: Resets notes which have been added via dynamic security scans
-- **deploy-production**: installs ingress, mariadb, and notes application to Kubernetes cluster for production.
+- **cleanup-db**: Resets notes which have been added via dynamic security scans
 
 ## Step 3: Setting up Merge-Request Approvals (Vulnerabilities)
 
 Code review is an essential practice of every successful project. Approving a merge request is an important part of the review process, as it clearly communicates the ability to merge the change.
 
-GitLab provides Security guard-rails to prevent vulnerable code
-from being merged without approval. This includes vulnerabilities as well as incompatible licenses. Now let's setup these guardrails, known as merge-request approvals.
+GitLab provides Security guard-rails to prevent vulnerable code from being merged without approval. This includes vulnerabilities as well as incompatible licenses. Now let's setup these guardrails, known as merge-request approvals.
 
 1. Go to the the **Security & Compliance** left navigation menu and press **Policies**  
 

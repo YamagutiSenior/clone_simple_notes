@@ -27,7 +27,7 @@ include:
   - template: Code-Quality.gitlab-ci.yml
   - template: Security/Dependency-Scanning.gitlab-ci.yml
   - template: Security/SAST.gitlab-ci.yml
-  - template: Security/Secret-Detection.gitlab-ci.yml
+  - template: Jobs/Secret-Detection.gitlab-ci.yml
   - template: Jobs/SAST-IaC.gitlab-ci.yml
   - template: DAST-API.gitlab-ci.yml
 
@@ -97,6 +97,10 @@ container_scanning:
     RUNNER_GENERATE_ARTIFACTS_METADATA: "true"
   before_script:
     - if [ $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH ]; then CS_IMAGE=$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest; fi
+
+secret_detection:
+  variables:
+    SECRET_DETECTION_HISTORIC_SCAN: "true"
 
 license_scanning:
   variables:

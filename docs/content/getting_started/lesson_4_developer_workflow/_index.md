@@ -23,11 +23,17 @@ Now let's go ahead and add some vulnerabilities. We will make sure that somethin
 **Note:** I'll try to keep it up-to-date and re-based, if it isn't open up an issue within the project
 {{< /hint >}}
 
-3. Select **Commit**
+3. Click on the Source Control Tab
 
-4. Select **Create a new branch** and give that branch a name, then select **Start a new merge request**, and press **Commit**
+4. Click on the **Commit & Push** Button
 
-5. Create the Merge Request and press **Submit merge request**
+5. In the **Commit to new branch?** Dialog box select **Yes**
+
+6. Enter a branch name and press enter
+
+7. On the bottom left, click on the **Create MR** button
+
+8. Scroll down and click on the **Create merge request** button
 
 Now let's wait for the pipeline to complete, this should take a few mins - so grab a coffee ☕️ or tea 🍵, or whatever you like! If the pipeline happens to fail, please checkout the [troubleshooting documentation](../../documentation/troubleshooting).
 
@@ -74,8 +80,7 @@ Within the same MR view, we can see the licenses that were detected. You'll be a
 2. You should see that the merge request approvals are active  
 
 {{< hint info >}}
-**Note:** We won't be able to merge because the security approvals are present and there are vulnerabilities. If you want to merge this,
-you either need to resolve the vulnerabilities (which doesn't make sense in this context, since the code is meant to introduce vulnerabilities) or remove the security approvals. Merging the code will add the new results to the vulnerability reports and dashboard
+**Note:** We won't be able to merge because the security approvals are present and there are vulnerabilities. If you want to merge this, you either need to resolve the vulnerabilities (which doesn't make sense in this context, since the code is meant to introduce vulnerabilities) or remove the security approvals. Merging the code will add the new results to the vulnerability reports and dashboard.
 {{< /hint >}}
 
 ---
