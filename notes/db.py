@@ -99,15 +99,18 @@ def select_note_by_id(conn, id=None, admin=False):
     query = "SELECT id, data FROM notes WHERE secret IS FALSE"
     cur = conn.cursor()
 
-    if id:
-        # NOTE: Vulnerable to SQL injection, can get secret notes
-        # by adding 'OR 1=1'
-        query = query + " AND id = %s" % id
-
     # Admin doesn't have search by id function,
     # since only used in the UI
     if admin:
         query = "SELECT id, data, ipaddress, hostname, secret FROM notes"
+
+    if id:
+        if admin:
+            query = query + " WHERE id = %s" % id
+        else:
+            # NOTE: Vulnerable to SQL injection, can get secret notes
+            # by adding 'OR 1=1'
+            query = query + " AND id = %s" % id
 
     try:
         cur.execute(query)

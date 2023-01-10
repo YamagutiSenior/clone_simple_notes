@@ -13,7 +13,14 @@ Dashboard and Vulnerability Management Console.
 
 Each vulnerability report contains vulnerabilities from the scans of the most recent branch merged into the default branch.
 
-The vulnerability reports display the total number of vulnerabilities by severity (for example, Critical, High, Medium, Low, Info, Unknown). Below this, a table shows each vulnerabilities detected date, status, severity, description, identifier, the scanner where it was detected, and activity (including related issues or available solutions). By default, the vulnerability report is filtered to display all detected and confirmed vulnerabilities.
+The vulnerability reports display the total number of vulnerabilities by severity. Below this, a table shows each vulnerabilities detected which includes:
+- date
+- status
+- severity
+- description
+- identifier
+- the scanner where it was detected
+- activity (including related issues or available solutions)
 
 1. In order to access vulnerability reports, navigate to **Security & Compliance** left navigation menu and selecting **Vulnerability Reports** 
 
@@ -23,7 +30,7 @@ The vulnerability reports display the total number of vulnerabilities by severit
 
 4. Select **Confirm**
 
-5. Press **Change Status**
+5. Press the **Change Status** button
 
 {{< hint info >}}
 **Note:** This allows for better filtering, enabling the security team to better triage security issues
@@ -50,7 +57,7 @@ collaborate with developers on a resolution.
 
 ## Step 2: Accessing the Security Dashboard
 
-At the project level, the Security Dashboard displays a chart with the number of vulnerabilities introduced to the master branch over time. 
+At the project level, the Security Dashboard displays a chart with the number of vulnerabilities introduced to the default branch over time. 
 
 1. Access the Security Dashboard by going to **Security & Compliance** left navigation menu and selecting **Security Dashboard**  
 
@@ -81,8 +88,7 @@ At the project level, the Security Dashboard displays a chart with the number of
   `daily` at `00:00`
 
 {{< hint info >}}
-**Note:** Make sure that the **agent-name (simplenotes)** is typed in correctly, this will be the agent running in our cluster which
-we will use to scan our pods for vulnerabilities.
+**Note:** Make sure that the **agent-name (simplenotes)** is typed in correctly, this will be the agent running in our cluster which we will use to scan our pods for vulnerabilities.
 
 The **namespaces** we are scanning here are **default** and **kube-system**, where all our pods are loaded.
 
@@ -128,7 +134,12 @@ Policy as Code is a way of creating policies by just editing code. In this secti
 
 We can see the Network Policy we will be applying in the [network-policies/restricted-echo.yaml file](https://gitlab.com/tech-marketing/devsecops/initech/simple-notes/-/blob/main/network-policies/restricted-echo.yaml), which prevents any pod without the label `access=true` from accessing the `restricted-echo` pod.
 
-1. Open the **WebIDE**
+1. Open the **WebIDE** from the project page
+
+{{< hint info >}}
+**Note:** To learn more about the GitLab Web IDE and how to use/configure it, checkout the
+[Web IDE documentation](https://docs.gitlab.com/ee/user/project/web_ide/)
+{{< /hint >}}
 
 2. Open up [**.gitlab > agents > simplenotes > config.yaml**](https://gitlab.com/tech-marketing/devsecops/initech/simple-notes/-/blob/main/.gitlab/agents/simplenotes/config.yaml)
 
@@ -150,11 +161,12 @@ gitops:
     - glob: '/network-policies/*.yaml'
 ```
 
-4. Press the **Create commit...** button
+4. Click on the **Source Control** Tab on the left of the Web IDE. It looks as follows:
+![](/devsecops/initech/simple-notes/images/source_control_tab.png)
 
-5. Select **Commit to main branch**
+5. Click on the **Commit & Push** Button
 
-6. Press the **Commit** button
+6. In the **Commit to new branch?** dialog box, select **No Use the current branch "main"**
 
 Now let's wait for the pipeline to complete, this should take a few mins - so grab a coffee ☕️ or tea 🍵, or whatever you like! If the pipeline happens to fail, please checkout the [troubleshooting documentation](../../documentation/troubleshooting).
 

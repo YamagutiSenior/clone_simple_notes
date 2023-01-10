@@ -15,27 +15,43 @@ The scanners run on a feature branch and display results within the MR, and if t
 
 Now let's go ahead and add some vulnerabilities. We will make sure that something can be picked up by each type of scanner.
 
-1. Open the **WebIDE**
+1. Open the **WebIDE** from the project page
 
-2. Copy over the changes found in [this Merge Request](https://gitlab.com/tech-marketing/devsecops/initech/simple-notes/-/merge_requests/7)
+{{< hint info >}}
+**Note:** To learn more about the GitLab Web IDE and how to use/configure it, checkout the
+[Web IDE documentation](https://docs.gitlab.com/ee/user/project/web_ide/)
+{{< /hint >}}
+
+2. Copy over the changes found in [this Merge Request](https://gitlab.com/tech-marketing/devsecops/initech/simple-notes/-/merge_requests/15)
 
 {{< hint info >}}
 **Note:** I'll try to keep it up-to-date and re-based, if it isn't open up an issue within the project
 {{< /hint >}}
 
-3. Click on the Source Control Tab
+3. Click on the **Source Control** Tab on the left of the Web IDE. It looks as follows:
+![](/devsecops/initech/simple-notes/images/source_control_tab.png)
 
 4. Click on the **Commit & Push** Button
 
-5. In the **Commit to new branch?** Dialog box select **Yes**
+5. In the **Commit to new branch?** dialog box, select **Yes Commit to a new branch**
 
 6. Enter a branch name and press enter
 
-7. On the bottom left, click on the **Create MR** button
+7. On the bottom right of the screen a popup will appear, click on the **Create MR** button
 
-8. Scroll down and click on the **Create merge request** button
+{{< hint info >}}
+**Note:** If you missed the popup you can create a merge request from the project's
+[merge request tab](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html).
+{{< /hint >}}
 
-Now let's wait for the pipeline to complete, this should take a few mins - so grab a coffee ☕️ or tea 🍵, or whatever you like! If the pipeline happens to fail, please checkout the [troubleshooting documentation](../../documentation/troubleshooting).
+8. Scroll down through the MR template and click on the **Create merge request** button
+
+Now let's wait for the pipeline to complete, this should take a few mins - so grab a coffee ☕️ or tea 🍵, or whatever you like! If the pipeline happens to fail, please checkout the [troubleshooting documentation](../../documentation/troubleshooting)
+
+{{< hint info >}}
+**Note:** You won't need to press the play button to deploy, it is done automatically since the branch
+created is not the **default** branch.
+{{< /hint >}}
 
 ## Step 2: Viewing Vulnerable Code
 
@@ -63,7 +79,7 @@ Let's dig into the vulnerabilities and perform some actions on them.
 work together to resolve without showing information of the vulnerability to others
 {{< /hint >}}
 
-7. Now let's go back to the Merge Request by pressing the back button on your browser.
+7. Now let's go back to the Merge Request by pressing the back button on your browser
 
 ## Step 3: Viewing Denied Licenses
 
@@ -79,8 +95,10 @@ Within the same MR view, we can see the licenses that were detected. You'll be a
 
 2. You should see that the merge request approvals are active  
 
-{{< hint info >}}
-**Note:** We won't be able to merge because the security approvals are present and there are vulnerabilities. If you want to merge this, you either need to resolve the vulnerabilities (which doesn't make sense in this context, since the code is meant to introduce vulnerabilities) or remove the security approvals. Merging the code will add the new results to the vulnerability reports and dashboard.
+{{< hint warning >}}
+**Note:** We won't be able to merge because the security approvals are present and there are vulnerabilities. If you want to merge this, you either need to resolve the vulnerabilities (which doesn't make sense in this context, since the code is meant to introduce vulnerabilities) or remove the security approvals and reload the MR pipeline.
+
+Merging the code will add the new results to the vulnerability reports and dashboard.
 {{< /hint >}}
 
 ---

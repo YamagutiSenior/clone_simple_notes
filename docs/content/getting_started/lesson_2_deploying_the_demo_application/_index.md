@@ -123,14 +123,16 @@ Now let's run a pipeline to deploy the application to our Kubernetes cluster.
 
 Now let's wait for the pipeline to complete, this should take a few mins - so grab a coffee ☕️ or tea 🍵, or whatever you like! If the pipeline happens to fail, please checkout the [troubleshooting documentation](../../documentation/troubleshooting).
 
-1. Verify that all the stages have passed successfully within the pipeline.
+1. Verify that all the stages before **deploy** have passed successfully within the pipeline
 
 {{< hint info >}}
-**Note:** A completed pipeline should look like the below:  
-![](/devsecops/initech/simple-notes/images/completed_pipeline.png)
+**Note:** A completed pre-deploy pipeline should look like the below:  
+![](/devsecops/initech/simple-notes/images/pre-deploy_main_pipeline.png)
 {{< /hint >}}
 
-2. Press the **play** button on the **deploy** job, the push to production
+2. Press the **play** button on the **deploy** job, the push to production. The play
+button like like the below:  
+![](/devsecops/initech/simple-notes/images/pipeline_play_button.png)
 
 {{< hint info >}}
 **Note:** The reason why this is manual is because a deployment from the
@@ -138,12 +140,15 @@ Now let's wait for the pipeline to complete, this should take a few mins - so gr
 automatically. We are treating the `default` branch like production.
 {{< /hint >}}
 
+3. Verify all jobs have completed successfully. It should look like the below:  
+![](/devsecops/initech/simple-notes/images/completed_main_pipeline.png)
+
 ## Step 5: Accessing our Application
 
 Now let's use the ingress to access our application. With the default settings
 your application should be available at your Load-Balancers IP under the `/notes` path. These items can be configured via the [values.yaml](https://gitlab.com/tech-marketing/devsecops/initech/simple-notes/-/blob/main/helm/values.yaml) within the helm path.
 
-1. Click on the `deploy` job and scroll to the bottom. You should see the URL which the application was deployed to.
+1. Click on the `deploy` job and scroll to the bottom. You should see the URL which the application was deployed to
 
 {{< hint info >}}
 **Note:** You can also go to the `Deployment > Environments` tab and click the `Open`

@@ -30,13 +30,18 @@ We will go over the following scanners:
 
 ## Step 1: Adding Security Scans to the pipeline
 
-Securty scanner can be added in 2 different ways. Either by using the [Security Configuration UI](https://docs.gitlab.com/ee/user/application_security/configuration/#security-testing) or by simply editing the [.gitlab-ci.yml](https://gitlab.com/tech-marketing/devsecops/initech/simple-notes/-/blob/main/.gitlab-ci.yml).
+Security scanners can be added in 2 different ways. Either by using the [Security Configuration UI](https://docs.gitlab.com/ee/user/application_security/configuration/#security-testing) or by simply editing the [.gitlab-ci.yml](https://gitlab.com/tech-marketing/devsecops/initech/simple-notes/-/blob/main/.gitlab-ci.yml).
 
-Since security scanners have already been added to this project via [templates](https://docs.gitlab.com/ee/ci/examples/index.html#cicd-templates), you can see how they are defined and configured and by viewing the [.gitlab-ci.yml](https://gitlab.com/tech-marketing/devsecops/initech/simple-notes/-/blob/main/.gitlab-ci.yml). I'll go ahead and explain how they work.
+Since security scanners have already been added to this project via [templates](https://docs.gitlab.com/ee/ci/examples/index.html#cicd-templates), you can see how they are defined and configured and by viewing the [.gitlab-ci.yml](https://gitlab.com/tech-marketing/devsecops/initech/simple-notes/-/blob/main/.gitlab-ci.yml).
 
-### Static Scanners
+Below I'll explain how the security scanners work and separate them into 3 different categories:
+- Static Security Scanners
+- Dynamic Security Scanners
+- Application and Web-API Fuzzers
 
-Static scanners examine the static source code in your project, and perform pattern matching on syntax, versions, etc in order find known vulnerabilities. They obtain the vulnerabilities from a CVE database and parse data in order to provide you with the following:
+### Static Security Scanners
+
+Static security scanners examine the static source code in your project and perform pattern matching on syntax, versions, etc. in order find known vulnerabilities. They obtain the vulnerabilities from a CVE database and parse data in order to provide you with the following:
 
 * Description
 * Severity
@@ -46,34 +51,36 @@ Static scanners examine the static source code in your project, and perform patt
 * Relevant links (Education/Training, Solutions)
 * Identifiers (CVE, CWE)
 
-### Dynamic Scanners
+### Dynamic Security Scanners
 
-Dynamic scanners examine the running application, and send requests in order to find vulnerabilities within the system. Dynamic scanners are not aware of the underlying code, and perform request on a block-box. Since **requests** are sent to the application and **responses** are received, they are included along with the same data as static scanners (listed above).
+Dynamic scanners examine the running application, and send requests in order to find vulnerabilities within the system. Dynamic scanners are not aware of the underlying code, and perform request on a block-box.
 
-You can also download Postman specs in order to replicate the **requests**, which is useful for manual testing.
+{{< hint info >}}
+**Note:** Since **requests** are sent to the application and **responses** are received, they are included along with the same data as static scanners (listed above). You can download Postman specs in order to replicate the **requests**, which is useful for manual testing.
+{{< /hint >}}
 
-### Fuzzing
+### Application and Web-API Fuzzers
 
 Fuzzing or Fuzz-Testing is the process of sending **random** or **malformed** data to an application or instrumented function in order to cause unexpected behavior. This helps you discover bugs and potential security issues that other QA processes may miss.
 
-GitLab includes Web-API Fuzzing (fuzz testing of API operation parameters) and Coverage-Guided Fuzzing (sends random inputs to an instrumented version of your application). Each have their own uses and benefits.
+GitLab includes Web-API Fuzzing (fuzz testing of API operation parameters) and Coverage-Guided Fuzzing (sends random inputs to an instrumented version of your application).
 
-## Step 2: Explanation of each of the CI/CD jobs
+## Step 2: Explanation of each of the CI/CD job
 
-There's a bunch of CI/CD jobs that do a bunch of different things, I'll briefly explain them here.
+There's a bunch of CI/CD jobs that do a bunch of different things, I'll briefly explain them below:
 
 - **build**: Builds the container image for using the application in Kubernetes
 - **pages**: Build the documentation using [Go Hugo](https://gohugo.io/) Static Site Generator
 - **unit**: Runs Unit Tests from the application
-- **gemnasium-python-dependency_scanning**: overwrites the pre_script of dependency scanning to install required system dependencies
-- **container_scanning**: overwrites the image being scanned depending on the branch
-- **license_scanning**: overwrites the pre_script of license scanning to install required system dependencies 
-- **secret_detection**: overwrites the variable SECRET_DETECTION_HISTORIC_SCAN to allow historic secret detection
-- **coverage-guided-fuzzing**: runs fuzzing on a provided instrumented file
-- **deploy**: installs ingress, mariadb, and notes application to Kubernetes cluster.
-- **dast**: overwrites paths used for running dast
-- **dast_api**: overwrites paths used for running dast_api
-- **apifuzzer_fuzz**: overwrites paths used for running api-fuzzing
+- **gemnasium-python-dependency_scanning**: Overwrites the pre_script of dependency scanning to install required system dependencies
+- **container_scanning**: Overwrites the image being scanned depending on the branch
+- **license_scanning**: Overwrites the pre_script of license scanning to install required system dependencies 
+- **secret_detection**: Overwrites the variable to allow historic secret detection
+- **coverage-guided-fuzzing**: Runs fuzzing on a provided instrumented file
+- **deploy**: Installs ingress, mariadb, and notes application to Kubernetes cluster.
+- **dast**: Overwrites paths used for running dast
+- **dast_api**: Overwrites paths used for running dast_api
+- **apifuzzer_fuzz**: Overwrites paths used for running api-fuzzing
 - **cleanup-db**: Resets notes which have been added via dynamic security scans
 
 ## Step 3: Setting up Merge-Request Approvals (Vulnerabilities)
@@ -104,7 +111,7 @@ GitLab provides Security guard-rails to prevent vulnerable code from being merge
 
 > THEN Require approval from `1` of the following approvers
 
-8. Add any username/group other than yours in the **Search users or groups** drop down
+8. Add any username/group (other than yours) in the **Search users or groups** drop down
 
 9. Click on the **Configure with a merge request** button
 
@@ -134,7 +141,7 @@ being merged.
 
 {{< hint info >}}
 **Note:** Make sure you type it completely as is, and don't select from the dropdown,
-License Scanning currently requires exact patterns
+License Scanning currently requires exact patterns.
 {{< /hint >}}
 
 ## Step 5: Setting up Merge-Request Approvals (Licenses)
