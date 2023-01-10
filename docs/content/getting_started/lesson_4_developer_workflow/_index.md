@@ -28,7 +28,7 @@ Now let's go ahead and add some vulnerabilities. We will make sure that somethin
 **Note:** I'll try to keep it up-to-date and re-based, if it isn't open up an issue within the project
 {{< /hint >}}
 
-3. Click on the **Source Control** Tab on the left of the Web IDE. It looks as follows:
+3. Click on the **Source Control** Tab on the left of the Web IDE. It looks as follows:  
 ![](/devsecops/initech/simple-notes/images/source_control_tab.png)
 
 4. Click on the **Commit & Push** Button

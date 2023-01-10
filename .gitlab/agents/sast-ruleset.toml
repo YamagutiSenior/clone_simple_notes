@@ -1,0 +1,18 @@
+[semgrep]
+  [[[semgrep.passthrough]]
+    type  = "raw"
+    mode  = "append"
+    value = """
+- id: "hard-coded-secret"
+  patterns:
+    - pattern-either:
+        - pattern: '$VAR'
+    - metavariable-regex:
+        metavariable: "$VAR"
+        regex: "(password|pass|passwd|pwd|secret|token|admin|yeet)"
+  message: |
+    Possible use of hard-coded credentials
+  severity: "WARNING"
+  languages:
+    - "python"
+"""
