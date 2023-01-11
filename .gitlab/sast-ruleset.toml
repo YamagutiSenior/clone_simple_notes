@@ -12,7 +12,7 @@
         regex: "(password|pass|passwd|pwd|secret|token|admin|yeet)"
   message: |
     Possible use of hard-coded credentials
-  severity: "WARNING"
+  severity: "Info"
   languages:
     - "python"
 """
