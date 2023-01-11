@@ -1,5 +1,8 @@
 image: docker:latest
 
+variables:
+  SECURE_LOG_LEVEL: "debug"
+
 workflow:
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
