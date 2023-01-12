@@ -100,9 +100,7 @@ container_scanning:
 
 secret_detection:
   variables:
-    SECRET_DETECTION_HISTORIC_SCAN: "true"
     GIT_DEPTH: 100
-    SECURE_LOG_LEVEL: "debug"
 
 license_scanning:
   variables:
