@@ -1,18 +1,23 @@
 [semgrep]
+  description = "My custom ruleset for Semgrep"
+  validate = true
+
   [[semgrep.passthrough]]
     type  = "raw"
     mode  = "append"
     value = """
-- id: "hard-coded-secret"
+- id: "secret"
   patterns:
     - pattern-either:
-        - pattern: "$VAR"
+        - pattern: '$MASK'
     - metavariable-regex:
-        metavariable: "$VAR"
+        metavariable: "$MASK"
         regex: "(password|pass|passwd|pwd|secret|token|admin|yeet)"
   message: |
-    "Possible use of hard-coded credentials"
-  severity: "INFO"
+    Possible use of a hard-coded password
+  metadata:
+    cwe: "..."
+  severity: "ERROR"
   languages:
     - "python"
 """
