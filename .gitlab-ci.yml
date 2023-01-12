@@ -1,8 +1,5 @@
 image: docker:latest
 
-variables:
-  SECURE_LOG_LEVEL: "debug"
-
 workflow:
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
@@ -104,6 +101,8 @@ container_scanning:
 secret_detection:
   variables:
     SECRET_DETECTION_HISTORIC_SCAN: "true"
+    GIT_DEPTH: 100
+    SECURE_LOG_LEVEL: "debug"
 
 license_scanning:
   variables:

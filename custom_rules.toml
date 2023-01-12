@@ -1,0 +1,5 @@
+title = "Hardcoded Credentials Config"
+
+[[rules]]
+description = "Possible Hardcoded Credentials"
+regex = "(?i)[^\\[]*(password|pass|passwd|pwd|secret|token|secrete|admin|yeet)[^\\]]*"
