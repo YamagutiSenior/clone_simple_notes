@@ -83,6 +83,7 @@ gemnasium-python-dependency_scanning:
     SECURE_LOG_LEVEL: "debug"
     RUNNER_GENERATE_ARTIFACTS_METADATA: "true"
     CI_DEBUG_TRACE: “true”
+    DS_REMEDIATE: "true"
   before_script:
     - apt update -y
     - apt install curl -y
