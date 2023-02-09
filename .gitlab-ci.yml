@@ -30,7 +30,7 @@ include:
   - template: Jobs/Secret-Detection.gitlab-ci.yml
   - template: Jobs/SAST-IaC.gitlab-ci.yml
   - template: DAST-API.gitlab-ci.yml
-  - project: 'renovate-bot/renovate-runner'
+  - project: 'tech-marketing/devsecops/initech/renovate-runner'
     file: '/templates/renovate-dind.gitlab-ci.yml'
 
 build:
