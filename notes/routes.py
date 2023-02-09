@@ -276,9 +276,9 @@ def delete_note(id=None, admin=False):
 def delete_note_admin(id=None):
     return delete_note(id, admin=True)
 
-@note.route('/version', methods=['GET'])
+@note.route('/health', methods=['GET', 'POST'])
 def version():
-    return jsonify({"Version": "1.0"}), 200
+    return jsonify({"message": "202 Accepted"}), 202
 
 def reset():
     conn = db.create_connection()
