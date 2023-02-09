@@ -276,6 +276,10 @@ def delete_note(id=None, admin=False):
 def delete_note_admin(id=None):
     return delete_note(id, admin=True)
 
+@note.route('/version', methods=['GET'])
+def version():
+    return jsonify({"Version": "1.0"}), 200
+
 def reset():
     conn = db.create_connection()
     query = """DROP TABLE notes;"""
