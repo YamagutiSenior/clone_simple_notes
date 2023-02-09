@@ -16,10 +16,20 @@ spec:
       - name: {{ .Values.notes.name }}
         image: {{ .Values.image }}
         env:          
-          {{- range $name, $value := .Values.notes.env }}
-          - name: {{ $name }}
-            value: {{ $value }}
-          {{- end }}
+          - name: "DB_ROOT_PWD"
+            value:  {{ .Values.notes.dbrootpwd }}
+          - name: "NOTES_DB_BACKEND"
+            value: {{ .Values.notes.dbBackend }}
+          - name: "NOTES_DB_DATABASE"
+            value: {{ .Values.notes.dbName }}
+          - name: "NOTES_ING_PATH"
+            value: {{ .Values.notes.path }}
+          - name: "CI_MERGE_REQUEST_PROJECT_ID"
+            value: {{ .Values.notes.env.CI_MERGE_REQUEST_PROJECT_ID }}
+          - name: "CI_MERGE_REQUEST_ID"
+            value: {{ .Values.notes.env.CI_MERGE_REQUEST_ID }}
+          - name: "CI_MERGE_REQUEST_SOURCE_BRANCH_SHA"
+            value: {{ .Values.notes.env.CI_MERGE_REQUEST_SOURCE_BRANCH_SHA }}
         ports:
         - containerPort: {{ .Values.notes.targetPort }}
 ---

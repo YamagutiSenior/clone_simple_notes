@@ -138,14 +138,14 @@ deploy:
     - sh scripts/install_echo.sh
   script:
     - kubectl config use-context $CI_PROJECT_PATH:simplenotes
-    - helm upgrade --install $HELM_DEPLOY_NAME helm -f helm/values.yaml \ 
-      --set image=$IMAGE \ 
-      --set notes.name=notes-$CI_COMMIT_REF_NAME \ 
-      --set notes.path=$ING_PATH \ 
-      --set notes.dbName=$CI_COMMIT_REF_NAME \
-      --set notes.env.CI_MERGE_REQUEST_PROJECT_ID=$CI_MERGE_REQUEST_PROJECT_ID \
-      --set notes.env.CI_MERGE_REQUEST_ID=$CI_MERGE_REQUEST_ID \
-      --set notes.env.CI_MERGE_REQUEST_SOURCE_BRANCH_SHA=$CI_MERGE_REQUEST_SOURCE_BRANCH_SHA \
+    - helm upgrade --install $HELM_DEPLOY_NAME helm -f helm/values.yaml 
+      --set image=$IMAGE 
+      --set notes.name=notes-$CI_COMMIT_REF_NAME 
+      --set notes.path=$ING_PATH 
+      --set notes.dbName=$CI_COMMIT_REF_NAME
+      --set notes.env.CI_MERGE_REQUEST_PROJECT_ID=$CI_MERGE_REQUEST_PROJECT_ID
+      --set notes.env.CI_MERGE_REQUEST_ID=$CI_MERGE_REQUEST_ID
+      --set notes.env.CI_MERGE_REQUEST_SOURCE_BRANCH_SHA=$CI_MERGE_REQUEST_SOURCE_BRANCH_SHA
       --set restrictednginx.name=restricted-nginx-$CI_COMMIT_REF_NAME
     - kubectl rollout restart deployment notes-$CI_COMMIT_REF_NAME -n default
   after_script:
