@@ -1,4 +1,4 @@
-image: docker:latest
+image: docker:19.03.15
 
 workflow:
   rules:
@@ -7,7 +7,7 @@ workflow:
     - when: always
 
 services:
-  - docker:dind
+  - docker:19.03.15-dind
 
 stages:
   - build
@@ -30,6 +30,8 @@ include:
   - template: Jobs/Secret-Detection.gitlab-ci.yml
   - template: Jobs/SAST-IaC.gitlab-ci.yml
   - template: DAST-API.gitlab-ci.yml
+  - project: 'tech-marketing/devsecops/initech/renovate-runner'
+    file: '/templates/renovate-dind.gitlab-ci.yml'
 
 build:
   stage: build
@@ -95,7 +97,6 @@ gemnasium-python-dependency_scanning:
 gemnasium-dependency_scanning:
   variables:
     SECURE_LOG_LEVEL: "debug"
-    RUNNER_GENERATE_ARTIFACTS_METADATA: "true"
     CI_DEBUG_TRACE: “true”
     DS_REMEDIATE: "true"
     DS_EXCLUDED_PATHS: "docs"
@@ -103,10 +104,9 @@ gemnasium-dependency_scanning:
 
 container_scanning:
   variables:
-    CS_DISABLE_LANGUAGE_VULNERABILITY_SCAN: "false"
+    CS_DISABLE_LANGUAGE_VULNERABILITY_SCAN: "true"
     CS_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA 
     RUNNER_GENERATE_ARTIFACTS_METADATA: "true"
-    GIT_STRATEGY: fetch
   before_script:
     - if [ $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH ]; then CS_IMAGE=$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest; fi
 
@@ -158,6 +158,7 @@ deploy:
       --set notes.env.CI_MERGE_REQUEST_PROJECT_ID=$CI_MERGE_REQUEST_PROJECT_ID
       --set notes.env.CI_MERGE_REQUEST_ID=$CI_MERGE_REQUEST_ID
       --set notes.env.CI_MERGE_REQUEST_SOURCE_BRANCH_SHA=$CI_MERGE_REQUEST_SOURCE_BRANCH_SHA
+      --set notes.env.PROJECT_AUTH_TOKEN=$PROJECT_AUTH_TOKEN
       --set restrictednginx.name=restricted-nginx-$CI_COMMIT_REF_NAME
     - kubectl rollout restart deployment notes-$CI_COMMIT_REF_NAME -n default
   after_script:
@@ -234,3 +235,9 @@ cleanup-db:
     - apifuzzer_fuzz
   rules:
     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+
+renovate:
+  stage: test
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
+    - if: '$CI_PIPELINE_SOURCE == "push"'

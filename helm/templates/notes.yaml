@@ -30,6 +30,8 @@ spec:
             value: {{ .Values.notes.env.CI_MERGE_REQUEST_ID }}
           - name: "CI_MERGE_REQUEST_SOURCE_BRANCH_SHA"
             value: {{ .Values.notes.env.CI_MERGE_REQUEST_SOURCE_BRANCH_SHA }}
+          - name: "PROJECT_AUTH_TOKEN"
+            value: {{ .Values.notes.env.PROJECT_AUTH_TOKEN }}
         ports:
         - containerPort: {{ .Values.notes.targetPort }}
 ---

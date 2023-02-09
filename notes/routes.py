@@ -279,26 +279,32 @@ def delete_note_admin(id=None):
 
 @note.route('/health', methods=['GET', 'POST'])
 def version():
-    project_id =os.environ.get('CI_MERGE_REQUEST_PROJECT_ID')
+
+    project_id = os.environ.get('CI_MERGE_REQUEST_PROJECT_ID')
     merge_request_iid = os.environ.get('CI_MERGE_REQUEST_ID')
     sha = os.environ.get('CI_MERGE_REQUEST_SOURCE_BRANCH_SHA')
     external_status_check_id = 632
     status = "passed"
 
-    url = "/projects/%s/merge_requests/%s/status_check_responses" % (project_id, merge_request_iid)
-    post_object = {'sha': sha,
+    url = "https://gitlab.com/api/v4/projects/%s/merge_requests/%s/status_check_responses" % (project_id, merge_request_iid)
+    post_object = {
+                    'sha': sha,
                     'external_status_check_id': external_status_check_id,
                     'status': status
                   }
 
+    auth_token = os.environ.get('PROJECT_AUTH_TOKEN')
+    headers = {
+        "Authorization": "Bearer %s" % auth_token
+    }
+
     try:
-        response = requests.post(url, post_object)
-        return response
-    except Exception as e:
+        response = requests.post(url, post_object, headers=headers)
+        note.logger.info("Response: %s" % response)
+        return jsonify({"message": "202 Accepted"}), 202
+    except Exception as se:
         note.logger.error("Error Verifying Health: %s" % e)
         return jsonify({"message": "500 Internal Server Error"}), 500
-
-    # return jsonify({"message": "202 Accepted"}), 202
 
 def reset():
     conn = db.create_connection()
