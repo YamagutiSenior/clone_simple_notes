@@ -13,7 +13,7 @@
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
     "reactjs-popup": "^2.0.5",
-    "saml2-js": "1.5.0",
+    "saml2-js": "1.0.0",
     "semantic-ui-react": "^2.1.4",
     "web-vitals": "^2.1.0"
   },

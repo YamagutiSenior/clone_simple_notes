@@ -2639,20 +2639,22 @@ ast-types-flow@^0.0.7:
   resolved "https://registry.yarnpkg.com/ast-types-flow/-/ast-types-flow-0.0.7.tgz#f70b735c6bca1a5c9c22d982c3e39e7feba3bdad"
   integrity sha512-eBvWn1lvIApYMhzQMsu9ciLfkBY499mFZlNqG+/9WR7PVlroQw0vG30cOQQbaKz3sCEc44TAOu2ykzqXSNnwag==
 
+async-ext@~0.1.4:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/async-ext/-/async-ext-0.1.5.tgz#d7bd2d3b64d7f13f6ea1ebcb399104b7b4fd795f"
+  integrity sha512-ke19OCj2BMmxLUWgybjTTaxe3htuywyav3oqfsEIWQ7k2QHnbI3RKGs8mS131jkVdCg0eyYhTLCvnxG74M1nng==
+  dependencies:
+    underscore "~1.5.2"
+
 async@^3.2.3:
   version "3.2.4"
   resolved "https://registry.yarnpkg.com/async/-/async-3.2.4.tgz#2d22e00f8cddeb5fde5dd33522b56d1cf569a81c"
   integrity sha512-iAB+JbDEGXhyIUavoDl9WP/Jj106Kz9DEn1DPgYw5ruDn0e3Wgi3sKFm55sASdGBNOQB8F59d9qQ7deqrHA8wQ==
 
-async@~0.2.7:
+async@~0.2.10, async@~0.2.7:
   version "0.2.10"
   resolved "https://registry.yarnpkg.com/async/-/async-0.2.10.tgz#b6bbe0b0674b9d719708ca38de8c237cb526c3d1"
   integrity sha512-eAkdoKxU6/LkKDBzLpT+t6Ff5EtfSF4wx1WfJiPEEV7WNLnDaRXk0oVysiEPm262roaachGexwUv94WhSgN5TQ==
-
-async@~1.5.2:
-  version "1.5.2"
-  resolved "https://registry.yarnpkg.com/async/-/async-1.5.2.tgz#ec6a61ae56480c0c3cb241c95618e20892f9672a"
-  integrity sha512-nSVgobk4rv61R9PUSDtYt7mPVB2olxNR5RWJcAsH676/ef11bUZwvu7+RGYrYauVdDPcO519v68wRhXQtxsV9w==
 
 asynckit@^0.4.0:
   version "0.4.0"
@@ -7909,16 +7911,17 @@ safe-regex-test@^1.0.0:
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
 
-saml2-js@1.5.0:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/saml2-js/-/saml2-js-1.5.0.tgz#c0d2268a179e7329d29eb25aa82df5503774b0d9"
-  integrity sha512-tJZsPQ1hOIY4EmmlKZGttJjjArs20Qgrv29kwCoy+dQU37Hg2V/h5QgGRsx2hHiKjLnyhBFRH3QWff3z1JBvbg==
+saml2-js@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/saml2-js/-/saml2-js-1.0.0.tgz#29671d3d46afa75718f5c4aae19b7f0dbbf6112d"
+  integrity sha512-z2wvmvxphlrj7MCW8DqqOpKK3arGJdiR5gT5dmrPLYA1haUpUeVwepGCUxRZVlIyct3JZaMxKCpW0uHB07l5pw==
   dependencies:
-    async "~1.5.2"
+    async "~0.2.10"
+    async-ext "~0.1.4"
     debug "^1.0.4"
     underscore "~1.6.0"
-    xml-crypto "^0.8.1"
-    xml-encryption "~0.7.4"
+    xml-crypto "0.0.22"
+    xml-encryption "~0.7.0"
     xml2js "~0.4.1"
     xmlbuilder "~2.1.0"
     xmldom "~0.1.19"
@@ -8750,6 +8753,11 @@ underscore@>=1.5.x:
   resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.13.6.tgz#04786a1f589dc6c09f761fc5f45b89e935136441"
   integrity sha512-+A5Sja4HP1M08MaXya7p5LvjuM7K6q/2EaC0+iovj/wOcMsTzMvDFbasi/oSapiwOlt252IqsKqPjCl7huKS0A==
 
+underscore@~1.5.2:
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.5.2.tgz#1335c5e4f5e6d33bbb4b006ba8c86a00f556de08"
+  integrity sha512-yejOFsRnTJs0N9CK5Apzf6maDO2djxGoLLrlZlvGs2o9ZQuhIhDL18rtFyy4FBIbOkzA6+4hDgXbgz5EvDQCXQ==
+
 underscore@~1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.6.0.tgz#8b38b10cacdef63337b8b24e4ff86d45aea529a8"
@@ -9349,15 +9357,16 @@ ws@^8.4.2:
   resolved "https://registry.yarnpkg.com/ws/-/ws-8.12.0.tgz#485074cc392689da78e1828a9ff23585e06cddd8"
   integrity sha512-kU62emKIdKVeEIOIKVegvqpXMSTAMLJozpHZaJNDYqBjzlSYXQGviYwN1osDLJ9av68qHd4a2oSjd7yD4pacig==
 
-xml-crypto@^0.8.1:
-  version "0.8.5"
-  resolved "https://registry.yarnpkg.com/xml-crypto/-/xml-crypto-0.8.5.tgz#2bbcfb3eb33f3a82a218b822bf672b6b1c20e538"
-  integrity sha512-bmO0+G7iSf8dldIehyokvLps0ZZpGMe3gQNa+MPOrdBZbpzUG/Ass4njwWmPKCtR4pN+N921uH4M+Uskc7g/IA==
+xml-crypto@0.0.22:
+  version "0.0.22"
+  resolved "https://registry.yarnpkg.com/xml-crypto/-/xml-crypto-0.0.22.tgz#af371d6b866f03244121540ee2bbbf1e9606e9ef"
+  integrity sha512-bwhk3QZBga1Q+uQweuSAoMcrG8sXGOvI63PTVuLAYSz6p2Jf3DPTSqqd+0VjIXzE07voyGjfwtq5+9ikxEt+iA==
   dependencies:
-    xmldom "=0.1.19"
+    xmldom "=0.1.16"
+    xmldom-fork-fixed ">=0.0.1"
     xpath.js ">=0.0.3"
 
-xml-encryption@~0.7.4:
+xml-encryption@~0.7.0:
   version "0.7.4"
   resolved "https://registry.yarnpkg.com/xml-encryption/-/xml-encryption-0.7.4.tgz#42791ec64d556d2455dcb9da0a54123665ac65c7"
   integrity sha512-gwwKa9TwNT8S4dimixE+k4wsOOxK6Rt7ctxGRtuZyT7bWPvJwMTbYLLDKu7WG19vKwDMqMqGkVjbLQquKDY7pw==
@@ -9398,10 +9407,15 @@ xmlchars@^2.2.0:
   resolved "https://registry.yarnpkg.com/xmlchars/-/xmlchars-2.2.0.tgz#060fe1bcb7f9c76fe2a17db86a9bc3ab894210cb"
   integrity sha512-JZnDKK8B0RCDw84FNdDAIpZK+JuJw+s7Lz8nksI7SIuU3UXJJslUthsi+uWBUYOwPFwW7W7PRLRfUKpxjtjFCw==
 
-xmldom@=0.1.19:
-  version "0.1.19"
-  resolved "https://registry.yarnpkg.com/xmldom/-/xmldom-0.1.19.tgz#631fc07776efd84118bf25171b37ed4d075a0abc"
-  integrity sha512-pDyxjQSFQgNHkU+yjvoF+GXVGJU7e9EnOg/KcGMDihBIKjTsOeDYaECwC/O9bsUWKY+Sd9izfE43JXC46EOHKA==
+xmldom-fork-fixed@>=0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/xmldom-fork-fixed/-/xmldom-fork-fixed-0.0.1.tgz#b0cdba157a579d1b6eb471c9615bc8e512c5a28b"
+  integrity sha512-XAh4oO++IkICsegrDes1I25uAUS8fZY0ZrIxqtrTUuMkqsif3jykAqmb4JBdenM2F208RPESdnSEZnADRoDiuw==
+
+xmldom@=0.1.16:
+  version "0.1.16"
+  resolved "https://registry.yarnpkg.com/xmldom/-/xmldom-0.1.16.tgz#cf2602832b1ab5c3e6813fca08fe70196ba15e8c"
+  integrity sha512-BAf7j3VCoH0YKmJkdN1yXDeHRj+T9Z2oxIhuaSvX3NigmNEInT9o9We6T+Ruh75hLZQBnATmekSmd0nd6GGrow==
 
 xmldom@~0.1.15, xmldom@~0.1.19:
   version "0.1.31"

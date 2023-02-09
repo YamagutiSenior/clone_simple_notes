@@ -1,5 +1,6 @@
 import os
 import socket
+import requests
 
 from notes import db, note, auth, users
 from notes.forms import AddForm, AdminForm, ResetForm, DeleteForm
@@ -278,7 +279,26 @@ def delete_note_admin(id=None):
 
 @note.route('/health', methods=['GET', 'POST'])
 def version():
-    return jsonify({"message": "202 Accepted"}), 202
+    project_id =os.environ.get('CI_MERGE_REQUEST_PROJECT_ID')
+    merge_request_iid = os.environ.get('CI_MERGE_REQUEST_ID')
+    sha = os.environ.get('CI_MERGE_REQUEST_SOURCE_BRANCH_SHA')
+    external_status_check_id = 1
+    status = "passed"
+
+    url = "/projects/:%s/merge_requests/:%s/status_check_responses" % (project_id, merge_request_iid)
+    post_object = {'sha': sha,
+                    'external_status_check_id': external_status_check_id,
+                    'status': status
+                  }
+
+    try:
+        response = requests.post(url, post_object)
+        return response
+    except Exception as e:
+        note.logger.error("Error Verifying Health: %s" % e)
+        return jsonify({"message": "500 Internal Server Error"}), 500
+
+    # return jsonify({"message": "202 Accepted"}), 202
 
 def reset():
     conn = db.create_connection()

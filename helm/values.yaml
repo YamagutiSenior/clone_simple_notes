@@ -12,3 +12,19 @@ notes:
     dbBackend: mariadb
     dbrootpwd: y33tboi
     dbName: production
+
+    env:
+      - name: DB_ROOT_PWD
+        value: "y33tboi"
+      - name: NOTES_DB_BACKEND
+        value: "mariadb"
+      - name: NOTES_DB_DATABASE
+        value: "production"
+      - name: NOTES_ING_PATH
+        value: "notes"
+      - name: CI_MERGE_REQUEST_PROJECT_ID
+        value: ""
+      - name: CI_MERGE_REQUEST_ID
+        value: ""
+      - name: 'CI_MERGE_REQUEST_SOURCE_BRANCH_SHA'
+        value: ""

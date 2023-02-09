@@ -15,15 +15,11 @@ spec:
       containers:
       - name: {{ .Values.notes.name }}
         image: {{ .Values.image }}
-        env:
-          - name: DB_ROOT_PWD
-            value: "{{ .Values.notes.dbrootpwd }}"
-          - name: NOTES_DB_BACKEND
-            value: "{{ .Values.notes.dbBackend }}"
-          - name: NOTES_DB_DATABASE
-            value: "{{ .Values.notes.dbName }}"
-          - name: NOTES_ING_PATH
-            value: "{{ .Values.notes.path }}"
+        env:          
+          {{- range $name, $value := .Values.notes.env }}
+          - name: {{ $name }}
+            value: {{ $value }}
+          {{- end }}
         ports:
         - containerPort: {{ .Values.notes.targetPort }}
 ---
