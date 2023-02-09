@@ -91,6 +91,14 @@ gemnasium-python-dependency_scanning:
     - curl -LsS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | bash
     - apt install libmariadb3 libmariadb-dev mariadb-client sqlite3 libsqlite3-dev -y
 
+gemnasium-dependency_scanning:
+  variables:
+    SECURE_LOG_LEVEL: "debug"
+    RUNNER_GENERATE_ARTIFACTS_METADATA: "true"
+    CI_DEBUG_TRACE: “true”
+    DS_REMEDIATE: "true"
+    DS_EXCLUDED_PATHS: "docs"
+
 container_scanning:
   variables:
     CS_DISABLE_LANGUAGE_VULNERABILITY_SCAN: "false"
