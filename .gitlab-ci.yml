@@ -137,6 +137,7 @@ deploy:
     - sh scripts/install_mariadb.sh
     - sh scripts/install_echo.sh
   script:
+    - printenv
     - kubectl config use-context $CI_PROJECT_PATH:simplenotes
     - helm upgrade --install $HELM_DEPLOY_NAME helm -f helm/values.yaml 
       --set image=$IMAGE 

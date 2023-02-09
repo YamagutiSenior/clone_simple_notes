@@ -282,10 +282,10 @@ def version():
     project_id =os.environ.get('CI_MERGE_REQUEST_PROJECT_ID')
     merge_request_iid = os.environ.get('CI_MERGE_REQUEST_ID')
     sha = os.environ.get('CI_MERGE_REQUEST_SOURCE_BRANCH_SHA')
-    external_status_check_id = 1
+    external_status_check_id = 632
     status = "passed"
 
-    url = "/projects/:%s/merge_requests/:%s/status_check_responses" % (project_id, merge_request_iid)
+    url = "/projects/%s/merge_requests/%s/status_check_responses" % (project_id, merge_request_iid)
     post_object = {'sha': sha,
                     'external_status_check_id': external_status_check_id,
                     'status': status
