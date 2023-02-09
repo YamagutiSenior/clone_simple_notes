@@ -1,4 +1,4 @@
-image: docker:19.03.15
+image: docker:latest
 
 workflow:
   rules:
@@ -7,7 +7,7 @@ workflow:
     - when: always
 
 services:
-  - docker:19.03.15-dind
+  - docker:dind
 
 stages:
   - build
@@ -237,7 +237,10 @@ cleanup-db:
     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
 renovate:
-  stage: test
+  image: docker:19.03.15
   rules:
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
     - if: '$CI_PIPELINE_SOURCE == "push"'
+  services:
+    - docker:19.03.15-dind
+  allow_failure: true
