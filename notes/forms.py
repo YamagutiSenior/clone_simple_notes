@@ -16,3 +16,7 @@ class AdminForm(FlaskForm):
 
 class ResetForm(FlaskForm):
     reset = SubmitField('Reset Database Table')
+
+# class DownloadForm(FlaskForm):
+#    note_field = StringField('Enter Note', validators=[DataRequired()])
+#    download = SubmitField('Download Form')
