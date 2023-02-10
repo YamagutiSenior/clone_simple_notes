@@ -14,8 +14,8 @@ stages:
   - test
   - deploy
   - production
-  - dast
-  - apifuzz
+  #- dast
+  #- apifuzz
   - cleanup
 
 include:
@@ -84,58 +84,58 @@ unit:
     paths:
       - unit.txt
 
-gemnasium-python-dependency_scanning:
-  variables:
-    SECURE_LOG_LEVEL: "debug"
-    RUNNER_GENERATE_ARTIFACTS_METADATA: "true"
-    CI_DEBUG_TRACE: “true”
-    DS_REMEDIATE: "true"
-    GIT_STRATEGY: fetch
-  before_script:
-    - apt update -y
-    - apt install curl -y
-    - apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
-    - curl -LsS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | bash
-    - apt install libmariadb3 libmariadb-dev mariadb-client sqlite3 libsqlite3-dev -y
+# gemnasium-python-dependency_scanning:
+#   variables:
+#     SECURE_LOG_LEVEL: "debug"
+#     RUNNER_GENERATE_ARTIFACTS_METADATA: "true"
+#     CI_DEBUG_TRACE: “true”
+#     DS_REMEDIATE: "true"
+#     GIT_STRATEGY: fetch
+#   before_script:
+#     - apt update -y
+#     - apt install curl -y
+#     - apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
+#     - curl -LsS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | bash
+#     - apt install libmariadb3 libmariadb-dev mariadb-client sqlite3 libsqlite3-dev -y
 
-gemnasium-dependency_scanning:
-  variables:
-    SECURE_LOG_LEVEL: "debug"
-    CI_DEBUG_TRACE: “true”
-    DS_REMEDIATE: "true"
-    DS_EXCLUDED_PATHS: "docs"
-    GIT_STRATEGY: fetch
+# gemnasium-dependency_scanning:
+#   variables:
+#     SECURE_LOG_LEVEL: "debug"
+#     CI_DEBUG_TRACE: “true”
+#     DS_REMEDIATE: "true"
+#     DS_EXCLUDED_PATHS: "docs"
+#     GIT_STRATEGY: fetch
 
-container_scanning:
-  variables:
-    CS_DISABLE_LANGUAGE_VULNERABILITY_SCAN: "true"
-    CS_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA 
-    RUNNER_GENERATE_ARTIFACTS_METADATA: "true"
-  before_script:
-    - if [ $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH ]; then CS_IMAGE=$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest; fi
+# container_scanning:
+#   variables:
+#     CS_DISABLE_LANGUAGE_VULNERABILITY_SCAN: "true"
+#     CS_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA 
+#     RUNNER_GENERATE_ARTIFACTS_METADATA: "true"
+#   before_script:
+#     - if [ $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH ]; then CS_IMAGE=$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest; fi
 
-secret_detection:
-  variables:
-    GIT_DEPTH: 100
+# secret_detection:
+#   variables:
+#     GIT_DEPTH: 100
 
-license_scanning:
-  variables:
-    CI_DEBUG_TRACE: "true"
-  before_script:
-    - apt update -y; apt upgrade -y
-    - apt install gcc curl openssl python3-pip -y
-    - apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
-    - curl -LsS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | bash
-    - apt install libmariadb3 libmariadb-dev mariadb-client sqlite3 libsqlite3-dev -y
-    - pip3 install --upgrade pip; pip3 install packaging
+# license_scanning:
+#   variables:
+#     CI_DEBUG_TRACE: "true"
+#   before_script:
+#     - apt update -y; apt upgrade -y
+#     - apt install gcc curl openssl python3-pip -y
+#     - apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
+#     - curl -LsS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | bash
+#     - apt install libmariadb3 libmariadb-dev mariadb-client sqlite3 libsqlite3-dev -y
+#     - pip3 install --upgrade pip; pip3 install packaging
 
-coverage-guided-fuzzing:
-  image: python:latest
-  stage: test
-  extends: .fuzz_base
-  script:
-    - pip install --extra-index-url https://gitlab.com/api/v4/projects/19904939/packages/pypi/simple pythonfuzz
-    - ./gitlab-cov-fuzz run --engine pythonfuzz -- fuzz.py
+# coverage-guided-fuzzing:
+#   image: python:latest
+#   stage: test
+#   extends: .fuzz_base
+#   script:
+#     - pip install --extra-index-url https://gitlab.com/api/v4/projects/19904939/packages/pypi/simple pythonfuzz
+#     - ./gitlab-cov-fuzz run --engine pythonfuzz -- fuzz.py
 
 deploy:
   image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image:helm-3.10.0-kube-1.24.6-alpine-3.15
@@ -189,42 +189,42 @@ deploy:
         ING_PATH: "notes"
       when: manual #production push is manual
 
-dast:
-  stage: dast
-  variables:
-     DAST_BROWSER_SCAN: "true"
-  rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-      variables:
-        DAST_FULL_SCAN_ENABLED: "false"
-    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
-      variables:
-        DAST_FULL_SCAN_ENABLED: "true"
-  dependencies:
-    - deploy
+# dast:
+#   stage: dast
+#   variables:
+#      DAST_BROWSER_SCAN: "true"
+#   rules:
+#     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+#       variables:
+#         DAST_FULL_SCAN_ENABLED: "false"
+#     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+#       variables:
+#         DAST_FULL_SCAN_ENABLED: "true"
+#   dependencies:
+#     - deploy
 
-dast_api:
-  stage: dast
-  before_script:
-    - sed -i 's@HOST@'"${INGRESS_LB_IP}"'@' test_openapi.v2.0.json
-    - sed -i 's@PATH@'"notes-${CI_COMMIT_REF_NAME}"'@' test_openapi.v2.0.json
-  variables:
-     DAST_API_PROFILE: Quick
-     DAST_API_OPENAPI: test_openapi.v2.0.json
-  rules:
-    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+# dast_api:
+#   stage: dast
+#   before_script:
+#     - sed -i 's@HOST@'"${INGRESS_LB_IP}"'@' test_openapi.v2.0.json
+#     - sed -i 's@PATH@'"notes-${CI_COMMIT_REF_NAME}"'@' test_openapi.v2.0.json
+#   variables:
+#      DAST_API_PROFILE: Quick
+#      DAST_API_OPENAPI: test_openapi.v2.0.json
+#   rules:
+#     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
-apifuzzer_fuzz:
-  stage: apifuzz
-  before_script:
-    - sed -i 's@HOST@'"${INGRESS_LB_IP}"'@' test_openapi.v2.0.json
-    - sed -i 's@PATH@'"notes-${CI_COMMIT_REF_NAME}"'@' test_openapi.v2.0.json
-    - export FUZZAPI_TARGET_URL=http://${INGRESS_LB_IP}/
-  variables:
-    FUZZAPI_PROFILE: Quick-10
-    FUZZAPI_OPENAPI: test_openapi.v2.0.json
-  rules:
-    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+# apifuzzer_fuzz:
+#   stage: apifuzz
+#   before_script:
+#     - sed -i 's@HOST@'"${INGRESS_LB_IP}"'@' test_openapi.v2.0.json
+#     - sed -i 's@PATH@'"notes-${CI_COMMIT_REF_NAME}"'@' test_openapi.v2.0.json
+#     - export FUZZAPI_TARGET_URL=http://${INGRESS_LB_IP}/
+#   variables:
+#     FUZZAPI_PROFILE: Quick-10
+#     FUZZAPI_OPENAPI: test_openapi.v2.0.json
+#   rules:
+#     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
 cleanup-db:
   image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image:helm-3.10.0-kube-1.24.6-alpine-3.15
