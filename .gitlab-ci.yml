@@ -31,7 +31,7 @@ include:
   - template: Jobs/SAST-IaC.gitlab-ci.yml
   - template: DAST-API.gitlab-ci.yml
   - project: 'renovate-bot/renovate-runner'
-    file: '/templates/renovate-dind.gitlab-ci.yml'
+    file: '/templates/renovate.gitlab-ci.yml'
     ref: v10.142.6
 
 build:
