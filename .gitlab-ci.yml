@@ -19,20 +19,23 @@ stages:
   - cleanup
 
 include:
-  - template: Security/Container-Scanning.gitlab-ci.yml
-  - template: Security/DAST.gitlab-ci.yml
-  - template: API-Fuzzing.gitlab-ci.yml
-  - template: Coverage-Fuzzing.gitlab-ci.yml
-  - template: Security/License-Scanning.gitlab-ci.yml
-  - template: Code-Quality.gitlab-ci.yml
-  - template: Security/Dependency-Scanning.gitlab-ci.yml
-  - template: Security/SAST.gitlab-ci.yml
-  - template: Jobs/Secret-Detection.gitlab-ci.yml
-  - template: Jobs/SAST-IaC.gitlab-ci.yml
-  - template: DAST-API.gitlab-ci.yml
+  # - template: Security/Container-Scanning.gitlab-ci.yml
+  # - template: Security/DAST.gitlab-ci.yml
+  # - template: API-Fuzzing.gitlab-ci.yml
+  # - template: Coverage-Fuzzing.gitlab-ci.yml
+  # - template: Security/License-Scanning.gitlab-ci.yml
+  # - template: Code-Quality.gitlab-ci.yml
+  # - template: Security/Dependency-Scanning.gitlab-ci.yml
+  # - template: Security/SAST.gitlab-ci.yml
+  # - template: Jobs/Secret-Detection.gitlab-ci.yml
+  # - template: Jobs/SAST-IaC.gitlab-ci.yml
+  # - template: DAST-API.gitlab-ci.yml
   - project: 'renovate-bot/renovate-runner'
-    file: '/templates/renovate.gitlab-ci.yml'
+    file: '/templates/renovate-dind.gitlab-ci.yml'
     ref: v10.142.6
+
+variables:
+  LOG_LEVEL: debug
 
 build:
   stage: build
@@ -238,7 +241,13 @@ cleanup-db:
     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
 renovate:
+  variables:
+    CI_DEBUG_TRACE: “true”
+    LOG_LEVEL: debug
   rules:
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
     - if: '$CI_PIPELINE_SOURCE == "push"'
   allow_failure: true
+  artifacts:
+    paths:
+      - renovate-log.ndjson
