@@ -246,3 +246,22 @@ renovate:
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
     - if: '$CI_PIPELINE_SOURCE == "push"'
   allow_failure: true
+
+yeet:
+  image: returntocorp/semgrep
+  stage: test
+  script: semgrep ci --gitlab-sast > gl-sast-report.json || true
+  rules:
+  - changes:
+      - .gitlab-ci.yml
+  - if: $CI_PIPELINE_SOURCE == "web"  # allow triggering a scan manually from the gitlab UI
+  - if: $CI_MERGE_REQUEST_IID
+  - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  variables:
+    SEMGREP_RULES: >- # more at semgrep.dev/r
+      p/security-audit
+      p/secrets
+    SEMGREP_APP_TOKEN: $SEMGREP_APP_TOKEN
+  artifacts:
+    reports:
+      sast: gl-sast-report.json
