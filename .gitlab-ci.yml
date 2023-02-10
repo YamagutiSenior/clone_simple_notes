@@ -32,6 +32,7 @@ include:
   - template: DAST-API.gitlab-ci.yml
   - project: 'renovate-bot/renovate-runner'
     file: '/templates/renovate.gitlab-ci.yml'
+    ref: v10.142.6
 
 build:
   stage: build
@@ -237,10 +238,7 @@ cleanup-db:
     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
 renovate:
-  image: docker:19.03.15
   rules:
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
     - if: '$CI_PIPELINE_SOURCE == "push"'
-  services:
-    - docker:19.03.15-dind
   allow_failure: true
