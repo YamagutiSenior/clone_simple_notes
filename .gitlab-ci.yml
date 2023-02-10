@@ -30,9 +30,9 @@ include:
   - template: Jobs/Secret-Detection.gitlab-ci.yml
   - template: Jobs/SAST-IaC.gitlab-ci.yml
   - template: DAST-API.gitlab-ci.yml
-  - project: 'renovate-bot/renovate-runner'
-    file: '/templates/renovate.gitlab-ci.yml'
-    ref: v10.142.6
+  # - project: 'renovate-bot/renovate-runner'
+  #   file: '/templates/renovate.gitlab-ci.yml'
+  #   ref: v10.142.6
 
 build:
   stage: build
@@ -237,15 +237,15 @@ cleanup-db:
   rules:
     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
-renovate:
-  stage: test
-  variables:
-    CI_DEBUG_TRACE: “true”
-    LOG_LEVEL: debug
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "schedule"'
-    - if: '$CI_PIPELINE_SOURCE == "push"'
-  allow_failure: true
+# renovate:
+#   stage: test
+#   variables:
+#     CI_DEBUG_TRACE: “true”
+#     LOG_LEVEL: debug
+#   rules:
+#     - if: '$CI_PIPELINE_SOURCE == "schedule"'
+#     - if: '$CI_PIPELINE_SOURCE == "push"'
+#   allow_failure: true
 
 custom_dude:
   stage: test
