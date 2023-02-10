@@ -16,7 +16,7 @@ stages:
   - production
   #- dast
   #- apifuzz
-  - cleanup
+  #- cleanup
 
 include:
   # - template: Security/Container-Scanning.gitlab-ci.yml
@@ -226,19 +226,19 @@ deploy:
 #   rules:
 #     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
-cleanup-db:
-  image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image:helm-3.10.0-kube-1.24.6-alpine-3.15
-  stage: cleanup
-  variables:
-    DB_NAME: $CI_COMMIT_REF_NAME
-  script:
-    - kubectl config use-context $CI_PROJECT_PATH:simplenotes
-    - kubectl exec -i deployment.apps/notes-$CI_COMMIT_REF_NAME -- sh scripts/reset_notes_table.sh
-  dependencies:
-    - dast
-    - apifuzzer_fuzz
-  rules:
-    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+# cleanup-db:
+#   image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image:helm-3.10.0-kube-1.24.6-alpine-3.15
+#   stage: cleanup
+#   variables:
+#     DB_NAME: $CI_COMMIT_REF_NAME
+#   script:
+#     - kubectl config use-context $CI_PROJECT_PATH:simplenotes
+#     - kubectl exec -i deployment.apps/notes-$CI_COMMIT_REF_NAME -- sh scripts/reset_notes_table.sh
+#   dependencies:
+#     - dast
+#     - apifuzzer_fuzz
+#   rules:
+#     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
 renovate:
   variables:
