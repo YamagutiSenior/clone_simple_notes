@@ -10,237 +10,235 @@ services:
   - docker:dind
 
 stages:
-  #- build
-  #- test
+  - build
+  - test
   - deploy
-  #- production
-  #- dast
-  #- apifuzz
-  #- cleanup
+  - production
+  - dast
+  - apifuzz
+  - cleanup
 
 include:
-  # - template: Security/Container-Scanning.gitlab-ci.yml
-  # - template: Security/DAST.gitlab-ci.yml
-  # - template: API-Fuzzing.gitlab-ci.yml
-  # - template: Coverage-Fuzzing.gitlab-ci.yml
-  # - template: Security/License-Scanning.gitlab-ci.yml
-  # - template: Code-Quality.gitlab-ci.yml
-  # - template: Security/Dependency-Scanning.gitlab-ci.yml
-  # - template: Security/SAST.gitlab-ci.yml
-  # - template: Jobs/Secret-Detection.gitlab-ci.yml
-  # - template: Jobs/SAST-IaC.gitlab-ci.yml
-  # - template: DAST-API.gitlab-ci.yml
+  - template: Security/Container-Scanning.gitlab-ci.yml
+  - template: Security/DAST.gitlab-ci.yml
+  - template: API-Fuzzing.gitlab-ci.yml
+  - template: Coverage-Fuzzing.gitlab-ci.yml
+  - template: Security/License-Scanning.gitlab-ci.yml
+  - template: Code-Quality.gitlab-ci.yml
+  - template: Security/Dependency-Scanning.gitlab-ci.yml
+  - template: Security/SAST.gitlab-ci.yml
+  - template: Jobs/Secret-Detection.gitlab-ci.yml
+  - template: Jobs/SAST-IaC.gitlab-ci.yml
+  - template: DAST-API.gitlab-ci.yml
   - project: 'renovate-bot/renovate-runner'
     file: '/templates/renovate-dind.gitlab-ci.yml'
     ref: v10.142.6
 
-variables:
-  LOG_LEVEL: debug
+build:
+  stage: build
+  variables:
+    IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - docker build -t $IMAGE .
+    - docker push $IMAGE
 
-# build:
-#   stage: build
-#   variables:
-#     IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
-#   before_script:
-#     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-#   script:
-#     - docker build -t $IMAGE .
-#     - docker push $IMAGE
+pages:
+  image: registry.gitlab.com/pages/hugo/hugo_extended:latest
+  before_script:
+    - apk add --update --no-cache git
+  script:
+    - hugo --minify -s docs
+    - cp -R docs/public .
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+  environment:
+    name: documentation
+    url: $CI_PAGES_URL
+  allow_failure: true
 
-# pages:
-#   image: registry.gitlab.com/pages/hugo/hugo_extended:latest
-#   before_script:
-#     - apk add --update --no-cache git
-#   script:
-#     - hugo --minify -s docs
-#     - cp -R docs/public .
-#   artifacts:
-#     paths:
-#       - public
-#   rules:
-#     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-#   environment:
-#     name: documentation
-#     url: $CI_PAGES_URL
-#   allow_failure: true
+unit:
+  image: python:latest
+  stage: test
+  variables:
+    NOTES_DB_BACKEND: "local"
+    RUNNER_GENERATE_ARTIFACTS_METADATA: "true"
+    NOTES_DB_DATABASE: "unit-tests"
+  before_script:
+    - apt update -y; apt upgrade -y
+    - apt install gcc curl openssl -y
+    - apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
+    - curl -LsS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | bash
+    - apt install libmariadb3 libmariadb-dev mariadb-client sqlite3 libsqlite3-dev -y
+    - pip3 install --upgrade pip; pip3 install -r requirements.txt
+  script:
+    - python -m unittest tests/test_db.py 2>&1 | tee unit.txt
+  artifacts:
+    paths:
+      - unit.txt
 
-# unit:
-#   image: python:latest
-#   stage: test
-#   variables:
-#     NOTES_DB_BACKEND: "local"
-#     RUNNER_GENERATE_ARTIFACTS_METADATA: "true"
-#     NOTES_DB_DATABASE: "unit-tests"
-#   before_script:
-#     - apt update -y; apt upgrade -y
-#     - apt install gcc curl openssl -y
-#     - apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
-#     - curl -LsS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | bash
-#     - apt install libmariadb3 libmariadb-dev mariadb-client sqlite3 libsqlite3-dev -y
-#     - pip3 install --upgrade pip; pip3 install -r requirements.txt
-#   script:
-#     - python -m unittest tests/test_db.py 2>&1 | tee unit.txt
-#   artifacts:
-#     paths:
-#       - unit.txt
+gemnasium-python-dependency_scanning:
+  variables:
+    SECURE_LOG_LEVEL: "debug"
+    RUNNER_GENERATE_ARTIFACTS_METADATA: "true"
+    CI_DEBUG_TRACE: “true”
+    DS_REMEDIATE: "true"
+    GIT_STRATEGY: fetch
+  before_script:
+    - apt update -y
+    - apt install curl -y
+    - apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
+    - curl -LsS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | bash
+    - apt install libmariadb3 libmariadb-dev mariadb-client sqlite3 libsqlite3-dev -y
 
-# gemnasium-python-dependency_scanning:
-#   variables:
-#     SECURE_LOG_LEVEL: "debug"
-#     RUNNER_GENERATE_ARTIFACTS_METADATA: "true"
-#     CI_DEBUG_TRACE: “true”
-#     DS_REMEDIATE: "true"
-#     GIT_STRATEGY: fetch
-#   before_script:
-#     - apt update -y
-#     - apt install curl -y
-#     - apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
-#     - curl -LsS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | bash
-#     - apt install libmariadb3 libmariadb-dev mariadb-client sqlite3 libsqlite3-dev -y
+gemnasium-dependency_scanning:
+  variables:
+    SECURE_LOG_LEVEL: "debug"
+    CI_DEBUG_TRACE: “true”
+    DS_REMEDIATE: "true"
+    DS_EXCLUDED_PATHS: "docs"
+    GIT_STRATEGY: fetch
 
-# gemnasium-dependency_scanning:
-#   variables:
-#     SECURE_LOG_LEVEL: "debug"
-#     CI_DEBUG_TRACE: “true”
-#     DS_REMEDIATE: "true"
-#     DS_EXCLUDED_PATHS: "docs"
-#     GIT_STRATEGY: fetch
+container_scanning:
+  variables:
+    CS_DISABLE_LANGUAGE_VULNERABILITY_SCAN: "true"
+    CS_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA 
+    RUNNER_GENERATE_ARTIFACTS_METADATA: "true"
+  before_script:
+    - if [ $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH ]; then CS_IMAGE=$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest; fi
 
-# container_scanning:
-#   variables:
-#     CS_DISABLE_LANGUAGE_VULNERABILITY_SCAN: "true"
-#     CS_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA 
-#     RUNNER_GENERATE_ARTIFACTS_METADATA: "true"
-#   before_script:
-#     - if [ $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH ]; then CS_IMAGE=$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest; fi
+secret_detection:
+  variables:
+    GIT_DEPTH: 100
 
-# secret_detection:
-#   variables:
-#     GIT_DEPTH: 100
+license_scanning:
+  variables:
+    CI_DEBUG_TRACE: "true"
+  before_script:
+    - apt update -y; apt upgrade -y
+    - apt install gcc curl openssl python3-pip -y
+    - apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
+    - curl -LsS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | bash
+    - apt install libmariadb3 libmariadb-dev mariadb-client sqlite3 libsqlite3-dev -y
+    - pip3 install --upgrade pip; pip3 install packaging
 
-# license_scanning:
-#   variables:
-#     CI_DEBUG_TRACE: "true"
-#   before_script:
-#     - apt update -y; apt upgrade -y
-#     - apt install gcc curl openssl python3-pip -y
-#     - apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
-#     - curl -LsS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | bash
-#     - apt install libmariadb3 libmariadb-dev mariadb-client sqlite3 libsqlite3-dev -y
-#     - pip3 install --upgrade pip; pip3 install packaging
+coverage-guided-fuzzing:
+  image: python:latest
+  stage: test
+  extends: .fuzz_base
+  script:
+    - pip install --extra-index-url https://gitlab.com/api/v4/projects/19904939/packages/pypi/simple pythonfuzz
+    - ./gitlab-cov-fuzz run --engine pythonfuzz -- fuzz.py
 
-# coverage-guided-fuzzing:
-#   image: python:latest
-#   stage: test
-#   extends: .fuzz_base
-#   script:
-#     - pip install --extra-index-url https://gitlab.com/api/v4/projects/19904939/packages/pypi/simple pythonfuzz
-#     - ./gitlab-cov-fuzz run --engine pythonfuzz -- fuzz.py
+deploy:
+  image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image:helm-3.10.0-kube-1.24.6-alpine-3.15
+  stage: deploy
+  variables:
+    HELM_HOST: "localhost:44134"
+    IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
+    ING_PATH: notes-$CI_COMMIT_REF_NAME
+    ENV_NAME: $CI_COMMIT_REF_NAME
+    HELM_DEPLOY_NAME: notes-$CI_COMMIT_REF_NAME
+  before_script:
+    - kubectl config use-context $CI_PROJECT_PATH:simplenotes
+    - sh scripts/install_ingress.sh
+    - sh scripts/install_mariadb.sh
+    - sh scripts/install_echo.sh
+  script:
+    - printenv
+    - kubectl config use-context $CI_PROJECT_PATH:simplenotes
+    - helm upgrade --install $HELM_DEPLOY_NAME helm -f helm/values.yaml 
+      --set image=$IMAGE 
+      --set notes.name=notes-$CI_COMMIT_REF_NAME 
+      --set notes.path=$ING_PATH 
+      --set notes.dbName=$CI_COMMIT_REF_NAME
+      --set notes.env.CI_MERGE_REQUEST_PROJECT_ID=$CI_MERGE_REQUEST_PROJECT_ID
+      --set notes.env.CI_MERGE_REQUEST_ID=$CI_MERGE_REQUEST_ID
+      --set notes.env.CI_MERGE_REQUEST_SOURCE_BRANCH_SHA=$CI_MERGE_REQUEST_SOURCE_BRANCH_SHA
+      --set notes.env.PROJECT_AUTH_TOKEN=$PROJECT_AUTH_TOKEN
+      --set restrictednginx.name=restricted-nginx-$CI_COMMIT_REF_NAME
+    - kubectl rollout restart deployment notes-$CI_COMMIT_REF_NAME -n default
+  after_script:
+    - kubectl config use-context $CI_PROJECT_PATH:simplenotes
+    - echo "DAST_WEBSITE=http://$(kubectl get svc -n ingress-nginx | grep LoadBalancer | awk '{print $4}')/notes-$CI_COMMIT_REF_NAME" >> deploy.env
+    - echo "DAST_API_TARGET_URL=http://$(kubectl get svc -n ingress-nginx | grep LoadBalancer | awk '{print $4}')/notes-$CI_COMMIT_REF_NAME" >> deploy.env
+    - export INGRESS_LB_IP=$(kubectl get svc -n ingress-nginx | grep LoadBalancer | awk '{print $4}')
+    - echo "INGRESS_LB_IP=$INGRESS_LB_IP" >> deploy.env
+    - echo "Access your application at http://$INGRESS_LB_IP/$ING_PATH"
+  environment:
+    name: $ENV_NAME
+    url: http://$INGRESS_LB_IP/notes-$CI_COMMIT_REF_NAME
+  artifacts:
+    reports:
+      dotenv: deploy.env
+  dependencies:
+    - build
+  rules:
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+      when: always
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+      variables:
+        ENV_NAME: "production"
+        ING_PATH: "notes"
+      when: manual #production push is manual
 
-# deploy:
-#   image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image:helm-3.10.0-kube-1.24.6-alpine-3.15
-#   stage: deploy
-#   variables:
-#     HELM_HOST: "localhost:44134"
-#     IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
-#     ING_PATH: notes-$CI_COMMIT_REF_NAME
-#     ENV_NAME: $CI_COMMIT_REF_NAME
-#     HELM_DEPLOY_NAME: notes-$CI_COMMIT_REF_NAME
-#   before_script:
-#     - kubectl config use-context $CI_PROJECT_PATH:simplenotes
-#     - sh scripts/install_ingress.sh
-#     - sh scripts/install_mariadb.sh
-#     - sh scripts/install_echo.sh
-#   script:
-#     - printenv
-#     - kubectl config use-context $CI_PROJECT_PATH:simplenotes
-#     - helm upgrade --install $HELM_DEPLOY_NAME helm -f helm/values.yaml 
-#       --set image=$IMAGE 
-#       --set notes.name=notes-$CI_COMMIT_REF_NAME 
-#       --set notes.path=$ING_PATH 
-#       --set notes.dbName=$CI_COMMIT_REF_NAME
-#       --set notes.env.CI_MERGE_REQUEST_PROJECT_ID=$CI_MERGE_REQUEST_PROJECT_ID
-#       --set notes.env.CI_MERGE_REQUEST_ID=$CI_MERGE_REQUEST_ID
-#       --set notes.env.CI_MERGE_REQUEST_SOURCE_BRANCH_SHA=$CI_MERGE_REQUEST_SOURCE_BRANCH_SHA
-#       --set notes.env.PROJECT_AUTH_TOKEN=$PROJECT_AUTH_TOKEN
-#       --set restrictednginx.name=restricted-nginx-$CI_COMMIT_REF_NAME
-#     - kubectl rollout restart deployment notes-$CI_COMMIT_REF_NAME -n default
-#   after_script:
-#     - kubectl config use-context $CI_PROJECT_PATH:simplenotes
-#     - echo "DAST_WEBSITE=http://$(kubectl get svc -n ingress-nginx | grep LoadBalancer | awk '{print $4}')/notes-$CI_COMMIT_REF_NAME" >> deploy.env
-#     - echo "DAST_API_TARGET_URL=http://$(kubectl get svc -n ingress-nginx | grep LoadBalancer | awk '{print $4}')/notes-$CI_COMMIT_REF_NAME" >> deploy.env
-#     - export INGRESS_LB_IP=$(kubectl get svc -n ingress-nginx | grep LoadBalancer | awk '{print $4}')
-#     - echo "INGRESS_LB_IP=$INGRESS_LB_IP" >> deploy.env
-#     - echo "Access your application at http://$INGRESS_LB_IP/$ING_PATH"
-#   environment:
-#     name: $ENV_NAME
-#     url: http://$INGRESS_LB_IP/notes-$CI_COMMIT_REF_NAME
-#   artifacts:
-#     reports:
-#       dotenv: deploy.env
-#   dependencies:
-#     - build
-#   rules:
-#     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
-#       when: always
-#     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-#       variables:
-#         ENV_NAME: "production"
-#         ING_PATH: "notes"
-#       when: manual #production push is manual
+dast:
+  stage: dast
+  variables:
+     DAST_BROWSER_SCAN: "true"
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+      variables:
+        DAST_FULL_SCAN_ENABLED: "false"
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+      variables:
+        DAST_FULL_SCAN_ENABLED: "true"
+  dependencies:
+    - deploy
 
-# dast:
-#   stage: dast
-#   variables:
-#      DAST_BROWSER_SCAN: "true"
-#   rules:
-#     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-#       variables:
-#         DAST_FULL_SCAN_ENABLED: "false"
-#     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
-#       variables:
-#         DAST_FULL_SCAN_ENABLED: "true"
-#   dependencies:
-#     - deploy
+dast_api:
+  stage: dast
+  before_script:
+    - sed -i 's@HOST@'"${INGRESS_LB_IP}"'@' test_openapi.v2.0.json
+    - sed -i 's@PATH@'"notes-${CI_COMMIT_REF_NAME}"'@' test_openapi.v2.0.json
+  variables:
+     DAST_API_PROFILE: Quick
+     DAST_API_OPENAPI: test_openapi.v2.0.json
+  rules:
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
-# dast_api:
-#   stage: dast
-#   before_script:
-#     - sed -i 's@HOST@'"${INGRESS_LB_IP}"'@' test_openapi.v2.0.json
-#     - sed -i 's@PATH@'"notes-${CI_COMMIT_REF_NAME}"'@' test_openapi.v2.0.json
-#   variables:
-#      DAST_API_PROFILE: Quick
-#      DAST_API_OPENAPI: test_openapi.v2.0.json
-#   rules:
-#     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+apifuzzer_fuzz:
+  stage: apifuzz
+  before_script:
+    - sed -i 's@HOST@'"${INGRESS_LB_IP}"'@' test_openapi.v2.0.json
+    - sed -i 's@PATH@'"notes-${CI_COMMIT_REF_NAME}"'@' test_openapi.v2.0.json
+    - export FUZZAPI_TARGET_URL=http://${INGRESS_LB_IP}/
+  variables:
+    FUZZAPI_PROFILE: Quick-10
+    FUZZAPI_OPENAPI: test_openapi.v2.0.json
+  rules:
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
-# apifuzzer_fuzz:
-#   stage: apifuzz
-#   before_script:
-#     - sed -i 's@HOST@'"${INGRESS_LB_IP}"'@' test_openapi.v2.0.json
-#     - sed -i 's@PATH@'"notes-${CI_COMMIT_REF_NAME}"'@' test_openapi.v2.0.json
-#     - export FUZZAPI_TARGET_URL=http://${INGRESS_LB_IP}/
-#   variables:
-#     FUZZAPI_PROFILE: Quick-10
-#     FUZZAPI_OPENAPI: test_openapi.v2.0.json
-#   rules:
-#     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
-
-# cleanup-db:
-#   image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image:helm-3.10.0-kube-1.24.6-alpine-3.15
-#   stage: cleanup
-#   variables:
-#     DB_NAME: $CI_COMMIT_REF_NAME
-#   script:
-#     - kubectl config use-context $CI_PROJECT_PATH:simplenotes
-#     - kubectl exec -i deployment.apps/notes-$CI_COMMIT_REF_NAME -- sh scripts/reset_notes_table.sh
-#   dependencies:
-#     - dast
-#     - apifuzzer_fuzz
-#   rules:
-#     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+cleanup-db:
+  image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image:helm-3.10.0-kube-1.24.6-alpine-3.15
+  stage: cleanup
+  variables:
+    DB_NAME: $CI_COMMIT_REF_NAME
+  script:
+    - kubectl config use-context $CI_PROJECT_PATH:simplenotes
+    - kubectl exec -i deployment.apps/notes-$CI_COMMIT_REF_NAME -- sh scripts/reset_notes_table.sh
+  dependencies:
+    - dast
+    - apifuzzer_fuzz
+  rules:
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
 renovate:
+  stage: test
   variables:
     CI_DEBUG_TRACE: “true”
     LOG_LEVEL: debug
@@ -248,6 +246,3 @@ renovate:
     - if: '$CI_PIPELINE_SOURCE == "schedule"'
     - if: '$CI_PIPELINE_SOURCE == "push"'
   allow_failure: true
-  artifacts:
-    paths:
-      - renovate-log.ndjson
