@@ -10,10 +10,10 @@ services:
   - docker:dind
 
 stages:
-  - build
-  - test
+  #- build
+  #- test
   - deploy
-  - production
+  #- production
   #- dast
   #- apifuzz
   #- cleanup
@@ -37,52 +37,52 @@ include:
 variables:
   LOG_LEVEL: debug
 
-build:
-  stage: build
-  variables:
-    IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
-  before_script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-  script:
-    - docker build -t $IMAGE .
-    - docker push $IMAGE
+# build:
+#   stage: build
+#   variables:
+#     IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
+#   before_script:
+#     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+#   script:
+#     - docker build -t $IMAGE .
+#     - docker push $IMAGE
 
-pages:
-  image: registry.gitlab.com/pages/hugo/hugo_extended:latest
-  before_script:
-    - apk add --update --no-cache git
-  script:
-    - hugo --minify -s docs
-    - cp -R docs/public .
-  artifacts:
-    paths:
-      - public
-  rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-  environment:
-    name: documentation
-    url: $CI_PAGES_URL
-  allow_failure: true
+# pages:
+#   image: registry.gitlab.com/pages/hugo/hugo_extended:latest
+#   before_script:
+#     - apk add --update --no-cache git
+#   script:
+#     - hugo --minify -s docs
+#     - cp -R docs/public .
+#   artifacts:
+#     paths:
+#       - public
+#   rules:
+#     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+#   environment:
+#     name: documentation
+#     url: $CI_PAGES_URL
+#   allow_failure: true
 
-unit:
-  image: python:latest
-  stage: test
-  variables:
-    NOTES_DB_BACKEND: "local"
-    RUNNER_GENERATE_ARTIFACTS_METADATA: "true"
-    NOTES_DB_DATABASE: "unit-tests"
-  before_script:
-    - apt update -y; apt upgrade -y
-    - apt install gcc curl openssl -y
-    - apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
-    - curl -LsS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | bash
-    - apt install libmariadb3 libmariadb-dev mariadb-client sqlite3 libsqlite3-dev -y
-    - pip3 install --upgrade pip; pip3 install -r requirements.txt
-  script:
-    - python -m unittest tests/test_db.py 2>&1 | tee unit.txt
-  artifacts:
-    paths:
-      - unit.txt
+# unit:
+#   image: python:latest
+#   stage: test
+#   variables:
+#     NOTES_DB_BACKEND: "local"
+#     RUNNER_GENERATE_ARTIFACTS_METADATA: "true"
+#     NOTES_DB_DATABASE: "unit-tests"
+#   before_script:
+#     - apt update -y; apt upgrade -y
+#     - apt install gcc curl openssl -y
+#     - apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
+#     - curl -LsS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | bash
+#     - apt install libmariadb3 libmariadb-dev mariadb-client sqlite3 libsqlite3-dev -y
+#     - pip3 install --upgrade pip; pip3 install -r requirements.txt
+#   script:
+#     - python -m unittest tests/test_db.py 2>&1 | tee unit.txt
+#   artifacts:
+#     paths:
+#       - unit.txt
 
 # gemnasium-python-dependency_scanning:
 #   variables:
@@ -137,57 +137,57 @@ unit:
 #     - pip install --extra-index-url https://gitlab.com/api/v4/projects/19904939/packages/pypi/simple pythonfuzz
 #     - ./gitlab-cov-fuzz run --engine pythonfuzz -- fuzz.py
 
-deploy:
-  image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image:helm-3.10.0-kube-1.24.6-alpine-3.15
-  stage: deploy
-  variables:
-    HELM_HOST: "localhost:44134"
-    IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
-    ING_PATH: notes-$CI_COMMIT_REF_NAME
-    ENV_NAME: $CI_COMMIT_REF_NAME
-    HELM_DEPLOY_NAME: notes-$CI_COMMIT_REF_NAME
-  before_script:
-    - kubectl config use-context $CI_PROJECT_PATH:simplenotes
-    - sh scripts/install_ingress.sh
-    - sh scripts/install_mariadb.sh
-    - sh scripts/install_echo.sh
-  script:
-    - printenv
-    - kubectl config use-context $CI_PROJECT_PATH:simplenotes
-    - helm upgrade --install $HELM_DEPLOY_NAME helm -f helm/values.yaml 
-      --set image=$IMAGE 
-      --set notes.name=notes-$CI_COMMIT_REF_NAME 
-      --set notes.path=$ING_PATH 
-      --set notes.dbName=$CI_COMMIT_REF_NAME
-      --set notes.env.CI_MERGE_REQUEST_PROJECT_ID=$CI_MERGE_REQUEST_PROJECT_ID
-      --set notes.env.CI_MERGE_REQUEST_ID=$CI_MERGE_REQUEST_ID
-      --set notes.env.CI_MERGE_REQUEST_SOURCE_BRANCH_SHA=$CI_MERGE_REQUEST_SOURCE_BRANCH_SHA
-      --set notes.env.PROJECT_AUTH_TOKEN=$PROJECT_AUTH_TOKEN
-      --set restrictednginx.name=restricted-nginx-$CI_COMMIT_REF_NAME
-    - kubectl rollout restart deployment notes-$CI_COMMIT_REF_NAME -n default
-  after_script:
-    - kubectl config use-context $CI_PROJECT_PATH:simplenotes
-    - echo "DAST_WEBSITE=http://$(kubectl get svc -n ingress-nginx | grep LoadBalancer | awk '{print $4}')/notes-$CI_COMMIT_REF_NAME" >> deploy.env
-    - echo "DAST_API_TARGET_URL=http://$(kubectl get svc -n ingress-nginx | grep LoadBalancer | awk '{print $4}')/notes-$CI_COMMIT_REF_NAME" >> deploy.env
-    - export INGRESS_LB_IP=$(kubectl get svc -n ingress-nginx | grep LoadBalancer | awk '{print $4}')
-    - echo "INGRESS_LB_IP=$INGRESS_LB_IP" >> deploy.env
-    - echo "Access your application at http://$INGRESS_LB_IP/$ING_PATH"
-  environment:
-    name: $ENV_NAME
-    url: http://$INGRESS_LB_IP/notes-$CI_COMMIT_REF_NAME
-  artifacts:
-    reports:
-      dotenv: deploy.env
-  dependencies:
-    - build
-  rules:
-    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
-      when: always
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-      variables:
-        ENV_NAME: "production"
-        ING_PATH: "notes"
-      when: manual #production push is manual
+# deploy:
+#   image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image:helm-3.10.0-kube-1.24.6-alpine-3.15
+#   stage: deploy
+#   variables:
+#     HELM_HOST: "localhost:44134"
+#     IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
+#     ING_PATH: notes-$CI_COMMIT_REF_NAME
+#     ENV_NAME: $CI_COMMIT_REF_NAME
+#     HELM_DEPLOY_NAME: notes-$CI_COMMIT_REF_NAME
+#   before_script:
+#     - kubectl config use-context $CI_PROJECT_PATH:simplenotes
+#     - sh scripts/install_ingress.sh
+#     - sh scripts/install_mariadb.sh
+#     - sh scripts/install_echo.sh
+#   script:
+#     - printenv
+#     - kubectl config use-context $CI_PROJECT_PATH:simplenotes
+#     - helm upgrade --install $HELM_DEPLOY_NAME helm -f helm/values.yaml 
+#       --set image=$IMAGE 
+#       --set notes.name=notes-$CI_COMMIT_REF_NAME 
+#       --set notes.path=$ING_PATH 
+#       --set notes.dbName=$CI_COMMIT_REF_NAME
+#       --set notes.env.CI_MERGE_REQUEST_PROJECT_ID=$CI_MERGE_REQUEST_PROJECT_ID
+#       --set notes.env.CI_MERGE_REQUEST_ID=$CI_MERGE_REQUEST_ID
+#       --set notes.env.CI_MERGE_REQUEST_SOURCE_BRANCH_SHA=$CI_MERGE_REQUEST_SOURCE_BRANCH_SHA
+#       --set notes.env.PROJECT_AUTH_TOKEN=$PROJECT_AUTH_TOKEN
+#       --set restrictednginx.name=restricted-nginx-$CI_COMMIT_REF_NAME
+#     - kubectl rollout restart deployment notes-$CI_COMMIT_REF_NAME -n default
+#   after_script:
+#     - kubectl config use-context $CI_PROJECT_PATH:simplenotes
+#     - echo "DAST_WEBSITE=http://$(kubectl get svc -n ingress-nginx | grep LoadBalancer | awk '{print $4}')/notes-$CI_COMMIT_REF_NAME" >> deploy.env
+#     - echo "DAST_API_TARGET_URL=http://$(kubectl get svc -n ingress-nginx | grep LoadBalancer | awk '{print $4}')/notes-$CI_COMMIT_REF_NAME" >> deploy.env
+#     - export INGRESS_LB_IP=$(kubectl get svc -n ingress-nginx | grep LoadBalancer | awk '{print $4}')
+#     - echo "INGRESS_LB_IP=$INGRESS_LB_IP" >> deploy.env
+#     - echo "Access your application at http://$INGRESS_LB_IP/$ING_PATH"
+#   environment:
+#     name: $ENV_NAME
+#     url: http://$INGRESS_LB_IP/notes-$CI_COMMIT_REF_NAME
+#   artifacts:
+#     reports:
+#       dotenv: deploy.env
+#   dependencies:
+#     - build
+#   rules:
+#     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+#       when: always
+#     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+#       variables:
+#         ENV_NAME: "production"
+#         ING_PATH: "notes"
+#       when: manual #production push is manual
 
 # dast:
 #   stage: dast
