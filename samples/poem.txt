@@ -1,4 +1,4 @@
 Roses are Red
 Violets are Blue
-GitLab is the One
-DevOps Pipeline
+GitLab is the King of
+DevOps Pipelines
