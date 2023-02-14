@@ -263,6 +263,6 @@ attestation_boi:
     EXPECTED_SHA: "e78f57626b6be5a363d0fe9d193d924b1a04dabe0af5da9c01fa55027463f7bd"
     RUNNER_GENERATE_ARTIFACTS_METADATA: "true"
   script:
-    - CURRENT_HASH=$(openssl sha256 samples/poem.txt | awk '{print $2}')
+    - export CURRENT_HASH=$(openssl sha256 samples/poem.txt | awk '{print $2}')
     - if [$EXPECTED_SHA != $CURRENT_HASH]; then exit 1; fi
   allow_failure: true
