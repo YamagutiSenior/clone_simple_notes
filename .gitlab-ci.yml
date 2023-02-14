@@ -266,5 +266,3 @@ attestation_boi:
     - CURRENT_HASH=$(openssl sha256 gl-sast-report.json | awk '{print $2}')
     - if [$EXPECTED_SHA != $CURRENT_HASH]; then exit 1; fi
   allow_failure: true
-
-  - if [ $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH ]; then CS_IMAGE=$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest; fi
