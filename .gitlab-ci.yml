@@ -12,6 +12,7 @@ services:
 stages:
   - build
   - test
+  - verify
   - deploy
   - production
   - dast
@@ -97,6 +98,7 @@ gemnasium-python-dependency_scanning:
 
 gemnasium-dependency_scanning:
   variables:
+    RUNNER_GENERATE_ARTIFACTS_METADATA: "true"
     SECURE_LOG_LEVEL: "debug"
     CI_DEBUG_TRACE: “true”
     DS_REMEDIATE: "true"
@@ -254,3 +256,12 @@ custom_dude:
   artifacts:
     reports:
       sast: "gl-sast-report.json"
+
+attestation_boi:
+  stage: verify
+  variables:
+    EXPECTED_SHA: "ok"
+    RUNNER_GENERATE_ARTIFACTS_METADATA: "true"
+  script:
+    - sha256sum samples/poem.txt
+  allow_failure: true
