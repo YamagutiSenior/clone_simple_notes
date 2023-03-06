@@ -38,7 +38,7 @@ include:
   - template: Jobs/Secret-Detection.gitlab-ci.yml
   - template: Jobs/SAST-IaC.gitlab-ci.yml
   - template: DAST-API.gitlab-ci.yml
-  - template: Terraform.gitlab-ci.yml
+  - template: Terraform.latest.gitlab-ci.yml
 
 build:
   stage: build
@@ -263,6 +263,13 @@ attestation_verification:
     - if [ ${EXPECTED_SHA} != ${CURRENT_HASH} ]; then exit 1; fi
   allow_failure: true
 
+deploy:
+  envrionment:
+    name: $TF_STATE_NAME
+    action: start
+
 destroy:
   extends: .terraform:destroy
-  needs: []
+  environment:
+    name: $TF_STATE_NAME
+    action: stop
