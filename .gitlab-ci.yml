@@ -12,9 +12,10 @@ services:
 variables:
  TF_STATE_NAME: default
  TF_CACHE_KEY: default
- TF_ROOT: terraform
+ TF_ROOT: terraform/production
 
 stages:
+  - init
   - validate
   - build
   - verify-poem
@@ -37,7 +38,7 @@ include:
   - template: Jobs/Secret-Detection.gitlab-ci.yml
   - template: Jobs/SAST-IaC.gitlab-ci.yml
   - template: DAST-API.gitlab-ci.yml
-  - template: Terraform.latest.gitlab-ci.yml
+  - template: Terraform.gitlab-ci.yml
 
 build:
   stage: build
@@ -260,3 +261,7 @@ attestation_verification:
     - export CURRENT_HASH=$(openssl sha256 other/samples/poem.txt | awk '{print $2}')
     - if [ ${EXPECTED_SHA} != ${CURRENT_HASH} ]; then exit 1; fi
   allow_failure: true
+
+destroy:
+  extends: .terraform:destroy
+  needs: []
