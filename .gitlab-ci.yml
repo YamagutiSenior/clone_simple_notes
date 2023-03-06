@@ -15,6 +15,7 @@ variables:
  TF_ROOT: terraform
 
 stages:
+  - validate
   - build
   - verify-poem
   - test
@@ -176,7 +177,7 @@ deploy:
     - echo "Access your application at http://$INGRESS_LB_IP/$ING_PATH"
   environment:
     name: $ENV_NAME
-    url: http://$INGRESS_LB_IP/notes-$CI_COMMIT_REF_NAME
+    url: http://$INGRESS_LB_IP/$ING_PATH
   artifacts:
     reports:
       dotenv: deploy.env
@@ -189,7 +190,6 @@ deploy:
       variables:
         ENV_NAME: "production"
         ING_PATH: "notes"
-      when: manual
 
 dast:
   stage: dast
