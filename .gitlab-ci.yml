@@ -264,5 +264,8 @@ attestation_verification:
 
 fmt:
   extends: .terraform:fmt
+  image: "$CI_TEMPLATE_REGISTRY_HOST/gitlab-org/terraform-images/stable:latest"
+
 validate:
   extends: .terraform:validate
+  image: "$CI_TEMPLATE_REGISTRY_HOST/gitlab-org/terraform-images/stable:latest"
