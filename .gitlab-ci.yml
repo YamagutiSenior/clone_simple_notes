@@ -264,7 +264,7 @@ attestation_verification:
   allow_failure: true
 
 deploy:
-  envrionment:
+  environment:
     name: $TF_STATE_NAME
     action: start
 
