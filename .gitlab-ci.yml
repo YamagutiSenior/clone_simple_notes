@@ -38,7 +38,7 @@ include:
   - template: Jobs/Secret-Detection.gitlab-ci.yml
   - template: Jobs/SAST-IaC.gitlab-ci.yml
   - template: DAST-API.gitlab-ci.yml
-  - template: Terraform.latest.gitlab-ci.yml
+  - template: Terraform.gitlab-ci.yml
 
 build-simple-notes:
   stage: build
