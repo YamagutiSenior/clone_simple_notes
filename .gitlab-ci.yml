@@ -15,7 +15,6 @@ variables:
  TF_ROOT: terraform/production
 
 stages:
-  - init
   - validate
   - build
   - verify-poem
@@ -38,7 +37,7 @@ include:
   - template: Jobs/Secret-Detection.gitlab-ci.yml
   - template: Jobs/SAST-IaC.gitlab-ci.yml
   - template: DAST-API.gitlab-ci.yml
-  - template: Terraform/Base.gitlab-ci.yml
+  - template: Terraform/Base.latest.gitlab-ci.yml 
 
 build-simple-notes:
   stage: build
@@ -262,3 +261,8 @@ attestation_verification:
     - export CURRENT_HASH=$(openssl sha256 other/samples/poem.txt | awk '{print $2}')
     - if [ ${EXPECTED_SHA} != ${CURRENT_HASH} ]; then exit 1; fi
   allow_failure: true
+
+fmt:
+  extends: .terraform:fmt
+validate:
+  extends: .terraform:validate
