@@ -6,7 +6,7 @@
 
 This application is used for taking simple notes, like `Everyone needs to go ahead and come in on Saturday and Sunday to help out with the new code push`. It is used to demo many of GitLab's Security features. Get started by viewing the [**Simple Notes Documentation**](https://tech-marketing.gitlab.io/devsecops/initech/simple-notes/)!
 
-![](./images/screenshot.png)  
+![](./other/images/screenshot.png)  
 
 If there is something you wanna see featured in this application, please open an issue! MRs are welcome 😁
 

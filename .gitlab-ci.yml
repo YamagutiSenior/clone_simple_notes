@@ -9,9 +9,14 @@ workflow:
 services:
   - docker:dind
 
+variables:
+ TF_STATE_NAME: default
+ TF_CACHE_KEY: default
+ TF_ROOT: terraform
+
 stages:
   - build
-  - verifypoem
+  - verify-poem
   - test
   - deploy
   - production
@@ -31,9 +36,7 @@ include:
   - template: Jobs/Secret-Detection.gitlab-ci.yml
   - template: Jobs/SAST-IaC.gitlab-ci.yml
   - template: DAST-API.gitlab-ci.yml
-  # - project: 'renovate-bot/renovate-runner'
-  #   file: '/templates/renovate.gitlab-ci.yml'
-  #   ref: v10.142.6
+  - template: Terraform.latest.gitlab-ci.yml
 
 build:
   stage: build
@@ -186,7 +189,7 @@ deploy:
       variables:
         ENV_NAME: "production"
         ING_PATH: "notes"
-      when: manual #production push is manual
+      when: manual
 
 dast:
   stage: dast
@@ -239,30 +242,21 @@ cleanup-db:
   rules:
     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
-# renovate:
-#   stage: test
-#   variables:
-#     CI_DEBUG_TRACE: “true”
-#     LOG_LEVEL: debug
-#   rules:
-#     - if: '$CI_PIPELINE_SOURCE == "schedule"'
-#     - if: '$CI_PIPELINE_SOURCE == "push"'
-#   allow_failure: true
-
-custom_dude:
+custom_scanner:
   stage: test
   script:
-    - unzip samples/gl-sast-report.json.zip
+    - unzip other/samples/gl-sast-report.json.zip
   artifacts:
     reports:
       sast: "gl-sast-report.json"
+  allow_failure: true
 
-attestation_boi:
-  stage: verifypoem
+attestation_verification:
+  stage: verify-poem
   variables:
     EXPECTED_SHA: "e78f57626b6be5a363d0fe9d193d924b1a04dabe0af5da9c01fa55027463f7bd"
     RUNNER_GENERATE_ARTIFACTS_METADATA: "true"
   script:
-    - export CURRENT_HASH=$(openssl sha256 samples/poem.txt | awk '{print $2}')
+    - export CURRENT_HASH=$(openssl sha256 other/samples/poem.txt | awk '{print $2}')
     - if [ ${EXPECTED_SHA} != ${CURRENT_HASH} ]; then exit 1; fi
   allow_failure: true
