@@ -9,28 +9,26 @@ workflow:
 services:
   - docker:dind
 
-variables:
- TF_STATE_NAME: default
- TF_CACHE_KEY: default
- TF_ROOT: terraform/production
-
 stages:
   - validate
   - build
   - verify-poem
   - test
   - deploy
-  - production
   - dast
   - apifuzz
   - cleanup
+
+variables:
+ TF_STATE_NAME: default
+ TF_CACHE_KEY: default
+ TF_ROOT: terraform/production
 
 include:
   - template: Security/Container-Scanning.gitlab-ci.yml
   - template: Security/DAST.gitlab-ci.yml
   - template: API-Fuzzing.gitlab-ci.yml
   - template: Coverage-Fuzzing.gitlab-ci.yml
-  - template: Security/License-Scanning.gitlab-ci.yml
   - template: Code-Quality.gitlab-ci.yml
   - template: Security/Dependency-Scanning.gitlab-ci.yml
   - template: Security/SAST.gitlab-ci.yml
@@ -39,6 +37,7 @@ include:
   - template: DAST-API.gitlab-ci.yml
   - template: Terraform/Base.latest.gitlab-ci.yml 
 
+# Start Application Build, Test, Deploy, Cleanup
 build-simple-notes:
   stage: build
   variables:
@@ -48,23 +47,6 @@ build-simple-notes:
   script:
     - docker build -t $IMAGE .
     - docker push $IMAGE
-
-pages:
-  image: registry.gitlab.com/pages/hugo/hugo_extended:latest
-  before_script:
-    - apk add --update --no-cache git
-  script:
-    - hugo --minify -s docs
-    - cp -R docs/public .
-  artifacts:
-    paths:
-      - public
-  rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-  environment:
-    name: documentation
-    url: $CI_PAGES_URL
-  allow_failure: true
 
 unit:
   image: python:latest
@@ -86,60 +68,6 @@ unit:
     paths:
       - unit.txt
 
-gemnasium-python-dependency_scanning:
-  variables:
-    SECURE_LOG_LEVEL: "debug"
-    RUNNER_GENERATE_ARTIFACTS_METADATA: "true"
-    CI_DEBUG_TRACE: “true”
-    DS_REMEDIATE: "true"
-    GIT_STRATEGY: fetch
-  before_script:
-    - apt update -y
-    - apt install curl -y
-    - apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
-    - curl -LsS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | bash
-    - apt install libmariadb3 libmariadb-dev mariadb-client sqlite3 libsqlite3-dev -y
-
-gemnasium-dependency_scanning:
-  variables:
-    RUNNER_GENERATE_ARTIFACTS_METADATA: "true"
-    SECURE_LOG_LEVEL: "debug"
-    CI_DEBUG_TRACE: “true”
-    DS_REMEDIATE: "true"
-    DS_EXCLUDED_PATHS: "docs"
-    GIT_STRATEGY: fetch
-
-container_scanning:
-  variables:
-    CS_DISABLE_LANGUAGE_VULNERABILITY_SCAN: "true"
-    CS_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA 
-    RUNNER_GENERATE_ARTIFACTS_METADATA: "true"
-  before_script:
-    - if [ $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH ]; then CS_IMAGE=$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest; fi
-
-secret_detection:
-  variables:
-    GIT_DEPTH: 100
-
-license_scanning:
-  variables:
-    CI_DEBUG_TRACE: "true"
-  before_script:
-    - apt update -y; apt upgrade -y
-    - apt install gcc curl openssl python3-pip -y
-    - apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
-    - curl -LsS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | bash
-    - apt install libmariadb3 libmariadb-dev mariadb-client sqlite3 libsqlite3-dev -y
-    - pip3 install --upgrade pip; pip3 install packaging
-
-coverage-guided-fuzzing:
-  image: python:latest
-  stage: test
-  extends: .fuzz_base
-  script:
-    - pip install --extra-index-url https://gitlab.com/api/v4/projects/19904939/packages/pypi/simple pythonfuzz
-    - ./gitlab-cov-fuzz run --engine pythonfuzz -- fuzz.py
-
 deploy-simple-notes:
   image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image:helm-3.10.0-kube-1.24.6-alpine-3.15
   stage: deploy
@@ -155,7 +83,6 @@ deploy-simple-notes:
     - sh scripts/install_mariadb.sh
     - sh scripts/install_echo.sh
   script:
-    - printenv
     - kubectl config use-context $CI_PROJECT_PATH:simplenotes
     - helm upgrade --install $HELM_DEPLOY_NAME helm -f helm/values.yaml 
       --set image=$IMAGE 
@@ -191,6 +118,23 @@ deploy-simple-notes:
         ENV_NAME: "production"
         ING_PATH: "notes"
 
+cleanup-db:
+  image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image:helm-3.10.0-kube-1.24.6-alpine-3.15
+  stage: cleanup
+  variables:
+    DB_NAME: $CI_COMMIT_REF_NAME
+  script:
+    - kubectl config use-context $CI_PROJECT_PATH:simplenotes
+    - kubectl exec -i deployment.apps/notes-$CI_COMMIT_REF_NAME -- sh scripts/reset_notes_table.sh
+  dependencies:
+    - dast
+    - apifuzzer_fuzz
+  rules:
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+  when: manual
+# End Application Build, Test, Deploy, Cleanup
+
+# Start Security Scanner Configurations
 dast:
   stage: dast
   variables:
@@ -228,21 +172,61 @@ apifuzzer_fuzz:
   rules:
     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
-cleanup-db:
-  image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image:helm-3.10.0-kube-1.24.6-alpine-3.15
-  stage: cleanup
+gemnasium-python-dependency_scanning:
   variables:
-    DB_NAME: $CI_COMMIT_REF_NAME
-  script:
-    - kubectl config use-context $CI_PROJECT_PATH:simplenotes
-    - kubectl exec -i deployment.apps/notes-$CI_COMMIT_REF_NAME -- sh scripts/reset_notes_table.sh
-  dependencies:
-    - dast
-    - apifuzzer_fuzz
-  rules:
-    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
-  when: manual
+    SECURE_LOG_LEVEL: "debug"
+    RUNNER_GENERATE_ARTIFACTS_METADATA: "true"
+    CI_DEBUG_TRACE: “true”
+    DS_REMEDIATE: "true"
+    GIT_STRATEGY: fetch
+  before_script:
+    - apt update -y
+    - apt install curl -y
+    - apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xcbcb082a1bb943db
+    - curl -LsS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | bash
+    - apt install libmariadb3 libmariadb-dev mariadb-client sqlite3 libsqlite3-dev -y
 
+gemnasium-dependency_scanning:
+  variables:
+    RUNNER_GENERATE_ARTIFACTS_METADATA: "true"
+    SECURE_LOG_LEVEL: "debug"
+    CI_DEBUG_TRACE: “true”
+    DS_REMEDIATE: "true"
+    DS_EXCLUDED_PATHS: "docs"
+    GIT_STRATEGY: fetch
+
+container_scanning:
+  variables:
+    CS_DISABLE_LANGUAGE_VULNERABILITY_SCAN: "true"
+    CS_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA 
+    RUNNER_GENERATE_ARTIFACTS_METADATA: "true"
+  before_script:
+    - if [ $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH ]; then CS_IMAGE=$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest; fi
+
+secret_detection:
+  variables:
+    GIT_DEPTH: 100
+
+coverage-guided-fuzzing:
+  image: python:latest
+  stage: test
+  extends: .fuzz_base
+  script:
+    - pip install --extra-index-url https://gitlab.com/api/v4/projects/19904939/packages/pypi/simple pythonfuzz
+    - ./gitlab-cov-fuzz run --engine pythonfuzz -- fuzz.py
+# End Security Scanner Configurations
+
+# Start Terraform Configurations
+fmt:
+  extends: .terraform:fmt
+  image: "$CI_TEMPLATE_REGISTRY_HOST/gitlab-org/terraform-images/stable:latest"
+
+validate:
+  extends: .terraform:validate
+  image: "$CI_TEMPLATE_REGISTRY_HOST/gitlab-org/terraform-images/stable:latest"
+# End Terraform Configurations
+
+# Start Additional Features
 custom_scanner:
   stage: test
   script:
@@ -262,10 +246,20 @@ attestation_verification:
     - if [ ${EXPECTED_SHA} != ${CURRENT_HASH} ]; then exit 1; fi
   allow_failure: true
 
-fmt:
-  extends: .terraform:fmt
-  image: "$CI_TEMPLATE_REGISTRY_HOST/gitlab-org/terraform-images/stable:latest"
-
-validate:
-  extends: .terraform:validate
-  image: "$CI_TEMPLATE_REGISTRY_HOST/gitlab-org/terraform-images/stable:latest"
+pages:
+  image: registry.gitlab.com/pages/hugo/hugo_extended:latest
+  before_script:
+    - apk add --update --no-cache git
+  script:
+    - hugo --minify -s docs
+    - cp -R docs/public .
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+  environment:
+    name: documentation
+    url: $CI_PAGES_URL
+  allow_failure: true
+# End Additional Features
