@@ -141,7 +141,7 @@ coverage-guided-fuzzing:
     - pip install --extra-index-url https://gitlab.com/api/v4/projects/19904939/packages/pypi/simple pythonfuzz
     - ./gitlab-cov-fuzz run --engine pythonfuzz -- fuzz.py
 
-deploy:
+deploy-simple-notws:
   image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image:helm-3.10.0-kube-1.24.6-alpine-3.15
   stage: deploy
   variables:
@@ -242,6 +242,7 @@ cleanup-db:
     - apifuzzer_fuzz
   rules:
     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+  when: manual
 
 custom_scanner:
   stage: test
