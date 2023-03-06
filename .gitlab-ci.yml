@@ -183,7 +183,7 @@ deploy-simple-notes:
     reports:
       dotenv: deploy.env
   dependencies:
-    - build
+    - build-simple-notes
   rules:
     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
       when: always
@@ -204,7 +204,7 @@ dast:
       variables:
         DAST_FULL_SCAN_ENABLED: "true"
   dependencies:
-    - deploy
+    - deploy-simple-notes
 
 dast_api:
   stage: dast
@@ -262,14 +262,3 @@ attestation_verification:
     - export CURRENT_HASH=$(openssl sha256 other/samples/poem.txt | awk '{print $2}')
     - if [ ${EXPECTED_SHA} != ${CURRENT_HASH} ]; then exit 1; fi
   allow_failure: true
-
-deploy:
-  environment:
-    name: $TF_STATE_NAME
-    action: start
-
-destroy:
-  extends: .terraform:destroy
-  environment:
-    name: $TF_STATE_NAME
-    action: stop
