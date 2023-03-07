@@ -19,23 +19,23 @@ stages:
   - cleanup
 
 variables:
-  USE_TERRAFORM: "False"
+  USE_TERRAFORM: "True"
   TF_STATE_NAME: default
   TF_CACHE_KEY: default
   TF_ROOT: terraform/production
 
 include:
+  - template: Code-Quality.gitlab-ci.yml
+  - template: Terraform/Base.latest.gitlab-ci.yml 
   - template: Security/Container-Scanning.gitlab-ci.yml
   - template: Security/DAST.gitlab-ci.yml
-  - template: API-Fuzzing.gitlab-ci.yml
-  - template: Coverage-Fuzzing.gitlab-ci.yml
-  - template: Code-Quality.gitlab-ci.yml
-  - template: Security/Dependency-Scanning.gitlab-ci.yml
-  - template: Security/SAST.gitlab-ci.yml
+  - template: Jobs/Dependency-Scanning.gitlab-ci.yml
+  - template: Jobs/SAST.gitlab-ci.yml
   - template: Jobs/Secret-Detection.gitlab-ci.yml
   - template: Jobs/SAST-IaC.gitlab-ci.yml
   - template: DAST-API.gitlab-ci.yml
-  - template: Terraform/Base.latest.gitlab-ci.yml 
+  - template: API-Fuzzing.gitlab-ci.yml
+  - template: Coverage-Fuzzing.gitlab-ci.yml
 
 # Start Application Build, Test, Deploy, Cleanup
 build-simple-notes:
@@ -270,6 +270,7 @@ attestation_verification:
 
 pages:
   image: registry.gitlab.com/pages/hugo/hugo_extended:latest
+  stage: build
   before_script:
     - apk add --update --no-cache git
   script:
