@@ -19,9 +19,10 @@ stages:
   - cleanup
 
 variables:
- TF_STATE_NAME: default
- TF_CACHE_KEY: default
- TF_ROOT: terraform/production
+  USE_TERRAFORM: "False"
+  TF_STATE_NAME: default
+  TF_CACHE_KEY: default
+  TF_ROOT: terraform/production
 
 include:
   - template: Security/Container-Scanning.gitlab-ci.yml
@@ -116,6 +117,8 @@ deploy-simple-notes:
       variables:
         ENV_NAME: "production"
         ING_PATH: "notes"
+    - if: '$USE_TERRAFORM == "True"'
+      when: manual
 
 cleanup-db:
   image: registry.gitlab.com/gitlab-org/cluster-integration/helm-install-image:helm-3.10.0-kube-1.24.6-alpine-3.15
@@ -219,21 +222,30 @@ coverage-guided-fuzzing:
 fmt:
   extends: .terraform:fmt
   image: "$CI_TEMPLATE_REGISTRY_HOST/gitlab-org/terraform-images/stable:latest"
+  rules:
+    - if: '$USE_TERRAFORM == "True"'
 
 validate:
   extends: .terraform:validate
   image: "$CI_TEMPLATE_REGISTRY_HOST/gitlab-org/terraform-images/stable:latest"
+  rules:
+    - if: '$USE_TERRAFORM == "True"'
 
 plan:
   extends: .terraform:build
+  image: "$CI_TEMPLATE_REGISTRY_HOST/gitlab-org/terraform-images/stable:latest"
   environment:
     name: production
+  rules:
+    - if: '$USE_TERRAFORM == "True"'
 
 apply:
   extends: .terraform:deploy
+  image: "$CI_TEMPLATE_REGISTRY_HOST/gitlab-org/terraform-images/stable:latest"
   environment:
     name: production
-  when: manual
+  rules:
+    - if: '$USE_TERRAFORM == "True"'
 # End Terraform Configurations
 
 # Start Additional Features
