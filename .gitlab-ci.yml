@@ -13,13 +13,14 @@ stages:
   - validate
   - build
   - test
+  - infra
   - deploy
   - dast
   - apifuzz
   - cleanup
 
 variables:
-  USE_TERRAFORM: "True"
+  USE_TERRAFORM: "False"
   TF_STATE_NAME: default
   TF_CACHE_KEY: default
   TF_ROOT: terraform/production
@@ -240,6 +241,7 @@ plan:
     - if: '$USE_TERRAFORM == "True"'
 
 apply:
+  stage: infra
   extends: .terraform:deploy
   image: "$CI_TEMPLATE_REGISTRY_HOST/gitlab-org/terraform-images/stable:latest"
   environment:
