@@ -12,7 +12,6 @@ services:
 stages:
   - validate
   - build
-  - verify-poem
   - test
   - deploy
   - dast
@@ -224,6 +223,17 @@ fmt:
 validate:
   extends: .terraform:validate
   image: "$CI_TEMPLATE_REGISTRY_HOST/gitlab-org/terraform-images/stable:latest"
+
+plan:
+  extends: .terraform:build
+  environment:
+    name: production
+
+apply:
+  extends: .terraform:deploy
+  environment:
+    name: production
+  when: manual
 # End Terraform Configurations
 
 # Start Additional Features
@@ -237,7 +247,7 @@ custom_scanner:
   allow_failure: true
 
 attestation_verification:
-  stage: verify-poem
+  stage: build
   variables:
     EXPECTED_SHA: "e78f57626b6be5a363d0fe9d193d924b1a04dabe0af5da9c01fa55027463f7bd"
     RUNNER_GENERATE_ARTIFACTS_METADATA: "true"
