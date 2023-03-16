@@ -200,15 +200,7 @@ gemnasium-dependency_scanning:
 
 container_scanning:
   variables:
-    CS_DISABLE_LANGUAGE_VULNERABILITY_SCAN: "true"
-    CS_IMAGE: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA 
     RUNNER_GENERATE_ARTIFACTS_METADATA: "true"
-  before_script:
-    - if [ $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH ]; then CS_IMAGE=$CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG:latest; fi
-
-secret_detection:
-  variables:
-    GIT_DEPTH: 100
 
 coverage-guided-fuzzing:
   image: python:latest
@@ -274,7 +266,7 @@ pages:
   image: registry.gitlab.com/pages/hugo/hugo_extended:latest
   stage: build
   before_script:
-    - apk add --update --no-cache git
+    - apt update -qq && apt install -y git golang curl bash
   script:
     - hugo --minify -s docs
     - cp -R docs/public .
