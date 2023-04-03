@@ -1,14 +1,22 @@
-# Simple Notes (Security Demo Application) 🔒
+# Simple Notes (Security Demo Application) 🔒🔑
+
+**Note: Do not edit this project directly, but rather clone it and configure it within your own GitLab instance.**
 
 ---
 
-## **Note: Do not edit this project directly, but rather clone it and configure it within your own GitLab instance.**
+This application is used for taking simple notes. It has been created to showcase many of GitLab's Security features and provide a tutorial on how
+to use them. Some notable security features covered include:
 
-This application is used for taking simple notes, like `Everyone needs to go ahead and come in on Saturday and Sunday to help out with the new code push`. It is used to demo many of GitLab's Security features. Get started by viewing the [**Simple Notes Documentation**](https://tech-marketing.gitlab.io/devsecops/initech/simple-notes/)!
+- Static Security Scanners
+- Dynamic Security Scanners
+- Security Guardrails/Policies
+- Vulnerability Management
 
-![](./other/images/screenshot.png)  
+Get started by viewing the [**Simple Notes Documentation**](https://tech-marketing.gitlab.io/gitlab-devsecops-tutorial/simple-notes).
 
-If there is something you wanna see featured in this application, please open an issue! MRs are welcome 😁
+![](./other/images/screenshot.png)
+
+If there is something you wanna see featured in this application, please open an issue! MRs are welcome too 😁
 
 ---
 
@@ -16,11 +24,13 @@ If there is something you wanna see featured in this application, please open an
 
 You can get started using this project on your own GitLab account with the following lessons:
 
-- Lesson 1: [Prerequisites](https://tech-marketing.gitlab.io/devsecops/initech/simple-notes/getting_started/lesson_1_prerequisites/)
-- Lesson 2: [Deploying the Demo application](https://tech-marketing.gitlab.io/devsecops/initech/simple-notes/getting_started/lesson_2_deploying_the_demo_application/)
-- Lesson 3: [Setting Up and Configuring the Security Scanners and Policies](https://tech-marketing.gitlab.io/devsecops/initech/simple-notes/getting_started/lesson_3_setting_up_and_configuring_the_security_scanners_and_policies/)
-- Lesson 4: [Developer Workflow](https://tech-marketing.gitlab.io/devsecops/initech/simple-notes/getting_started/lesson_4_developer_workflow/)
-- Lesson 5: [AppSec Workflow](https://tech-marketing.gitlab.io/devsecops/initech/simple-notes/getting_started/lesson_5_appsec_workflow/)
+- Lesson 1: [DevSecOps Overview]()
+- Lesson 2: [Tutorial Prerequisites]()
+- Lesson 3: [Deploying the Demo Application]()
+- Lesson 4: [Setting up and Configuring Security Scanners and Guardrails]()
+- Lesson 5: [Developer Workflow]()
+- Lesson 6: [AppSec Workflow]()
+- Lesson 7 **Bonus**: [Policy as code with GitOps]()
 
 ---
 
