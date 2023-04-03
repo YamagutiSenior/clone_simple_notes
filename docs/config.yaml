@@ -1,6 +1,6 @@
 # hugo server --minify --themesDir ... --baseURL=http://0.0.0.0:1313/theme/hugo-book/
 
-baseURL: https://tech-marketing.gitlab.io/devsecops/initech/simple-notes
+baseURL: https://gtlb-devsecops-tutorial.gitlab.io/simple-notes
 title: Simple Notes - GitLab DevSecOps Intro
 theme: hugo-book
 
@@ -29,7 +29,7 @@ languages:
 menu:
   after:
     - name: "Simple Notes - GitLab Project Repository"
-      url: "https://gitlab.com/tech-marketing/devsecops/initech/simple-notes"
+      url: "https://gitlab.com/gtlb-devsecops-tutorial/simple-notes"
       weight: 10
 
 params:
