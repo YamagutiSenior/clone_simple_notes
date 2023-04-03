@@ -1,6 +1,6 @@
 ---
 bookCollapseSection: false
-weight: 40
+weight: 60
 ---
 
 # Enabling and Configuring Security Scans and Policies
@@ -11,22 +11,21 @@ In this section, we will go over the security scans which GitLab offers. We will
 
 GitLab offers a variety of security scans to enhance application security. Some scanners will scan the static source code, and others will scan the running application for vulnerabilities.
 
-The scanners use both OpenSource and GitLab built tools, which vary by language. The language in the application is auto-detected by GitLab. For these OpenSource tools, the infrastructure is maintained by GitLab, saving users lot's of cost and hassle maintaining.
+The scanners use both OpenSource and GitLab built tools, which vary by language. The language in the application is auto-detected by GitLab. For these OpenSource tools, the infrastructure is maintained by GitLab, and the rules used are created by our security reseachers.
 
 We will go over the following scanners:
 
 1. [Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/): analyzes your source code for known vulnerabilities.
 2. [Dynamic Application Security Testing (DAST)](https://docs.gitlab.com/ee/user/application_security/dast/): analyzes your running application for known vulnerabilities.
-3. [Container Scanning](https://docs.gitlab.com/ee/user/application_security/container_scanning/): scans Docker images for known vulnerabilities
-4. [Dependency Scanning](https://docs.gitlab.com/ee/user/application_security/dependency_scanning/): scans project dependencies for known vulnerabilities
-5. [License Scanning](https://docs.gitlab.com/ee/user/compliance/license_compliance/): scans licenses to see if they are incompatible with a set policy
-6. [Secret Detection](https://docs.gitlab.com/ee/user/application_security/secret_detection/): Scans for secrets checked into source code
-7. [Infrastructure as Code Scanning](https://docs.gitlab.com/ee/user/application_security/iac_scanning/): Scans your IaC configuration files for known vulnerabilities. IaC scanning supports configuration files for Terraform, Ansible, AWS CloudFormation, and Kubernetes.
-8. [Coverage-Guided Fuzzing](https://docs.gitlab.com/ee/user/application_security/coverage_fuzzing/): Sends random inputs to an instrumented version of your application in an effort to cause unexpected behavior.
-9. [Web-API Fuzzing](https://docs.gitlab.com/ee/user/application_security/api_fuzzing/): Sets operation parameters to unexpected values in an effort to cause unexpected behavior and errors in the API backend
-10. [DAST API-Scanning](https://docs.gitlab.com/ee/user/application_security/dast_api/): analyzes the APIs of your running application for known vulnerabilities using REST, SOAP, GraphQL, Form bodies, JSON, or XML definitions.
-11. [Code Quality Scanning](https://docs.gitlab.com/ee/ci/testing/code_quality.html): ensures your project’s code stays simple, readable, and easy to contribute to.
-12. [Operational Container Scanning](https://docs.gitlab.com/ee/user/clusters/agent/vulnerabilities.html): scans the container images in your cluster for known vulnerabilities.
+3. [Container Scanning](https://docs.gitlab.com/ee/user/application_security/container_scanning/): scans container images for known vulnerabilities
+4. [Dependency + License Scanning](https://docs.gitlab.com/ee/user/application_security/dependency_scanning/): scans project dependencies for known vulnerabilities and detects licenses used by dependencies
+5. [Secret Detection](https://docs.gitlab.com/ee/user/application_security/secret_detection/): Scans for secrets checked into source code
+6. [Infrastructure as Code Scanning](https://docs.gitlab.com/ee/user/application_security/iac_scanning/): Scans your IaC configuration files for known vulnerabilities. IaC scanning supports configuration files for Terraform, Ansible, AWS CloudFormation, and Kubernetes.
+7. [Coverage-Guided Fuzzing](https://docs.gitlab.com/ee/user/application_security/coverage_fuzzing/): Sends random inputs to an instrumented version of your application in an effort to cause unexpected behavior.
+8. [Web-API Fuzzing](https://docs.gitlab.com/ee/user/application_security/api_fuzzing/): Sets operation parameters to unexpected values in an effort to cause unexpected behavior and errors in the API backend
+9. [DAST API-Scanning](https://docs.gitlab.com/ee/user/application_security/dast_api/): analyzes the APIs of your running application for known vulnerabilities using REST, SOAP, GraphQL, Form bodies, JSON, or XML definitions.
+10. [Code Quality Scanning](https://docs.gitlab.com/ee/ci/testing/code_quality.html): ensures your project’s code stays simple, readable, and easy to contribute to.
+11. [Operational Container Scanning](https://docs.gitlab.com/ee/user/clusters/agent/vulnerabilities.html): scans the container images in your cluster for known vulnerabilities.
 
 ## Step 1: Adding Security Scans to the pipeline
 
@@ -35,6 +34,7 @@ Security scanners can be added in 2 different ways. Either by using the [Securit
 Since security scanners have already been added to this project via [templates](https://docs.gitlab.com/ee/ci/examples/index.html#cicd-templates), you can see how they are defined and configured and by viewing the [.gitlab-ci.yml](https://gitlab.com/tech-marketing/devsecops/initech/simple-notes/-/blob/main/.gitlab-ci.yml).
 
 Below I'll explain how the security scanners work and separate them into 3 different categories:
+
 - Static Security Scanners
 - Dynamic Security Scanners
 - Application and Web-API Fuzzers
@@ -53,7 +53,7 @@ Static security scanners examine the static source code in your project and perf
 
 ### Dynamic Security Scanners
 
-Dynamic scanners examine the running application, and send requests in order to find vulnerabilities within the system. Dynamic scanners are not aware of the underlying code, and perform request on a block-box.
+Dynamic scanners examine the running application, and send requests in order to find vulnerabilities within the system. Dynamic scanners are not aware of the underlying code, and perform requests blindly to the application.
 
 {{< hint info >}}
 **Note:** Since **requests** are sent to the application and **responses** are received, they are included along with the same data as static scanners (listed above). You can download Postman specs in order to replicate the **requests**, which is useful for manual testing.
@@ -74,7 +74,6 @@ There's a bunch of CI/CD jobs that do a bunch of different things, I'll briefly 
 - **unit**: Runs Unit Tests from the application
 - **gemnasium-python-dependency_scanning**: Overwrites the pre_script of dependency scanning to install required system dependencies
 - **container_scanning**: Overwrites the image being scanned depending on the branch
-- **license_scanning**: Overwrites the pre_script of license scanning to install required system dependencies 
 - **secret_detection**: Overwrites the variable to allow historic secret detection
 - **coverage-guided-fuzzing**: Runs fuzzing on a provided instrumented file
 - **deploy**: Installs ingress, mariadb, and notes application to Kubernetes cluster.
@@ -100,73 +99,73 @@ GitLab provides Security guard-rails to prevent vulnerable code from being merge
 - Name: Policy Name
 - Description: Policy Description
 
-5. Check the **Enabled** button under **Policy status**
+5. Check the **Enabled** radio button under **Policy status**
 
 6. Create a Rule
 
-> IF `Select all` find(s) more than `0` `Select all` `Newly detected`
-  vulnerabilities in an open merge request targeting `main`
+> IF `Security Scan` from `All scanners` find(s) more than `0` `Select all` `Newly detected`
+  vulnerabilities in an open merge request targeting `All protected branches`
 
 7. Create an Action
 
-> THEN Require approval from `1` of the following approvers
+> Require `1` approval from `Roles` `Maintainer`
 
-8. Add any username/group (other than yours) in the **Search users or groups** drop down
+{{< hint info >}}
+**Note:** You can also set **individual approvers** or **groups** as approvers,
+for example (the security team)
+{{< /hint >}}
 
-9. Click on the **Configure with a merge request** button
+8. Click on the **Configure with a merge request** button
 
-10. Merge the newly added code
+9. Merge the newly added code
 
 {{< hint info >}}
 **Note:** You will notice a new project was created to store the policies
 {{< /hint >}}
 
-## Step 4: Creating a License Policy
+## Step 4: Setting up Merge-Request Approvals (Licenses)
 
-License Policies allow you to declare licenses as either approved or denied.
-When Merge-Request Approvals are set up a denied license will block an MR from
-being merged.
+Now let's do the same thing, but for requiring approval for restrictive licenses.
 
-1. Under the **Security & Compliance** left navigation menu, go to **License Compliance**
+1. Go to the the **Security & Compliance** left navigation menu and press **Policies**  
 
-2. Click on **Policies**
+2. Click on the  **New policy** button   
 
-3. Click on **Add license and related policy**
+3. Press the **Select policy** button under the **Scan result policy** section
 
-4. Type in **Apache License 2.0**, select **Deny**, and press **Submit**
+4. Fill out the following information:
 
-5. The **Apache License 2.0** should now be added with a confirmation
+- Name: Policy Name
+- Description: Policy Description
 
-6. Follow Steps 3-5 for **GNU Affero General Public License v3 or later (AGPLv3+)**
+5. Check the **Enabled** radio button under **Policy status**
+
+6. Create a Rule
+
+> IF `License Scan` finds any license `except` `MIT, MIT License` and is `Newly Detected`
+  in an open merge request targeting `All protected branches`
+
+7. Create an Action
+
+> Require `1` approval from `Roles` `Maintainer`
 
 {{< hint info >}}
-**Note:** Make sure you type it completely as is, and don't select from the dropdown,
-License Scanning currently requires exact patterns.
+**Note:** You can also set **individual approvers** or **groups** as approvers,
+for example (the security team)
 {{< /hint >}}
 
-## Step 5: Setting up Merge-Request Approvals (Licenses)
+8. Click on the **Configure with a merge request** button
 
-Setting up the License Check enables us to require approval if any
-licenses within the denylist are present. We setup the denylist in
-the previous step.
-
-1. Click on the **Update approvals** button
-
-2. Set **Approvals required** to `1`
-
-3. Add any username/group other than yours in the **Search users or groups** drop down
-
-4. Click on the **Update approvers** button
+9. Merge the newly added code
 
 {{< hint info >}}
-**Note:** You should now have a confirmation that License Approvals have been enabled
+**Note:** The new policy is appended to the policy file along with
+the security policy we created earlier.
 {{< /hint >}}
 
 ---
 
-Congratulations! You have now successfully run Security Scans and enabled DevSecOps for your application.
+Congratulations! You have now successfully run security scans and setup security guardrails for your application.
 
-{{< button relref="/lesson_2_deploying_the_demo_application" >}}Previous Lesson{{< /button >}}
-{{< button relref="/lesson_4_developer_workflow" >}}Next Lesson{{< /button >}}
-
-
+{{< button relref="/lesson_3_deploying_the_demo_application" >}}Previous Lesson{{< /button >}}
+{{< button relref="/lesson_5_developer_workflow" >}}Next Lesson{{< /button >}}

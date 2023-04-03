@@ -13,11 +13,13 @@ typical approaches can provide.
 
 In order to get started, go through each of the lessons described within the workshop:
 
-[Lesson 1: Prerequisites](./getting_started/lesson_1_prerequisites/)  
-[Lesson 2: Deploying the Demo Application](./getting_started/lesson_2_deploying_the_demo_application/)  
-[Lesson 3: Setting up and Configuring the Security Scanners and Policies](./getting_started/lesson_3_setting_up_and_configuring_the_security_scanners_and_policies/)  
-[Lesson 4: Developer Workflow](./getting_started/lesson_4_developer_workflow/)  
-[Lesson 5: AppSec Workflow](./getting_started/lesson_5_appsec_workflow/)  
+[Lesson 1: DevSecOps Overview](./getting_started/lesson_1_devsecops_overview/)
+[Lesson 2: Tutorial Prerequisites](./getting_started/lesson_2_tutorial_prerequisites/)  
+[Lesson 3: Deploying the Demo Application](./getting_started/lesson_3_deploying_the_demo_application/)  
+[Lesson 4: Setting up and Configuring the Security Scanners and Policies](./getting_started/lesson_4_setting_up_and_configuring_the_security_scanners_and_policies/)  
+[Lesson 5: Developer Workflow](./getting_started/lesson_5_developer_workflow/)  
+[Lesson 6: AppSec Workflow](./getting_started/lesson_6_appsec_workflow/)  
+[Lesson 7: Policy as Code with GitOps](./getting_started/lesson_7_policy_as_code_gitops/)  
 
 ## Outcomes
 
@@ -32,11 +34,13 @@ In order to get started, go through each of the lessons described within the wor
 
 | # |     Title     |                Description                   |
 | - |---------------|----------------------------------------------|
-| 1 | Prerequisites | Requirements to get started with the project |
-| 2 | Deploying the Demo Application | Learn how to deploy and expose the demo application |
-| 3 | Setting up and Configuring the Security Scanners and Policies | Learn how to setup and configure the different types of security scans. This includes Security Policies as well |
-| 4 | Developer Workflow | Learn how to view and take action on vulnerabilities within a Merge Request |
-| 5 | AppSec Workflow | Learn how to triage vulnerabilities and collaborate with other members of a Security team |
+| 1 | DevSecOps Overview | ... |
+| 2 | Prerequisites | Requirements to get started with the project |
+| 3 | Deploying the Demo Application | Learn how to deploy and expose the demo application |
+| 4 | Setting up and Configuring the Security Scanners and Policies | Learn how to setup and configure the different types of security scans. This includes Security Policies as well |
+| 5 | Developer Workflow | Learn how to view and take action on vulnerabilities within a Merge Request |
+| 6 | AppSec Workflow | Learn how to triage vulnerabilities and collaborate with other members of a Security team |
+| 7 | Policy as Code with GitOps | ... |
 
 ## Additional Resources
 

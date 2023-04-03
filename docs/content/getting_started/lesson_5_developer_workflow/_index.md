@@ -1,15 +1,11 @@
 ---
 bookCollapseSection: false
-weight: 50
+weight: 70
 ---
 
 # Viewing Vulnerabilities in the MR
 
 In this lab, we will go over how Vulnerabilities can be viewed as well as the information and actions available to a user. We are going to add some vulnerable code to a feature branch and then the scanners will run and display the found vulnerabilities.
-
-The scanners run on a feature branch and display results within the MR, and if the MR is merged, the scans also run on the feature branch in order to populate the vulnerability reports. It can be seen here in a typical Software Development Lifecycle (SDLC).
-
-![](/devsecops/initech/simple-notes/images/sdlc.png)
 
 ## Step 1: Adding Vulnerable Code
 
@@ -22,7 +18,7 @@ Now let's go ahead and add some vulnerabilities. We will make sure that somethin
 [Web IDE documentation](https://docs.gitlab.com/ee/user/project/web_ide/)
 {{< /hint >}}
 
-2. Copy over the changes found in [this Merge Request](https://gitlab.com/tech-marketing/devsecops/initech/simple-notes/-/merge_requests/15)
+2. Copy over the changes found in [this Merge Request]()
 
 {{< hint info >}}
 **Note:** I'll try to keep it up-to-date and re-based, if it isn't open up an issue within the project
@@ -53,7 +49,7 @@ Now let's wait for the pipeline to complete, this should take a few mins - so gr
 created is not the **default** branch.
 {{< /hint >}}
 
-## Step 2: Viewing Vulnerable Code
+## Step 2: Viewing and taking action on vulnerable Code
 
 Now we can view the vulnerabilities after the pipeline started above has completely run.
 Let's dig into the vulnerabilities and perform some actions on them.
@@ -85,10 +81,6 @@ work together to resolve without showing information of the vulnerability to oth
 
 Within the same MR view, we can see the licenses that were detected. You'll be able to see which licenses are approved and denied according to the policy we set in an earlier lab.
 
-1. Within the merge request expand the **license** section
-
-2. See that the  **GNU Affero General Public License v3 or later (AGPLv3+)** has been denied
-
 ## Step 4: Viewing the Security Guardrails
 
 1. Click **view eligible approvers**
@@ -105,5 +97,5 @@ Merging the code will add the new results to the vulnerability reports and dashb
 
 Congratulations! You have now successfully viewed vulnerabilities within an MR and the details to their resolution.
 
-{{< button relref="/lesson_3_setting_up_and_configuring_the_security_scanners_and_policies" >}}Previous Lesson{{< /button >}}
-{{< button relref="/lesson_5_appsec_workflow" >}}Next Lesson{{< /button >}}
+{{< button relref="/lesson_4_setting_up_and_configuring_the_security_scanners_and_policies" >}}Previous Lesson{{< /button >}}
+{{< button relref="/lesson_6_appsec_workflow" >}}Next Lesson{{< /button >}}

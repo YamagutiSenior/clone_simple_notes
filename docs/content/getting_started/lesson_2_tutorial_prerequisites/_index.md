@@ -1,9 +1,9 @@
 ---
 bookCollapseSection: false
-weight: 20
+weight: 40
 ---
 
-# Prerequisites
+# Tutorial Prerequisites
 
 In order to get started with GitLab DevSecOps, you will need the following:
 
@@ -25,8 +25,8 @@ https://gitlab.com/users/sign_up
 ## GitLab Ultimate
 
 In order to get the most out of GitLab DevSecOps, you will require GitLab
-Ultimate. If you do not have GitLab Ultimate, you can sign-up for a 30-day trial
-license here: https://about.gitlab.com/free-trial/
+Ultimate. If you do not have GitLab Ultimate, you can sign-up for a 30-day
+free trial license here: https://about.gitlab.com/free-trial/
 
 {{< hint info >}}
 **Note:** GitLab Ultimate is a requirement for this tutorial
@@ -35,24 +35,28 @@ license here: https://about.gitlab.com/free-trial/
 ## Google Cloud SDK
 
 Before starting, you should download and install the Google Cloud SDK. It will allow us to interact with set our cluster via the command-line.
+
 Download it from here: https://cloud.google.com/sdk/docs/quickstart
 
 ## KubeCtl
 
-The Kubernetes command-line tool, kubectl, allows you to run commands against Kubernetes clusters. We will need it to interact with the cluster we have created via the CLI. You can download it from here: https://kubernetes.io/docs/tasks/tools/
+The Kubernetes command-line tool, kubectl, allows you to run commands against Kubernetes clusters. We will need it to interact with the cluster we have created via the CLI.
+
+Download it from here: https://kubernetes.io/docs/tasks/tools/
 
 ## Kubernetes Cluster
 
-In this example, I will be using GKE, but you can always bring/create a Kubernetes cluster
-from another service provider since GitLab is cloud agnostic. You can get $300 towards a GKE cluster when you first sign-up here: https://cloud.google.com/kubernetes-engine
+In this example, I will be using GKE, but you can always bring/create a Kubernetes cluster from another service provider.
+
+You can get $300 towards a GKE cluster when you first sign-up here: https://cloud.google.com/kubernetes-engine
 
 Once you have access to the Google cloud console, you can create a cluster as follows:
 
 1. Go to the Google Cloud Console - console.cloud.google.com
 
-2. Click on the Menu Tab
+2. Click on the **Menu** Tab
 
-3. Go to the Kubernetes Engine Menu in Google Cloud Platform
+3. Go to the **Kubernetes Engine** Menu in Google Cloud Platform
 
 4. Click on the **Create** button
 
@@ -115,5 +119,5 @@ gke-fern-initech-default-pool-c3bad177-vg5j   Ready    <none>   53d   v1.22.3-gk
 
 Congratulations! You have just met all the prerequisites and created a Kubernetes Cluster.
 
-{{< button relref="/" >}}Go Home{{< /button >}}
-{{< button relref="/lesson_2_deploying_the_demo_application" >}}Next Lesson{{< /button >}}
+{{< button relref="/lesson_1_devsecops_overview" >}}Previous Lesson{{< /button >}}
+{{< button relref="/lesson_3_deploying_the_demo_application" >}}Next Lesson{{< /button >}}

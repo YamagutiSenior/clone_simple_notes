@@ -1,17 +1,20 @@
 ---
 bookCollapseSection: false
-weight: 30
+weight: 50
 ---
 
 # Deploying an Application with GitLab Pipeline
 
-In this lesson, we will clone the project over to our space, so that we can make
-edits. We will deploy our application to our Kubernetes cluster, along with
-an Ingress controller. This will allow us to access the application from the outside world.
+In this lesson, we will import the demo project and deploy the complete application environment to our Kubernetes cluster. The application environment includes:
 
-## Step 1: Cloning the Sample Project
+- Simple Notes (application used for note taking)
+- MariaDB Backend (database to store notes)
+- Kubernetes Ingress-Controller (provide access to simple notes application over internet)
+- Echo Application (used as a static base url)
 
-Here we will clone the sample project which we will use through this workshop. It's a simple python Flask application which add/removes notes from a MariaDB DataBase.
+## Step 1: Importing the Sample Project
+
+Here we will import the sample project which we will use through this workshop. It's a simple python Flask application which add/removes notes from a MariaDB DataBase.
 
 1. Press the **New Project** button
 
@@ -151,8 +154,7 @@ your application should be available at your Load-Balancers IP under the `/notes
 1. Click on the `deploy` job and scroll to the bottom. You should see the URL which the application was deployed to
 
 {{< hint info >}}
-**Note:** You can also go to the `Deployment > Environments` tab and click the `Open`
-button under the **production** environment.
+**Note:** You can also go to the `Deployment > Environments` tab and click the `Open` button under the **production** environment.
 {{< /hint >}}
 
 2. Point your browser to the provided link
@@ -172,5 +174,5 @@ button under the **production** environment.
 
 Congratulations! You have now successfully deployed an application using GitLab CI/CD.
 
-{{< button relref="/lesson_1_prerequisites" >}}Previous Lesson{{< /button >}}
-{{< button relref="/lesson_3_setting_up_and_configuring_the_security_scanners_and_policies" >}}Next Lesson{{< /button >}}
+{{< button relref="/lesson_2_tutorial_prerequisites" >}}Previous Lesson{{< /button >}}
+{{< button relref="/lesson_4_setting_up_and_configuring_the_security_scanners_and_policies" >}}Next Lesson{{< /button >}}
