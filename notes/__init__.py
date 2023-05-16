@@ -20,7 +20,8 @@ note.config.from_object(Config)
 bootstrap = Bootstrap(note)
 auth = HTTPBasicAuth()
 users = {
-    "admin": generate_password_hash("yeet")
+    "admin": generate_password_hash("yeet"),
+    "admin2": generate_password_hash("password"),
 }
 
 from notes import db, routes
