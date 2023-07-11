@@ -1,6 +1,6 @@
 # Simple Notes (Security Demo Application) 🔒🔑
 
-**Note: Do not edit this project directly, but rather clone it and configure it within your own GitLab instance.**
+**Note: Do not edit this project directly, but rather [**clone**](https://docs.gitlab.com/ee/gitlab-basics/start-using-git.html#clone-a-repository) it and configure it within your own GitLab instance.**
 
 ---
 
