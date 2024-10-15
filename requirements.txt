@@ -7,3 +7,5 @@ pysqlite3
 Werkzeug
 flask_httpauth
 requests
+django==2.0.0
+osrframework
